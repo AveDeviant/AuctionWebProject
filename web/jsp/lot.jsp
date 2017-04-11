@@ -54,8 +54,7 @@
 
                         <label for="price"><fmt:message key="lot.bet.input"/></label>
                         <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}"
-                               required
-                               title="<fmt:message key="bet.restrict"/> "
+                           required title="<fmt:message key="bet.restrict"/> "
                                placeholder="<fmt:message key="bet.restrict"/>"><br/>
                         <button class="button-auction" type="submit" name="command" value="makeBet"><fmt:message
                                 key="lot.bet.button"/></button>
@@ -80,13 +79,25 @@
             <h6>${lot.getDescription()}</h6>
         </div>
     </div>
-    <button class="button-auction" type="button" onclick="showBets()"><fmt:message
+    <div class="row">
+    <div align="center"> <button class="button-auction" type="button" onclick="showBets()"><fmt:message
             key="lot.page.button.showBets"/></button>
+    </div>
+    </div>
+    <br/>
     <div id="bets" style="display: none;">
         <c:forEach var="bet" items="${lot.getBets()}">
-            <c:out value="${bet.getDate()}"/>
-            <c:out value="${bet.getBet()}"/><br/>
+            <div class="row">
+                <div class="col-sm-6" align="center">
+                    <label class="text-center"><c:out value="${bet.getDate()}"/></label>
+                </div>
+                <div class="col-sm-6" align="center">
+                    <label class="text-center"><c:out value="${bet.getBet()}"/></label>
+                </div>
+                </div>
         </c:forEach>
+    </div>
+</div>
     </div>
 </div>
 <script>

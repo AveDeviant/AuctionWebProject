@@ -27,6 +27,7 @@ import java.util.ArrayList;
  * Created by Acer on 16.03.2017.
  */
 public class LotService extends AbstractService {
+    private static final int WAITING_PERIOD = 10;       // waiting period for registration of the won lot, in days.
     private static Logger LOGGER = LogManager.getLogger();
     private static LotValidator validator = new LotValidator();
 
@@ -81,25 +82,45 @@ public class LotService extends AbstractService {
     }
 
 
-    public Lot getLotById(long lotId) throws ServiceException { // оставить первый вариант??
-//        LotDao lotDao = new LotDao();
+    public Lot getLotById(long lotId) throws ServiceException {
+        LotDao lotDao = new LotDao();
         BetDao betDao = new BetDao();
         Lot lot = null;
         try {
-            ArrayList<Lot> lots = getAvailableLots();
-            for (int i =0; i<lots.size(); i++){
-                if (lots.get(i).getId()==lotId){
-                    lot = lots.get(i);
-                }
-            }
-//            lot = lotDao.getLotById(lotId);
+            lot = lotDao.getLotById(lotId);
             if (lot != null) {
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-//            lotDao.returnConnection();
+            lotDao.returnConnection();
+            betDao.returnConnection();
+        }
+        return lot;
+    }
+
+    /**
+     * @param lotId
+     * @return
+     * @throws ServiceException
+     */
+    public Lot getAvailableLotById(long lotId) throws ServiceException {
+        BetDao betDao = new BetDao();
+        Lot lot = null;
+        try {
+            ArrayList<Lot> lots = getAvailableLots();
+            for (int i = 0; i < lots.size(); i++) {
+                if (lots.get(i).getId() == lotId) {
+                    lot = lots.get(i);
+                }
+            }
+            if (lot != null) {
+                lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
+            }
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        } finally {
             betDao.returnConnection();
         }
         return lot;
@@ -133,7 +154,7 @@ public class LotService extends AbstractService {
         BetDao betDao = new BetDao();
         try {
             lots = lotDao.getLotsOverTiming();
-            if (lots != null) {
+            if (!lots.isEmpty()) {
                 for (Lot lot : lots) {
                     lot.getBets().addAll(betDao.getBetsByLotId(lot.getId())); // adding bets to the current lot.
                 }
@@ -241,25 +262,23 @@ public class LotService extends AbstractService {
 
     }
 
-//    /**
-//     * Withdraw lot from bids using lot ID.
-//     * Set lot availability to false.
-//     *
-//     * @param lotId
-//     */
-//    public void withdrawLot(long lotId) throws ServiceException {
-//        LotDao lotDao = new LotDao();
-//        try {
-//            lotDao.withdrawLot(lotId);
-//        } catch (DAOException e) {
-//            throw new ServiceException(e);
-//        } finally {
-//            lotDao.returnConnection();
-//        }
-//    }
+    /**
+     * Check the auction waiting period.
+     * If period is greater than 10 days from current date, all results for this lot must be reset.
+     * In other case results for lot are still actual.
+     *
+     * @param lot lot which time need to be checked.
+     * @return true - period less than 10 days and result of auction are actual.
+     * false - waiting period is over.
+     */
+    public boolean checkWaitingPeriod(Lot lot) {
+        LocalDate lotDateAvailable = lot.getDateAvailable();
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.minusDays(WAITING_PERIOD).isBefore(lotDateAvailable);
+    }
 
     /**
-     * Editing lot date for returning to bids.
+     * Editing lot date before returning lot to bids.
      * Adding 10 days to current date to get a new date to make the lot available for auction bids.
      *
      * @return new date.

@@ -25,7 +25,6 @@ public class BetDao extends AbstractDao {
     private static final String SQL_RESET_LOT_BETS = "DELETE FROM bet WHERE id_lot=?";
 
     public BetDao() {
-        super();
     }
 
     public BetDao(ProxyConnection connection) {

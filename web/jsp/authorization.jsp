@@ -63,26 +63,7 @@
                         key="login.button.register"/></a>
             </div>
         </div>
-    </div> <!--gggg-->
-    <%--<form name="LoginForm" action="/Controller" method="post" style="margin: 20px" class="login-form">--%>
-        <%--<fmt:message key="login.title.login"/>--%>
-        <%--<input type="text" name="login" pattern="[\w-_]{6,}" required><label class="label-warning">*</label><br/>--%>
-        <%--<fmt:message key="login.title.password"/>--%>
-        <%--<input type="password" name="password" required title="<fmt:message key="login.password.restrict"/>"--%>
-               <%--pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[\d])[\w_-]{8,}$"><label class="label-warning">*</label><br/>--%>
-        <%--<button class="button-auction" type="submit" name="button"><fmt:message key="login.button.login"/></button>--%>
-        <%--<label class="alert-danger">--%>
-            <%--<c:if test="${authorizationError !=null}">--%>
-                <%--<fmt:message key="${authorizationError}"/>--%>
-            <%--</c:if>--%>
-        <%--</label>--%>
-        <%--<input type="hidden" name="command" value="authorization">--%>
-        <%--<input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>--%>
-    <%--</form>--%>
-    <%--<label class="label-warning">*</label><fmt:message key="login.notice.unnecessary"/><br/>--%>
-    <%--<fmt:message key="login.firsttime.title"/>--%>
-    <%--<a href="${pageContext.request.contextPath}/Controller?command=goTo&page=registration"><fmt:message--%>
-            <%--key="login.button.register"/></a>--%>
+    </div>
 </div>
 </body>
 </html>

@@ -72,22 +72,22 @@
             </div>
         </div>
     </div>
-        <script>
-            function validateForm() {
-                var result = true;
-                var errPwd2 = document.getElementById("errPwd2");
-                var pwd = document.registrationForm.password.value;
-                var pwd2 = document.registrationForm.password2.value;
-                if (pwd !== pwd2) {
-                    errPwd2.style.display="inline";
-                    result = false;
-                    document.registrationForm.password.value = "";
-                    document.registrationForm.password2.value = "";
-                }
-                return result;
+    <script>
+        function validateForm() {
+            var result = true;
+            var errPwd2 = document.getElementById("errPwd2");
+            var pwd = document.registrationForm.password.value;
+            var pwd2 = document.registrationForm.password2.value;
+            if (pwd !== pwd2) {
+                errPwd2.style.display = "inline";
+                result = false;
+                document.registrationForm.password.value = "";
+                document.registrationForm.password2.value = "";
             }
-        </script>
+            return result;
+        }
+    </script>
 
-    </div>
+</div>
 </body>
 </html>

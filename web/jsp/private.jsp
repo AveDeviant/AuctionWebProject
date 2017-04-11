@@ -27,7 +27,7 @@
             <button class="button-auction" type="button" onclick="showCardForm()"><fmt:message
                     key="register.page.title"/></button>
             <div id="cardForm" style="display: none;">
-                <form action="/Controller" method="post">
+                <form action="${pageContext.request.contextPath}/Controller" method="post">
                     <input type="radio" name="system" value="Visa" checked>Visa
                     <input type="radio" name="system" value="MasterCard">MasterCard
                     <br/>
@@ -66,7 +66,7 @@
             <fmt:message key="private.emptyBetList"/>
         </c:otherwise>
     </c:choose>
-    <form name="logout" action="/Controller" method="post" style="margin: 20px">
+    <form name="logout" action="${pageContext.request.contextPath}/Controller" method="post">
         <button class="button-auction" type="submit" name="button"><fmt:message key="private.button.logout"/></button>
         <input type="hidden" name="command" value="logout">
         <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>

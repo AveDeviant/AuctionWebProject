@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: Acer
@@ -8,8 +9,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="properties.locale"/>
 <head>
-    <title>Title</title>
+    <title><fmt:message key="message.page.title"/></title>
 </head>
 <body>
 <c:import url="/fragments/header.jsp"/>
@@ -26,7 +29,8 @@
         <c:out value="${message.getContent()}"/>
         <c:if test="${user.getRole().getValue() eq 'admin' and message.getSenderId()!=user.getUserId()}">
             <button type="button" onclick="showMessageForm()">Ответ</button>
-            <form id="message-form" method="post" action="${pageContext.request.contextPath}/Controller" style="display:none;">
+            <form id="message-form" method="post" action="${pageContext.request.contextPath}/Controller"
+                  style="display:none;">
                 <label>Theme</label>
                 <input type="text" name="theme">
                 <label>Content</label>

@@ -3,7 +3,6 @@ package by.buslauski.auction.action;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
@@ -24,7 +23,7 @@ public class ShowLotImpl implements Command {
         long lotId = Long.parseLong(request.getParameter(LOT_ID));
         LotService lotService = new LotService();
         try {
-            Lot lot = lotService.getLotById(lotId);
+            Lot lot = lotService.getAvailableLotById(lotId);
             if (lot == null) {
                 pageResponse.setResponseType(ResponseType.FORWARD);
                 pageResponse.setPage(PageNavigation.PAGE_NOT_FOUND);

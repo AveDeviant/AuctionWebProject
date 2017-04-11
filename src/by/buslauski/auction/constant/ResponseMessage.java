@@ -29,5 +29,6 @@ public class ResponseMessage {
     public static final String DELETE_LOT_ERROR="admin.edit.lot.delete.error";
     public static final String INVALID_CARD_NUMBER="bank.card.error";
     public static final String ADDING_CATEGORY_ERROR="category.add.error";
+    public static final String INVALID_VALUE = "invalid.value";
 
 }

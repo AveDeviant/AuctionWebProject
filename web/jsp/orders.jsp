@@ -26,7 +26,7 @@
         <tr>
             <th>ID</th>
             <th>ID lot</th>
-            <th>ID customer</th>
+            <th><fmt:message key="order.title.customer.id"/></th>
             <th><fmt:message key="order.title.customer.name"/></th>
             <th><fmt:message key="order.title.customer.city"/></th>
             <th><fmt:message key="order.title.customer.address"/></th>

@@ -27,7 +27,7 @@ public class UserDao extends AbstractDao {
             "FROM user JOIN role ON user.id_role=role.id_role WHERE id_user=?";
     private static final String SQL_UPDATE_INFO = "UPDATE user SET real_name=?, city=?, address=?, phone_number=? WHERE id_user=?";
     private static final String SQL_CHANGE_USER_ACCESS = "UPDATE user SET access=? WHERE id_user=?";
-    private static final String SQL_SELECT_ADMIN ="SELECT * FROM user INNER JOIN role ON user.id_role=role.id_role " +
+    private static final String SQL_SELECT_ADMIN ="SELECT * FROM user JOIN role ON user.id_role=role.id_role " +
             "WHERE name='admin' LIMIT 1";
 
 

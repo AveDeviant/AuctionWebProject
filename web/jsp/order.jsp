@@ -18,40 +18,56 @@
 <body>
 <div class="container">
 
-    <c:if test="${orderError!=null}">
-        <label class="alert-danger"><fmt:message key="${orderError}"/> </label>
-    </c:if>
     <div class="row">
-    <label class="text-center"><fmt:message key="order.reject.notice"/></label>
+        <div class="col-sm-12">
+            <c:if test="${orderError!=null}">
+                <label class="alert-danger text-center"><fmt:message key="${orderError}"/> </label>
+            </c:if>
+        </div>
     </div>
     <div class="row">
-    <h1 class="text-center"><fmt:message key="order.title.greeting"/></h1>
+        <div class="col-sm-12">
+            <label class="text-center"><fmt:message key="order.reject.notice"/></label>
+        </div>
     </div>
-    <h3>${lot.getTitle()}</h3>
-    <img src="${lot.getImage()}">
-    <h4>${lot.getCurrentPrice()}</h4>
-    <form action="/Controller" method="post" enctype="multipart/form-data">
-        <fmt:message key="order.page.name"/>
-        <input type="text" required pattern="[A-Za-z А-Яа-я ]{2,}" name="name"><label
-            class="label-warning">*</label><br/>
-        <fmt:message key="order.page.city"/>
-        <input type="text" required pattern="[\w,-.А-Яа-я ]{5,}" name="city"><label class="label-warning">*</label><br/>
-        <fmt:message key="order.page.address"/>
-        <input type="text" required pattern="[\w\d,-.А-Яа-я ]{5,}" name="address"><label class="label-warning">*</label><br/>
-        <fmt:message key="order.page.phone"/>
-        <input type="text" required name="phone"><label class="label-warning">*</label><br/>
-        <button class="button-auction" type="submit" name="command" value="buy"><fmt:message
-                key="order.button.buy"/></button>
-        <input type="hidden" name="jspPath"
-               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-    </form>
-    <form method="post" action="${pageContext.request.contextPath}/Controller">
-        <button class="button-auction" type="submit" name="command" value="reject"><fmt:message
-                key="order.button.reject"/></button>
-        <input type="hidden" name="jspPath"
-               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-    </form>
-    <label class="label-warning">*</label><label><fmt:message key="login.notice.unnecessary"/> </label>
+    <div class="row">
+        <h1 class="text-center"><fmt:message key="order.title.greeting"/></h1>
+    </div>
+    <h2 class="text-center">${lot.getTitle()}</h2>
+    <div class="row">
+        <div class="col-sm-8">
+            <img class="img-responsive" src="${lot.getImage()}">
+        </div>
+        <div class="col-sm-4">
+            <h4><fmt:message key="order.page.cost"/></h4>
+            <h3>${lot.getCurrentPrice()}</h3>
+
+            <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data">
+                <label for="name"><fmt:message key="order.page.name"/></label><label
+                    class="required">*</label>
+                <input class="form-control" type="text" required pattern="[A-Za-z А-Яа-я ]{2,}" name="name" id="name">
+                <label for="city"><fmt:message key="order.page.city"/></label><label class="required">*</label>
+                <input class="form-control" type="text" required pattern="[\w,-.А-Яа-я ]{5,}" name="city" id="city">
+                <label for="address"><fmt:message key="order.page.address"/></label><label class="required">*</label>
+                <input class="form-control" type="text" required pattern="[\w\d,-.А-Яа-я ]{5,}" name="address"
+                       id="address">
+                <label for="phone"><fmt:message key="order.page.phone"/></label><label class="required">*</label>
+                <input class="form-control" type="text" required name="phone" id="phone"><br/>
+                <button class="button-auction" type="submit" name="command" value="buy"><fmt:message
+                        key="order.button.buy"/></button>
+                <input type="hidden" name="jspPath"
+                       value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+            </form>
+            <form method="post" action="${pageContext.request.contextPath}/Controller">
+                <button class="button-auction" type="submit" name="command" value="reject"><fmt:message
+                        key="order.button.reject"/></button>
+                <input type="hidden" name="jspPath"
+                       value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+
+            </form>
+            <label class="required">*</label><label><fmt:message key="login.notice.unnecessary"/> </label>
+        </div>
+    </div>
 
 </div>
 </body>

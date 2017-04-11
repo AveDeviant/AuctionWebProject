@@ -12,6 +12,7 @@ import by.buslauski.auction.service.BankService;
 import by.buslauski.auction.service.BetService;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.validator.BetValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,7 +36,6 @@ public class BetCommandImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         HttpSession session = request.getSession();
-        BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
         User user = (User) session.getAttribute(RequestAttributes.USER);
         long lotId = Long.valueOf(request.getParameter(LOT_ID_PARAM));
         String controller = request.getRequestURI();
@@ -61,12 +61,18 @@ public class BetCommandImpl implements Command {
         }
         try {
             if (user.getAccess()) {
-                Lot lot = lotService.getLotById(lotId);// ЙОУ ЙОУ ЙОУ можешь это сунуть в сервис где сравниваешь цены лота(там вызывать дао который
+                Lot lot = lotService.getAvailableLotById(lotId);// ЙОУ ЙОУ ЙОУ можешь это сунуть в сервис где сравниваешь цены лота(там вызывать дао который
                 if (!lotService.checkActuality(lot)) {
                     request.setAttribute(BET_ERROR, ResponseMessage.BET_TIMEOUT);
                     pageResponse.setResponseType(ResponseType.FORWARD);
                     return pageResponse;
                 }
+                if (!BetValidator.checkPriceForValid(request.getParameter(PRICE_PARAM))) {
+                    request.setAttribute(BET_ERROR, ResponseMessage.INVALID_VALUE);
+                    pageResponse.setResponseType(ResponseType.FORWARD);
+                    return pageResponse;
+                }
+                BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
                 if (!lotService.checkBetValue(lot, newPrice)) {
                     request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
                     pageResponse.setResponseType(ResponseType.FORWARD);
@@ -89,6 +95,6 @@ public class BetCommandImpl implements Command {
             request.setAttribute(BET_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);
         }
-            return pageResponse;
-        }
+        return pageResponse;
     }
+}

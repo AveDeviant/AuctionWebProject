@@ -23,27 +23,57 @@
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="properties.locale"/>
 <div class="container">
-    <c:if test="${err!=null}">
-        <fmt:message key="${err}"/>
-    </c:if>
-    <c:if test="${banned !=null}">
-        <label class="alert-danger"><fmt:message key="${banned}"/> </label>
-    </c:if>
-    <c:if test="${emptyList !=null}">
-        <fmt:message key="${emptyList}"/>
-    </c:if>
+    <div class="row">
+        <c:if test="${err!=null}">
+            <fmt:message key="${err}"/>
+        </c:if>
+        <c:if test="${banned !=null}">
+            <label class="text-center alert-danger"><fmt:message key="${banned}"/> </label>
+        </c:if>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <c:if test="${emptyList !=null}">
+                <h1 class="text-center"><fmt:message key="${emptyList}"/></h1>
+            </c:if>
+        </div>
+    </div>
     <c:choose>
         <c:when test="${lotsByCategory==null}">
             <c:forEach var="lot" items="${lots}" varStatus="status">
-                <a class="lot-title" href="/Controller?command=showLot&id=${lot.getId()}"><h2>${lot.getTitle()}</h2></a>
-                <img style="width: 50%" src="${lot.getImage()}">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <a class="lot-title"
+                           href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
+                            <h2>${lot.getTitle()}</h2></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <img style="width:80%" src="${lot.getImage()}">
+                    </div>
+                    <div class="col-sm-4">
+                        <h4><fmt:message key="lot.page.currentPrice"/></h4>
+                        <h2>${lot.getCurrentPrice()}</h2>
+                    </div>
+                </div>
             </c:forEach>
         </c:when>
         <c:otherwise>
             <label><fmt:message key="selected.category"/>${categoryValue} </label>
             <c:forEach var="lot" items="${lotsByCategory}" varStatus="status">
-                <a class="lot-title" href="/Controller?command=showLot&id=${lot.getId()}"><h3>${lot.getTitle()}</h3></a>
-                <img style="width: 50%" src="${lot.getImage()}">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <a class="lot-title"
+                           href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
+                            <h2>${lot.getTitle()}</h2></a>
+                        <img style="width:80%" src="${lot.getImage()}">
+                    </div>
+                    <div class="col-sm-4">
+                        <h4><fmt:message key="lot.page.currentPrice"/></h4>
+                        <h2>${lot.getCurrentPrice()}</h2>
+                    </div>
+                </div>
             </c:forEach>
         </c:otherwise>
     </c:choose>

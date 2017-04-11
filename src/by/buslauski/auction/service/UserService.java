@@ -44,7 +44,7 @@ public class UserService extends AbstractService {
 
     /**
      * Check lots which unable for bids but already have confirmed bets.
-     * Last bet is a winning bet - it's means that last consumer who made a bet is a winner of auction.
+     * Last bet is a winning bet - the last consumer who made a bet is a winner of auction.
      *
      * @param user add winning bets in consumer's ArrayList for further order.
      */
@@ -53,10 +53,14 @@ public class UserService extends AbstractService {
         ArrayList<Bet> winningBets = new ArrayList<>();
 
         for (Lot lot : lots) {
-            if (!lot.getBets().isEmpty() && lot.getAvailability()) {
+            if (!lot.getBets().isEmpty() && lot.getAvailability()) {   // if lot have confirmed bets
                 Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
                 if (lastBet.getUserId() == user.getUserId()) {
-                    winningBets.add(lastBet);
+                    if (lotService.checkWaitingPeriod(lot)) {
+                        winningBets.add(lastBet);
+                    } else {                            // if the winnings are not processed within 10 days.
+                        lotService.resetBids(lot);
+                    }
                 }
             }
             user.setWinningBets(winningBets);
@@ -167,7 +171,7 @@ public class UserService extends AbstractService {
         return user;
     }
 
-    /**
+    /** Checking user's username and password for uniqueness
      * @param userName entered username
      * @param email    entered password
      * @return false - entered values have been already used by other users.

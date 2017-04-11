@@ -21,7 +21,7 @@
         <h1 class="text-center"><fmt:message key="offer.lot.page.head"/></h1>
     </div>
     <div class="row">
-    <h3 class="text-center"><fmt:message key="offer.lot.page"/></h3>
+        <h3 class="text-center"><fmt:message key="offer.lot.page"/></h3>
     </div>
     <c:choose>
         <c:when test="${user eq null}">
@@ -33,37 +33,47 @@
             <c:if test="${offerErr !=null}">
                 <fmt:message key="offer.bank.account"/>
             </c:if>
-            <form name="addingLot" action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data" method="post">
-                <span><fmt:message key="admin.lot.title"/> </span>
-                <input type="text" name="title" title="<fmt:message key="admin.lot.title.restrict"/>" required>
-                <span class="err" id="errTitle" style="display: none"><fmt:message
-                        key="admin.lot.title.restrict"/> </span>
-                <br/>
-                <span><fmt:message key="admin.lot.description"/> </span>
-                <input type="text" name="description"><br/>
-                <span><fmt:message key="admin.lot.image"/> </span>
-                <input type="file" name="image" required><br/>
-                <c:if test="${imageErr!=null}">
-                    <label class="error"><fmt:message key="${imageErr}"/></label>
-                </c:if>
-                <span><fmt:message key="admin.lot.startingprice"/> </span>
-                <input type="text" name="price" pattern="^[1-9][0-9]*.[0-9]{2}" required
-                       title="<fmt:message key="bet.restrict"/>"><br/>
-                <span><fmt:message key="lot.timing"/> </span>
-                <input type="date" name="availableTiming" id="availableTiming">
-                <label class="label-danger" id="errDate" style="display: none"><fmt:message
-                        key="admin.lot.timing.err"/> </label><br/>
-                <span><fmt:message key="admin.lot.value"/> </span>
-                <select name="category">
-                    <c:forEach var="option" items="${categories}">
-                        <option value="${option.getValue()}" selected><c:out value="${option.getValue()}"/></option>
-                    </c:forEach>
-                </select> <br/>
-                <button type="submit" onclick=" return checkDate()"><fmt:message key="button.add"/></button>
-                <input type="hidden" name="command" value="addLot"/>
-                <input type="hidden" name="jspPath"
-                       value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-            </form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <form name="addingLot" action="${pageContext.request.contextPath}/Controller"
+                          enctype="multipart/form-data" method="post">
+                        <label for="title"><fmt:message key="admin.lot.title"/> </label>
+                        <input class="form-control" type="text" name="title" id="title"
+                               title="<fmt:message key="admin.lot.title.restrict"/>" required>
+                        <span class="err" id="errTitle" style="display: none"><fmt:message
+                                key="admin.lot.title.restrict"/> </span>
+                        <br/>
+                        <label for="description"><fmt:message key="admin.lot.description"/> </label>
+                        <textarea class="form-control" rows="4" name="description" id="description"></textarea>
+                        <label for="image"><fmt:message key="admin.lot.image"/> </label>
+                        <input class="form-control" type="file" name="image" id="image" required><br/>
+                        <c:if test="${imageErr!=null}">
+                            <label class="error"><fmt:message key="${imageErr}"/></label>
+                        </c:if>
+                        <label for="price"><fmt:message key="admin.lot.startingprice"/> </label>
+                        <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}"
+                               required
+                               title="<fmt:message key="bet.restrict"/>"
+                               placeholder="<fmt:message key="bet.restrict"/>"><br/>
+                        <label for="availableTiming"><fmt:message key="lot.timing"/> </label>
+                        <input class="form-control" type="date" name="availableTiming" id="availableTiming">
+                        <label class="alert-danger" id="errDate" style="display: none"><fmt:message
+                                key="admin.lot.timing.err"/> </label><br/>
+                        <label for="category"><fmt:message key="admin.lot.value"/> </label>
+                        <select name="category" id="category">
+                            <c:forEach var="option" items="${categories}">
+                                <option value="${option.getValue()}" selected><c:out
+                                        value="${option.getValue()}"/></option>
+                            </c:forEach>
+                        </select> <br/>
+                        <button class="button-auction" type="submit" onclick=" return checkDate()"><fmt:message
+                                key="button.add"/></button>
+                        <input type="hidden" name="command" value="addLot"/>
+                        <input type="hidden" name="jspPath"
+                               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                    </form>
+                </div>
+            </div>
         </c:otherwise>
     </c:choose>
 </div>
