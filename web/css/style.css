@@ -1,0 +1,86 @@
+body {
+    background-color: #ffffff;
+}
+
+.login-form {
+    margin: 20px;
+}
+
+.local-spec {
+    border: none;
+    background-color: black;
+    color: #585858;
+    /*color: darkgoldenrod;*/
+}
+
+.local-spec:hover {
+    color: darkgoldenrod;
+}
+
+.required {
+    color: red;
+}
+
+.button-auction {
+    border: none;
+    padding: 8px 12px;
+    background-color: darkgoldenrod;
+    transition-property: background-color;
+    color: #ffffff;
+}
+
+.button-auction-disabled {
+    border: none;
+    padding: 8px 12px;
+    background-color: darkgoldenrod;
+    transition-property: background-color;
+    color: #ffffff;
+}
+
+.button-auction:hover {
+    transition-duration: 0.5s;
+    background-color: goldenrod;
+}
+
+.error {
+    color: red;
+}
+
+.label-warning {
+    color: #B55D00;
+}
+
+.event-winner {
+    margin: 2px;
+    border-radius: 5%;
+    background-color: darkgoldenrod;
+    transition-property: background-color;
+    color: #A4A4A4;
+}
+
+.event-winner:hover {
+    transition-duration: 0.5s;
+    background-color: goldenrod;
+}
+
+.lot-title {
+    transition-property: color;
+}
+
+.lot-title:hover {
+    transition-duration: 0.5s;
+    color: darkgoldenrod;
+}
+
+.mail-icon {
+    width: 15px;
+    height:15px;
+}
+
+/*.text-info {*/
+    /*color: darkgoldenrod;*/
+/*}*/
+/*.text-center.strong.text-info {*/
+    /*color: darkgoldenrod;*/
+
+/*}*/
