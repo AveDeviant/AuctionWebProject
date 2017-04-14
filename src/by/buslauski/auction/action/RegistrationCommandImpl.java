@@ -8,6 +8,7 @@ import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ RegistrationCommandImpl implements Command {
     private static final String PASSWORD = "password";
     private static final String REPEAT_PASSWORD = "password2";
     private static final String MAIL = "mail";
-    private static UserService userService = new UserService();
+    private static UserService userService = new UserServiceImpl();
 
     @Override
     public PageResponse execute(HttpServletRequest request) {

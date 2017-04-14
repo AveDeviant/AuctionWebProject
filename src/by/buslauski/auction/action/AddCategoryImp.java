@@ -6,8 +6,8 @@ import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.CategoryService;
+import by.buslauski.auction.service.impl.CategoryServiceImpl;
 import by.buslauski.auction.validator.CategoryValidator;
-import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class AddCategoryImp implements Command {
     private static final String CATEGORY_NAME = "name";
     private static final String ERROR = "categoryErr";
-    private static CategoryService categoryService = new CategoryService();
+    private static CategoryService categoryService = new CategoryServiceImpl();
 
     /**
      * Insert a new category into database.

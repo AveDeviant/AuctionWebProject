@@ -8,7 +8,7 @@ import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.entity.BankCard;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
-import by.buslauski.auction.service.BankService;
+import by.buslauski.auction.service.impl.BankServiceImpl;
 import by.buslauski.auction.validator.BankCardValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public class AddBankCardImpl implements Command {
         String paymentSystem = request.getParameter(PAYMENT_SYSTEM);
         String cardNumber = request.getParameter(CARD_NUMBER);
         long userId = user.getUserId();
-        BankService bankService = new BankService();
+        BankServiceImpl bankService = new BankServiceImpl();
         BankCard bankCard = null;
         try {
             if (validator.checkCardForValidNumber(cardNumber)) {

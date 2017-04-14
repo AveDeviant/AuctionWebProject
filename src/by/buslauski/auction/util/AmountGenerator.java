@@ -13,7 +13,7 @@ public class AmountGenerator {
      *
      * @return BigDecimal
      */
-    public BigDecimal generateMoneyAmount() {
+    public static BigDecimal generateMoneyAmount() {
         Random random = new Random();
         double money = random.nextInt(20000) * random.nextDouble();
         BigDecimal moneyAmount = new BigDecimal(money);

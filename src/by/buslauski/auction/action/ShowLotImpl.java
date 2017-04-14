@@ -6,6 +6,7 @@ import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class ShowLotImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         long lotId = Long.parseLong(request.getParameter(LOT_ID));
-        LotService lotService = new LotService();
+        LotService lotService = new LotServiceImpl();
         try {
             Lot lot = lotService.getAvailableLotById(lotId);
             if (lot == null) {

@@ -1,7 +1,9 @@
-package by.buslauski.auction.dao;
+
+package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.connection.ConnectionPool;
 import by.buslauski.auction.connection.ProxyConnection;
+import by.buslauski.auction.dao.BankAccountDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,10 +12,10 @@ import java.sql.SQLException;
 /**
  * Created by Acer on 28.02.2017.
  */
-public abstract class AbstractDao {
+public abstract class AbstractDao{
     private static ConnectionPool pool = ConnectionPool.getInstance();
     static final Logger LOGGER = LogManager.getLogger();
-    ProxyConnection connection;
+    protected ProxyConnection connection;
 
 
     AbstractDao() {
@@ -44,5 +46,9 @@ public abstract class AbstractDao {
         if (connection != null) {
             pool.returnConnectionToPool(connection);
         }
+    }
+
+    public void setConnection(ProxyConnection connection) {
+        this.connection = connection;
     }
 }

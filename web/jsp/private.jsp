@@ -31,7 +31,7 @@
                     <input type="radio" name="system" value="Visa" checked>Visa
                     <input type="radio" name="system" value="MasterCard">MasterCard
                     <br/>
-                    <input name="number" required pattern="[\d]{4}-[\d]{4}-[\d]{4}-[\d]{4}"
+                    <input name="number" required pattern="\d{4}-\d{4}-\d{4}-\d{4}"
                            title="<fmt:message key="bankaccount.registration.card"/> ">
                     <br>
                     <button class="button-auction" type="submit" name="command" value="addBankAccount">

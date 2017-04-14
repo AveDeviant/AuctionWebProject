@@ -10,6 +10,7 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class RejectCommandImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
-    private static LotService lotService = new LotService();
+    private static LotService lotService = new LotServiceImpl();
 
     @Override
     public PageResponse execute(HttpServletRequest request) {

@@ -7,6 +7,7 @@ import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class GetLotsByCategoryImpl implements Command {
     private static final String LOTS_BY_CATEGORY = "lotsByCategory";
     private static final String EMPTY_LIST = "emptyList";
     private static final String ERROR = "err";
-    private static LotService lotService = new LotService();
+    private static LotService lotService = new LotServiceImpl();
 
 
     /**

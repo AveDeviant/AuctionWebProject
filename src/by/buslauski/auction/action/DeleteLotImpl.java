@@ -6,6 +6,7 @@ import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,11 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 public class DeleteLotImpl implements Command {
     private static final String LOT_ID = "lotId";
     private static final String DELETE_ERROR = "editErr";
-    LotService lotService = new LotService();
+    private static LotService lotService = new LotServiceImpl();
 
     /**
      * Delete lot from database.
-     * Displaying appropriate message in case any bet or order have already been mady for his lot.
+     * Displaying appropriate message in case any bet or order have already been made for this lot.
      *
      * @param request
      * @return An object containing two fields:

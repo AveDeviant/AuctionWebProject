@@ -1,4 +1,4 @@
-package by.buslauski.auction.service;
+package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.connection.ConnectionPool;
 import by.buslauski.auction.connection.ProxyConnection;

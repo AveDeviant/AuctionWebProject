@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Created by Acer on 20.03.2017.
  */
 public class BankCardValidator {
-    private static final String CARD_REGEXP = "[\\d]{4}-[\\d]{4}-[\\d]{4}-[\\d]{4}";
+    private static final String CARD_REGEXP = "\\d{4}-\\d{4}-\\d{4}-\\d{4}";
 
 
     public boolean checkCardForValidNumber(String number) {

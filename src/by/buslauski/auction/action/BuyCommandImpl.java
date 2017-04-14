@@ -8,8 +8,10 @@ import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
-import by.buslauski.auction.service.BankService;
-import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.*;
+import by.buslauski.auction.service.impl.BankServiceImpl;
+import by.buslauski.auction.service.impl.LotServiceImpl;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 import by.buslauski.auction.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +22,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BuyCommandImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
+    private static final String ERROR_ATTR_MAIN_PAGE = "err";
     private static final String NAME_PARAM = "name";
     private static final String CITY_PARAM = "city";
     private static final String ADDRESS_PARAM = "address";
     private static final String PHONE_PARAM = "phone";
-    private static BankService bankService = new BankService();
-    private static UserService userService = new UserService();
+    private static BankServiceImpl bankService = new BankServiceImpl();
+    private static UserService userService = new UserServiceImpl();
+    private static LotService lotService = new LotServiceImpl();
 
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -50,6 +54,15 @@ public class BuyCommandImpl implements Command {
             return pageResponse;
         }
         try {
+            // The winnings are not processed within 10 days.
+            if (!lotService.checkWaitingPeriod(lotService.getLotById(winningBet.getLotId()))) {
+                user.getWinningBets().remove(winningBet);
+                pageResponse.setResponseType(ResponseType.FORWARD);
+                pageResponse.setPage(PageNavigation.INDEX_PAGE);
+                request.setAttribute(ERROR_ATTR_MAIN_PAGE, ResponseMessage.ACCESS_DENIED);
+                return pageResponse;
+            }
+            // Current customer's balance less than lot price.
             if (!bankService.checkIsEnoughBalance(user.getUserId(), winningBet.getBet())) {
                 pageResponse.setResponseType(ResponseType.FORWARD);
                 request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.ORDER_BANK_BALANCE_ERROR);
@@ -74,6 +87,6 @@ public class BuyCommandImpl implements Command {
             pageResponse.setResponseType(ResponseType.FORWARD);
             request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.OPERATION_ERROR);
         }
-            return pageResponse;
-        }
+        return pageResponse;
     }
+}

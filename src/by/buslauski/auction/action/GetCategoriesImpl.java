@@ -4,6 +4,7 @@ import by.buslauski.auction.entity.Category;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.CategoryService;
+import by.buslauski.auction.service.impl.CategoryServiceImpl;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,14 +15,16 @@ import java.util.ArrayList;
  */
 public class GetCategoriesImpl implements Command {
     private static final String CATEGORIES = "categories";
-    private static CategoryService categoryService = new CategoryService();
+    private static CategoryService categoryService = new CategoryServiceImpl();
 
 
     /**
+     * Return all lot categories from database.
+     *
      * @param request
-     * @return Array of two strings:
-     * array[0] - response type (forward or redirect)
-     * array[1] - page for response
+     * @return PageResponse object containing two fields:
+     * ResponseType - response type (forward or redirect)
+     * String page - page for response
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

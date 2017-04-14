@@ -8,6 +8,7 @@ import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.Uploading;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -78,8 +80,8 @@ public class AddLotImpl implements Command {
             }
             String uploadPath = request.getServletContext().getRealPath(UPLOAD);
             Uploading uploading = new Uploading();
-            String image = UPLOAD + "/" + uploading.uploadFile(uploadPath, lotImage);
-            LotService logic = new LotService();
+            String image = UPLOAD + File.separator + uploading.uploadFile(uploadPath, lotImage);
+            LotService logic = new LotServiceImpl();
             logic.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability, lotCategory, lotTimer);
             pageResponse.setResponseType(ResponseType.REDIRECT);
         } catch (ServiceException e) {

@@ -10,6 +10,7 @@ import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.Uploading;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +37,7 @@ public class LotEditImpl implements Command {
     private static final String LOT_IMAGE = "image";
     private static final String CATEGORY = "category";
     private static final Logger LOGGER = LogManager.getLogger();
-    private static LotService lotService = new LotService();
+    private static LotService lotService = new LotServiceImpl();
 
     /**
      * @param request

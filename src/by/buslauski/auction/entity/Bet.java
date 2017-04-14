@@ -1,7 +1,6 @@
 package by.buslauski.auction.entity;
 
 import java.math.BigDecimal;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
 /**
@@ -68,4 +67,5 @@ public class Bet {
     public String getLotTitle() {
         return lotTitle;
     }
+
 }

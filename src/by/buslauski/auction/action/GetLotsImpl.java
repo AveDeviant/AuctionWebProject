@@ -2,11 +2,10 @@ package by.buslauski.auction.action;
 
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
-import by.buslauski.auction.response.ResponseType;
-import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 public class GetLotsImpl implements Command {
     private static final String ALL_LOTS = "allLots";
     private static final String EMPTY_LIST = "emptyList";
-    private static LotService lotService = new LotService();
+    private static LotService lotService = new LotServiceImpl();
 
     @Override
     public PageResponse execute(HttpServletRequest request) {

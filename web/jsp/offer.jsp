@@ -35,8 +35,7 @@
             </c:if>
             <div class="row">
                 <div class="col-sm-12">
-                    <form name="addingLot" action="${pageContext.request.contextPath}/Controller"
-                          enctype="multipart/form-data" method="post">
+                    <form name="addingLot" action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data" method="post">
                         <label for="title"><fmt:message key="admin.lot.title"/> </label>
                         <input class="form-control" type="text" name="title" id="title"
                                title="<fmt:message key="admin.lot.title.restrict"/>" required>
@@ -44,7 +43,10 @@
                                 key="admin.lot.title.restrict"/> </span>
                         <br/>
                         <label for="description"><fmt:message key="admin.lot.description"/> </label>
-                        <textarea class="form-control" rows="4" name="description" id="description"></textarea>
+                        <textarea class="form-control" rows="4" name="description" id="description"
+                                  oninput=" return checkLength()"></textarea>
+                        <label class="help-block" id="symbolCount"></label><br/><label id="descriptErr" class="alert-danger">
+                    </label><br/>
                         <label for="image"><fmt:message key="admin.lot.image"/> </label>
                         <input class="form-control" type="file" name="image" id="image" required><br/>
                         <c:if test="${imageErr!=null}">
@@ -66,7 +68,7 @@
                                         value="${option.getValue()}"/></option>
                             </c:forEach>
                         </select> <br/>
-                        <button class="button-auction" type="submit" onclick=" return checkDate()"><fmt:message
+                        <button class="button-auction" type="submit" onclick=" return checkInput()"><fmt:message
                                 key="button.add"/></button>
                         <input type="hidden" name="command" value="addLot"/>
                         <input type="hidden" name="jspPath"
@@ -78,9 +80,10 @@
     </c:choose>
 </div>
 <script>
-    function checkDate() {
+    function checkInput() {
         var valid = true;
         var checkedDate = document.addingLot.availableTiming.value;
+        var textArea = document.getElementById("description").value;
         var errDate = document.getElementById("errDate");
         var arr = checkedDate.toString().split("-");
         var year = arr[0];
@@ -92,7 +95,21 @@
             valid = false;
             errDate.style.display = "inline";
         }
+        if (textArea.length > 1000) {
+            valid = false;
+            var error = document.getElementById("descriptErr");
+            error.innerHTML =<fmt:message key="description.length.error"/>;
+        }
         return valid;
+    }
+
+    function checkLength() {
+        var textArea = document.getElementById("description").value;
+        var count = document.getElementById("symbolCount");
+        count.innerHTML = String(1000 - textArea.length);
+        if (textArea.length > 1000) {
+            count.style.color = "red";
+        }
     }
 </script>
 </body>

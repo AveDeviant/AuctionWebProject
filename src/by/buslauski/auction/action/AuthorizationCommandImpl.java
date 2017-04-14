@@ -8,7 +8,9 @@ import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.impl.MessageServiceImpl;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 import by.buslauski.auction.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +20,10 @@ import javax.servlet.http.HttpSession;
  * Created by Acer on 27.02.2017.
  */
 public class AuthorizationCommandImpl implements Command {
-    private static UserService userService = new UserService();
-    private static MessageService messageService = new MessageService();
+    private static UserService userService = new UserServiceImpl();
+    private static MessageService messageService = new MessageServiceImpl();
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
-    private static final String JSP_PATH = "jspPath";
     private static final String AUTHORIZATION_ERROR = "authorizationError";
     private static final String USER_BANNED = "banned";
 
@@ -56,7 +57,7 @@ public class AuthorizationCommandImpl implements Command {
                 user.setUnreadMessages(true);
             }
             if (user.getAccess()) {
-                userService.setWinner(user); //check for winning bets made by this costumer
+                userService.setWinner(user); //check for winning bets made by this customer
             } else {
                 session.setAttribute(USER_BANNED, ResponseMessage.USER_BANNED);
             }

@@ -9,13 +9,12 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -38,8 +37,8 @@ public class InitCommandImpl implements Command {
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
-        LotService lotService = new LotService();
-        UserService userService = new UserService();
+        LotService lotService = new LotServiceImpl();
+        UserService userService = new UserServiceImpl();
         PageResponse pageResponse = new PageResponse();
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.MAIN_PAGE);

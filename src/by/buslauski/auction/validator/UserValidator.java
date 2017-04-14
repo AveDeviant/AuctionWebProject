@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  */
 public class UserValidator {
     private static final String PASSWORD_REGEXP = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d])[\\w_-]{8,}$";
+    private static final String Pass = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d])[\\w_-]{8,}$";
     private static final String MAIL_REGEXP = "[\\w]{3,}@[a-z]{4,}.[a-z]{2,3}";
     private static final String USERNAME_REGEXP = "[\\w_-]{6,}";
     private static final String NAME_REGEXP = "[A-Za-z А-Яа-я ]{2,}";

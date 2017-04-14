@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CommandFactory {
     private static final String COMMAND_PARAM = "command";
     private static final String LOCALE = "locale";
-    private static final String BACK = "back";
     private static final String LOGIN = "authorization";
     private static final String REGISTRATION = "registration";
     private static final String LOGOUT = "logout";
@@ -40,8 +39,6 @@ public class CommandFactory {
         switch (command) {
             case LOCALE:
                 return new LocaleCommandImpl();
-//            case BACK:
-//                return new BackCommandImpl();
             case LOGIN:
                 return new AuthorizationCommandImpl();
             case REGISTRATION:

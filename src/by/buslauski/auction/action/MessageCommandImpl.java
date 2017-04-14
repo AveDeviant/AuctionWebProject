@@ -9,7 +9,9 @@ import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.impl.MessageServiceImpl;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 import by.buslauski.auction.validator.MessageValidator;
 import org.apache.logging.log4j.Level;
 
@@ -24,8 +26,8 @@ public class MessageCommandImpl implements Command {
     private static final String MESSAGE_THEME = "theme";
     private static final String MESSAGE_TEXT = "content";
     private static final String RECIPIENT_ID = "recipientId";
-    private static MessageService messageService = new MessageService();
-    private static UserService userService = new UserService();
+    private static MessageService messageService = new MessageServiceImpl();
+    private static UserService userService = new UserServiceImpl();
 
     /**
      * @param request
@@ -59,9 +61,8 @@ public class MessageCommandImpl implements Command {
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 pageResponse.setPage(PageNavigation.FAQ_PAGE);
             } else {
-                System.out.println("piishet admin");
+                // bug
                 long recipientId = Long.parseLong(request.getParameter(RECIPIENT_ID));
-                System.out.println(recipientId);
                 User customer = userService.findUserById(recipientId);
                 messageService.addMessage(theme, text, user, customer);
                 pageResponse.setResponseType(ResponseType.REDIRECT);

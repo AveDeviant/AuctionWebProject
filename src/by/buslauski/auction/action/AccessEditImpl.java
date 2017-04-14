@@ -7,6 +7,7 @@ import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,7 +19,7 @@ public class AccessEditImpl implements Command {
     private static final String STATE = "state";
     private static final String UNBANNED = "unbanned";
     private static final String OPERATION_ERROR = "editErr";
-    private static UserService userService = new UserService();
+    private static UserService userService = new UserServiceImpl();
 
     /**
      * Changing customer's access to bidding
@@ -40,11 +41,8 @@ public class AccessEditImpl implements Command {
             pageResponse.setPage(controller + query);
         }
         long customerId = Long.parseLong(request.getParameter(CUSTOMER_ID));
-        boolean access = false;
         String state = request.getParameter(STATE);
-        if (UNBANNED.equals(state)) {
-            access = true;
-        }
+        boolean access = UNBANNED.equals(state);
         try {
             userService.changeAccess(customerId, access);
             pageResponse.setResponseType(ResponseType.REDIRECT);

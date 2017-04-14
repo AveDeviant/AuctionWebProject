@@ -17,7 +17,7 @@ public class LogoutCommandImp implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         HttpSession session = request.getSession();
-        session.invalidate();
+        session.setAttribute(RequestAttributes.USER, null);
         pageResponse.setResponseType(ResponseType.REDIRECT);
         pageResponse.setPage(PageNavigation.INDEX_PAGE);
         return pageResponse;

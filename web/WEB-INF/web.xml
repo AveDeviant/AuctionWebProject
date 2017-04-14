@@ -26,10 +26,10 @@
             <taglib-location>/WEB-INF/tld/date.tld</taglib-location>
         </taglib>
     </jsp-config>
-    <!--<error-page>-->
-    <!--<error-code>404</error-code>-->
-    <!--<location>/jsp/errors/404.jsp</location>-->
-    <!--</error-page>-->
+    <error-page>
+    <error-code>404</error-code>
+    <location>/jsp/errors/404.jsp</location>
+    </error-page>
     <!--<error-page>-->
     <!--<error-code>500</error-code>-->
     <!--<location>/jsp/errors/500.jsp</location>-->

@@ -8,10 +8,11 @@ import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
-import by.buslauski.auction.service.BankService;
-import by.buslauski.auction.service.BetService;
-import by.buslauski.auction.service.LotService;
-import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.*;
+import by.buslauski.auction.service.impl.BankServiceImpl;
+import by.buslauski.auction.service.impl.BetServiceImpl;
+import by.buslauski.auction.service.impl.LotServiceImpl;
+import by.buslauski.auction.service.impl.UserServiceImpl;
 import by.buslauski.auction.validator.BetValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +27,10 @@ public class BetCommandImpl implements Command {
     private static final String LOT_ID_PARAM = "lotId";
     private static final String BET_ERROR = "betErr";
     private static final String AUTHORIZATION_ERROR = "authorizationError";
-    private static LotService lotService = new LotService();
-    private static BetService betService = new BetService();
-    private static BankService bankService = new BankService();
-    private static UserService userService = new UserService();
+    private static LotService lotService = new LotServiceImpl();
+    private static BetService betService = new BetServiceImpl();
+    private static BankServiceImpl bankService = new BankServiceImpl();
+    private static UserService userService = new UserServiceImpl();
 
 
     @Override
@@ -38,14 +39,7 @@ public class BetCommandImpl implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(RequestAttributes.USER);
         long lotId = Long.valueOf(request.getParameter(LOT_ID_PARAM));
-        String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
-        } else {
-            String query = path.substring(path.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         if (user == null) {
             request.setAttribute(AUTHORIZATION_ERROR, ResponseMessage.BET_AUTHORIZATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);
@@ -61,7 +55,7 @@ public class BetCommandImpl implements Command {
         }
         try {
             if (user.getAccess()) {
-                Lot lot = lotService.getAvailableLotById(lotId);// ЙОУ ЙОУ ЙОУ можешь это сунуть в сервис где сравниваешь цены лота(там вызывать дао который
+                Lot lot = lotService.getAvailableLotById(lotId);
                 if (!lotService.checkActuality(lot)) {
                     request.setAttribute(BET_ERROR, ResponseMessage.BET_TIMEOUT);
                     pageResponse.setResponseType(ResponseType.FORWARD);
@@ -73,7 +67,7 @@ public class BetCommandImpl implements Command {
                     return pageResponse;
                 }
                 BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
-                if (!lotService.checkBetValue(lot, newPrice)) {
+                if (!betService.checkBetValue(lot, newPrice)) {
                     request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
                     pageResponse.setResponseType(ResponseType.FORWARD);
                     return pageResponse;

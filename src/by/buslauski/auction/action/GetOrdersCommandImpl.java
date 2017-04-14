@@ -7,6 +7,7 @@ import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.OrderService;
+import by.buslauski.auction.service.impl.OrderServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class GetOrdersCommandImpl implements Command {
     private static final String ORDERS = "orders";
     private static final String ERROR = "err";
-    private static OrderService orderService = new OrderService();
+    private static OrderService orderService = new OrderServiceImpl();
 
     /**
      * Get order list from database.

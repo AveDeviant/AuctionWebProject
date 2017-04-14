@@ -24,10 +24,10 @@
 <fmt:setBundle basename="properties.locale"/>
 <div class="container">
     <div class="row">
-        <c:if test="${err!=null}">
-            <fmt:message key="${err}"/>
+        <c:if test="${err != null}">
+            <label class="alert-danger"><fmt:message key="${err}"/></label>
         </c:if>
-        <c:if test="${banned !=null}">
+        <c:if test="${banned != null}">
             <label class="text-center alert-danger"><fmt:message key="${banned}"/> </label>
         </c:if>
     </div>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        <img style="width:80%" src="${lot.getImage()}">
+                        <img style="width:80%" src="${lot.getImage()}" alt="${lot.getTitle()}">
                     </div>
                     <div class="col-sm-4">
                         <h4><fmt:message key="lot.page.currentPrice"/></h4>
@@ -67,7 +67,7 @@
                         <a class="lot-title"
                            href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
                             <h2>${lot.getTitle()}</h2></a>
-                        <img style="width:80%" src="${lot.getImage()}">
+                        <img style="width:80%" src="${lot.getImage()}" alt="${lot.getImage()}">
                     </div>
                     <div class="col-sm-4">
                         <h4><fmt:message key="lot.page.currentPrice"/></h4>
