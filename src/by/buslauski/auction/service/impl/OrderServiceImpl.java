@@ -1,5 +1,7 @@
 package by.buslauski.auction.service.impl;
 
+import by.buslauski.auction.dao.DaoHelper;
+import by.buslauski.auction.dao.OrderDao;
 import by.buslauski.auction.dao.impl.OrderDaoImpl;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.exception.DAOException;
@@ -21,13 +23,15 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
     @Override
     public ArrayList<Order> getAllOrders() throws ServiceException {
         ArrayList<Order> orders = null;
-        OrderDaoImpl orderDao = new OrderDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            OrderDao orderDao = new OrderDaoImpl();
+            daoHelper.initDao(orderDao);
             orders = orderDao.getAllOrders();
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            orderDao.returnConnection();
+            daoHelper.release();
         }
         return orders;
     }
@@ -35,14 +39,16 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
 
     @Override
     public void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws ServiceException {
-        OrderDaoImpl orderDao = new OrderDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            OrderDao orderDao = new OrderDaoImpl();
+            daoHelper.initDao(orderDao);
             orderDao.addCancelledOrder(lotId, userId, payment);
         } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e + "Exception during adding order into database");
             throw new ServiceException(e);
         } finally {
-            orderDao.returnConnection();
+            daoHelper.release();
         }
 
     }

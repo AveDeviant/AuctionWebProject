@@ -24,12 +24,6 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
             "bet JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=?";
     private static final String SQL_RESET_LOT_BETS = "DELETE FROM bet WHERE id_lot=?";
 
-    public BetDaoImpl() {
-    }
-
-    public BetDaoImpl(ProxyConnection connection) {
-        super(connection);
-    }
 
     @Override
     public void addBet(long userId, long lotId, BigDecimal price) throws DAOException {
@@ -63,6 +57,7 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
         return bets;
     }
 
+    @Override
     public ArrayList<Bet> getUserBets(long userId) throws DAOException {
         ArrayList<Bet> userBets = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BETS)) {
@@ -80,6 +75,7 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
         return userBets;
     }
 
+    @Override
     public void resetBets(long lotId) throws DAOException {
         try (PreparedStatement preparedStatementBet = connection.prepareStatement(SQL_RESET_LOT_BETS)) {
             preparedStatementBet.setLong(1, lotId);

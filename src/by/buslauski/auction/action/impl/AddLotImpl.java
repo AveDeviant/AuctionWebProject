@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -38,18 +39,12 @@ public class AddLotImpl implements Command {
     private static final String IMAGE_ERROR = "imageErr";
     private static final String OFFER_ERROR = "offerErr";
     private static final String ADD_ERROR = "addErr";
+    private static LotService lotService = new LotServiceImpl();
 
     @Override
     public PageResponse execute(HttpServletRequest request) {
-        String page = request.getParameter(RequestAttributes.JSP_PATH);
         PageResponse pageResponse = new PageResponse();
-        String controller = request.getRequestURI();
-        if (page.endsWith("?")) {
-            pageResponse.setPage(page);
-        } else {
-            String query = page.substring(page.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         try {
             User user = (User) request.getSession().getAttribute(USER_SESSION);
             long userId = user.getUserId();
@@ -81,8 +76,7 @@ public class AddLotImpl implements Command {
             String uploadPath = request.getServletContext().getRealPath(UPLOAD);
             Uploading uploading = new Uploading();
             String image = UPLOAD + File.separator + uploading.uploadFile(uploadPath, lotImage);
-            LotService logic = new LotServiceImpl();
-            logic.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability, lotCategory, lotTimer);
+            lotService.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability, lotCategory, lotTimer);
             pageResponse.setResponseType(ResponseType.REDIRECT);
         } catch (ServiceException e) {
             pageResponse.setResponseType(ResponseType.FORWARD);

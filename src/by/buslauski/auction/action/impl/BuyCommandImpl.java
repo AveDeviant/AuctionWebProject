@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
@@ -40,14 +41,7 @@ public class BuyCommandImpl implements Command {
         String address = request.getParameter(ADDRESS_PARAM);
         String phone = request.getParameter(PHONE_PARAM);
         Bet winningBet = user.getWinningBets().get(0);
-        String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
-        } else {
-            String query = path.substring(path.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         if (!user.getAccess()) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.USER_BANNED);

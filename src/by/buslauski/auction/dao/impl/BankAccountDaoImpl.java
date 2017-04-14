@@ -26,14 +26,6 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
             "FROM account JOIN lot ON account.id_user=lot.id_user WHERE id_lot=?";
     private static final String SQL_UPDATE_ACCOUNT = "UPDATE account SET money_amount=? WHERE id_user=?";
 
-
-    public BankAccountDaoImpl() {
-    }
-
-    public BankAccountDaoImpl(ProxyConnection connection) {
-        super(connection);
-    }
-
     @Override
     public void addCard(long userId, String system, String cardNumber, BigDecimal moneyAmount) throws DAOException {
         try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_CARD)) {
@@ -48,6 +40,7 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
         }
     }
 
+    @Override
     public BankCard findCardByNumber(String cardNumber) throws DAOException {
         BankCard bankCard = null;
         try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_CARD_BY_NUMBER)) {
@@ -63,6 +56,7 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
         return bankCard;
     }
 
+    @Override
     public BankCard findCardById(long cardId) throws DAOException {
         BankCard bankCard = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_CARD_BY_ID)) {
@@ -78,6 +72,7 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
         return bankCard;
     }
 
+    @Override
     public BankCard findCardByUserId(long userId) throws DAOException {
         BankCard bankCard = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_CARD_BY_USER)) {
@@ -93,6 +88,7 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
         return bankCard;
     }
 
+    @Override
     public BankCard findRecipientAccount(long lotId) throws DAOException {
         BankCard bankCard = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_RECIPIENT_ACCOUNT)) {
@@ -109,28 +105,24 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
     }
 
     @Override
-    public boolean doPayment(long customerId, long recipientId, BigDecimal newBalanceCustomer,
-                             BigDecimal newBalanceRecipient) throws SQLException, DAOException {
-        boolean success = false;
-        PreparedStatement preparedStatementRecipient = null;
-        try (PreparedStatement preparedStatementCustomer = connection.prepareStatement(SQL_UPDATE_ACCOUNT)) {
-            preparedStatementCustomer.setBigDecimal(1, newBalanceCustomer);
-            preparedStatementCustomer.setLong(2, customerId);
-            preparedStatementRecipient = connection.prepareStatement(SQL_UPDATE_ACCOUNT);
-            preparedStatementRecipient.setBigDecimal(1, newBalanceRecipient);
-            preparedStatementRecipient.setLong(2, recipientId);
-            preparedStatementCustomer.executeUpdate();
-            preparedStatementRecipient.executeUpdate();
-            success = true;
+    public boolean doPayment(long customerId, long recipientId, BigDecimal newBalanceCustomer, BigDecimal newBalanceRecipient) throws DAOException {
+        try (PreparedStatement psCustomer = connection.prepareStatement(SQL_UPDATE_ACCOUNT);
+             PreparedStatement psRecipient = connection.prepareStatement(SQL_UPDATE_ACCOUNT)) {
+
+            psCustomer.setBigDecimal(1, newBalanceCustomer);
+            psCustomer.setLong(2, customerId);
+            psCustomer.executeUpdate();
+
+            psRecipient.setBigDecimal(1, newBalanceRecipient);
+            psRecipient.setLong(2, recipientId);
+            psRecipient.executeUpdate();
+
+            return true;
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e);
             throw new DAOException();
-        } finally {
-            if (preparedStatementRecipient != null) {
-                preparedStatementRecipient.close();
-            }
         }
-        return success;
+
     }
 
 

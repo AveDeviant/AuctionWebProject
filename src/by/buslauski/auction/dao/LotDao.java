@@ -4,6 +4,7 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.exception.DAOException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -18,4 +19,19 @@ public interface LotDao {
     ArrayList<Lot> findAllLots() throws DAOException;
 
     Lot findLotById(long id) throws DAOException;
+
+    void withdrawLot(long lotId) throws DAOException;
+
+    ArrayList<Lot> findAvailableLots() throws DAOException;
+
+    ArrayList<Lot> findLotsWithOverTiming() throws DAOException;
+
+    void updateCurrentPrice(long lotId, BigDecimal price) throws DAOException;
+
+    void editLot(long lotId, int categoryId, String title, BigDecimal price, String image, boolean availability,
+                 String availableDate) throws DAOException;
+
+    void returnLotToBids(long lotId, BigDecimal price, LocalDate date) throws DAOException;
+
+    void deleteLot(long lotId) throws DAOException;
 }

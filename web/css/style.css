@@ -74,13 +74,21 @@ body {
 
 .mail-icon {
     width: 15px;
-    height:15px;
+    height: 15px;
 }
 
 /*.text-info {*/
-    /*color: darkgoldenrod;*/
+/*color: darkgoldenrod;*/
 /*}*/
 /*.text-center.strong.text-info {*/
-    /*color: darkgoldenrod;*/
+/*color: darkgoldenrod;*/
 
 /*}*/
+
+#user-stat {
+    background-color: #ffffff;
+}
+
+#user-stat .table head {
+    color: #0B0B0B;
+}

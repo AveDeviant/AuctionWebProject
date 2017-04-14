@@ -1,16 +1,13 @@
 package by.buslauski.auction.dao.impl;
 
 
-import by.buslauski.auction.connection.ProxyConnection;
 import by.buslauski.auction.dao.LotDao;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.exception.DAOException;
 import org.apache.logging.log4j.Level;
 
-
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -36,13 +33,6 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
             "current_price=? WHERE id_lot=?";
     private static final String SQL_DELETE_LOT = "DELETE FROM lot WHERE id_lot=?";
 
-
-    public LotDaoImpl() {
-    }
-
-    public LotDaoImpl(ProxyConnection connection) {
-        super(connection);
-    }
 
     @Override
     public void addLot(long userId, int categoryId, String title, String description,
@@ -80,6 +70,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         return lots;
     }
 
+    @Override
     public ArrayList<Lot> findAvailableLots() throws DAOException {
         ArrayList<Lot> lots = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(SQL_GET_AVAILABLE_LOTS)) {
@@ -121,6 +112,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         return lot;
     }
 
+    @Override
     public void updateCurrentPrice(long lotId, BigDecimal price) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_CURRENT_PRICE)) {
             preparedStatement.setBigDecimal(1, price);
@@ -132,6 +124,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         }
     }
 
+    @Override
     public ArrayList<Lot> findLotsWithOverTiming() throws DAOException {
         ArrayList<Lot> lots = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_LOTS_OVER_TIMING)) {
@@ -146,6 +139,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         return lots;
     }
 
+    @Override
     public void editLot(long lotId, int categoryId, String title, BigDecimal price, String image, boolean availability,
                         String availableDate) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_EDIT_LOT)) {
@@ -163,6 +157,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         }
     }
 
+    @Override
     public void returnLotToBids(long lotId, BigDecimal price, LocalDate date) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_RETURN_LOT_TO_BIDS)) {
             preparedStatement.setString(1, date.toString());
@@ -175,6 +170,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         }
     }
 
+    @Override
     public void withdrawLot(long lotId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_WITHDRAW_LOT)) {
             preparedStatement.setLong(1, lotId);
@@ -185,6 +181,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
         }
     }
 
+    @Override
     public void deleteLot(long lotId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_LOT)) {
             preparedStatement.setLong(1, lotId);

@@ -20,14 +20,8 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao{
     private static final String SQL_INSERT_CATEGORY ="INSERT INTO category VALUES(NULL,?)";
 
 
-    public CategoryDaoImpl(){
-        super();
-    }
-    public CategoryDaoImpl(ProxyConnection connection) {
-        super(connection);
-    }
-
-    public int findCategoryByName(String name) throws DAOException {
+    @Override
+    public int findCategoryIdByName(String name) throws DAOException {
         int categoryId = 0;
         try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ID)) {
             statement.setString(1, name);

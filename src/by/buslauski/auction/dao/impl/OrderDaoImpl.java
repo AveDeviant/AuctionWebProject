@@ -1,6 +1,5 @@
 package by.buslauski.auction.dao.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
 import by.buslauski.auction.dao.OrderDao;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.exception.DAOException;
@@ -23,13 +22,7 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
     private static final String SQL_CREATE_ORDER = "INSERT INTO auction.order VALUES(NULL,?,?,?,NOW(),?)";
 
 
-    public OrderDaoImpl() {
-    }
-
-    public OrderDaoImpl(ProxyConnection connection) {
-        super(connection);
-    }
-
+    @Override
     public void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_CANCELLED_ORDER)) {
             preparedStatement.setLong(1, userId);
@@ -39,7 +32,6 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR,e);
             throw new DAOException(e);
-
         }
     }
 

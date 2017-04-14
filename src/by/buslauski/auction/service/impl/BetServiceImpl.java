@@ -1,6 +1,9 @@
 package by.buslauski.auction.service.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
+import by.buslauski.auction.dao.BetDao;
+import by.buslauski.auction.dao.DaoHelper;
+import by.buslauski.auction.dao.LotDao;
+import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.BetDaoImpl;
 import by.buslauski.auction.dao.impl.LotDaoImpl;
 import by.buslauski.auction.dao.impl.UserDaoImpl;
@@ -15,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 
 /**
  * Created by Acer on 21.03.2017.
@@ -26,47 +28,37 @@ public class BetServiceImpl extends AbstractService implements BetService {
 
     @Override
     public void addBet(long userId, long lotId, BigDecimal price) throws ServiceException {
-        ProxyConnection connection = null;
+        DaoHelper daoHelper = new DaoHelper();
         try {
-            connection = pool.takeConnectionFromPool();
-            connection.setAutoCommit(false);
-            BetDaoImpl betDao = new BetDaoImpl(connection);
+            BetDao betDao = new BetDaoImpl();
+            LotDao lotDao = new LotDaoImpl();
+            daoHelper.beginTransaction(betDao, lotDao);
             betDao.addBet(userId, lotId, price);
-            LotDaoImpl lotDao = new LotDaoImpl(connection);
             lotDao.updateCurrentPrice(lotId, price);
-            connection.commit();
-        } catch (DAOException | SQLException e) {
+            daoHelper.commit();
+        } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e + " Exception during adding bet in database");
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    LOGGER.log(Level.ERROR, e);
-                }
-            }
+            daoHelper.rollback();
             throw new ServiceException(e);
         } finally {
-            if (connection != null) {
-                try {
-                    connection.setAutoCommit(true);
-                } catch (SQLException e) {
-                    LOGGER.log(Level.ERROR, e);
-                }
-            }
-            returnConnection(connection);
+            daoHelper.endTransaction();
+
         }
+
     }
 
     @Override
     public User findUserByBet(Bet bet) throws ServiceException {
         User user = null;
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             user = userDao.findUserById(bet.getUserId());
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
         return user;
     }

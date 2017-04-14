@@ -29,32 +29,34 @@
         </c:if>
     </label>
     <div class="col-sm-4">
-    <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data">
-        <label for="id"><fmt:message key="admin.lot.edit.id"/></label>
-        <input class="form-control" type="number" name="id" id="id" required>
-        <label for="title"><fmt:message key="admin.lot.edit.title"/></label>
-        <input  class="form-control" type="text" name="title" id="title" required>
-        <label for="image"><fmt:message key="admin.lot.image"/> </label>
-        <input class="form-control" type="file" id="image" name="image" required>
-        <label for="price"><fmt:message key="admin.lot.startingprice"/></label>
-        <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}" required
-               title="<fmt:message key="bet.restrict"/>" placeholder="<fmt:message key="bet.restrict"/>">
-        <label for="date"><fmt:message key="lot.timing"/></label>
-        <input class="form-control" type="date" id="date" name="availableTiming" required/>
-        <label for="availability"><fmt:message key="admin.lot.edit.availability"/></label><br/>
-        <input type="checkbox" id="availability" name="availability" value="true" checked/><br/>
-        <label for="category"><fmt:message key="lot.edit.page.category"/></label>
-        <select name="category" id="category">
-            <c:forEach var="option" items="${categories}">
-                <option value="${option.getValue()}" selected><c:out value="${option.getValue()}"/></option>
-            </c:forEach>
-        </select>
-        <br/>
-        <button class="button-auction" type="submit"><fmt:message key="admin.lot.edit.button"/></button>
-        <input type="hidden" name="command" value="editLot">
-        <input type="hidden" name="jspPath"
-               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-    </form>
+        <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data" name="editLot">
+            <label for="id"><fmt:message key="admin.lot.edit.id"/></label>
+            <input class="form-control" type="number" name="id" id="id" required>
+            <label for="title"><fmt:message key="admin.lot.edit.title"/></label>
+            <input class="form-control" type="text" name="title" id="title" required>
+            <label for="image"><fmt:message key="admin.lot.image"/> </label>
+            <input class="form-control" type="file" id="image" name="image" required>
+            <label for="price"><fmt:message key="admin.lot.startingprice"/></label>
+            <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}" required
+                   title="<fmt:message key="bet.restrict"/>" placeholder="<fmt:message key="bet.restrict"/>">
+            <label for="date"><fmt:message key="lot.timing"/></label>
+            <input class="form-control" type="date" id="date" name="availableTiming" required/>
+            <label class="alert-danger" id="errDate"></label><br/>
+            <label for="availability"><fmt:message key="admin.lot.edit.availability"/></label><br/>
+            <input type="checkbox" id="availability" name="availability" value="true" checked/><br/>
+            <label for="category"><fmt:message key="lot.edit.page.category"/></label>
+            <select name="category" id="category">
+                <c:forEach var="option" items="${categories}">
+                    <option value="${option.getValue()}" selected><c:out value="${option.getValue()}"/></option>
+                </c:forEach>
+            </select>
+            <br/>
+            <button class="button-auction" type="submit" onclick="return checkDate()"><fmt:message
+                    key="admin.lot.edit.button"/></button>
+            <input type="hidden" name="command" value="editLot">
+            <input type="hidden" name="jspPath"
+                   value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+        </form>
     </div>
     <table class="table">
         <thead>
@@ -103,5 +105,23 @@
         </tbody>
     </table>
 </div>
+<script>
+    function checkDate() {
+        var valid = true;
+        var checkedDate = document.editLot.availableTiming.value;
+        var errDate = document.getElementById("errDate");
+        var arr = checkedDate.toString().split("-");
+        var year = arr[0];
+        var month = arr[1];
+        var day = arr[2];
+        var date = new Date(year, month, day);
+        var currentTime = new Date();
+        if (date.getTime() < currentTime) {
+            valid = false;
+            errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';
+        }
+        return valid;
+    }
+</script>
 </body>
 </html>

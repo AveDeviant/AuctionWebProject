@@ -14,4 +14,8 @@ public interface MessageDao {
     void addMessage(String theme, String text, User sender, User recipient) throws DAOException;
 
     ArrayList<UserMessage> findUserMessages(long userId) throws DAOException;
+
+    long countUserUnreadMessages(long userId) throws DAOException;
+
+    void changeMessageStatus(long userId) throws DAOException;
 }

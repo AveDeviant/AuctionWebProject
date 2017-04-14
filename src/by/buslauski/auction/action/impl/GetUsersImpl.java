@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
  */
 public class GetUsersImpl implements Command {
     private static final String CUSTOMERS = "customers";
-    private static final String EMPTY_USER_LIST = "emptyList";
     private static UserService userService = new UserServiceImpl();
 
     /**

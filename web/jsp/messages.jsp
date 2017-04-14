@@ -24,18 +24,17 @@
         <jsp:param name="command" value="getMessages"/>
     </jsp:include>
     <c:forEach var="message" items="${user.getUserMessages()}">
-        <c:out value="${message.getSenderId()}"/>
         <c:out value="${message.getSenderUsername()}"/>
         <c:out value="${message.getContent()}"/>
         <c:if test="${user.getRole().getValue() eq 'admin' and message.getSenderId()!=user.getUserId()}">
-            <button type="button" onclick="showMessageForm()">Ответ</button>
-            <form id="message-form" method="post" action="${pageContext.request.contextPath}/Controller"
+            <button type="button" class="button-auction" onclick="showMessageForm(${message.getSenderId()})"><fmt:message key="admin.message.button"/></button>
+            <form id=${message.getSenderId()} method="post" action="${pageContext.request.contextPath}/Controller"
                   style="display:none;">
-                <label>Theme</label>
-                <input type="text" name="theme">
-                <label>Content</label>
-                <input type="text" name="content">
-                <button type="submit">Send</button>
+                <label for="theme"><fmt:message key="faq.form.theme"/></label>
+                <input class="form-control" type="text" name="theme" id="theme">
+                <label for="content"><fmt:message key="faq.form.message"/> </label>
+                <input class="form-control" type="text" name="content" id="content">
+                <button type="submit" class="button-auction"><fmt:message key="faq.form.send"/></button>
                 <input type="hidden" name="recipientId" value="${message.getSenderId()}">
                 <input type="hidden" name="command" value="message">
                 <input type="hidden" name="jspPath"
@@ -48,8 +47,8 @@
     <label>Остались неразрешенные вопросы? Задайте их здесь</label>
 </div>
 <script>
-    function showMessageForm() {
-        var form = document.getElementById("message-form");
+    function showMessageForm(a) {
+        var form = document.getElementById(a);
         if (form.style.display === "none") {
             form.style.display = "inline";
         } else {

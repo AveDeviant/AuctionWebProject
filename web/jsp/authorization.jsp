@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label for="login"><fmt:message key="login.title.login"/></label><label
                             class="error">*</label>
-                        <input type="text" name="login" id="login" pattern="[\w-_]{6,}" class="form-control" required>
+                        <input type="text" name="login" id="login" pattern="[\w-_]{6,32}" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="password"><fmt:message key="login.title.password"/></label><label

@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -26,14 +27,7 @@ public class RejectCommandImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
         Bet bet = user.getWinningBets().get(0);
-        String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
-        } else {
-            String query = path.substring(path.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         try {
             Lot lot = lotService.getLotById(bet.getLotId());
             lotService.resetBids(lot);
@@ -42,7 +36,6 @@ public class RejectCommandImpl implements Command {
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
         } catch (ServiceException e) {
             request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.OPERATION_ERROR);
-            pageResponse.setPage(path);
             pageResponse.setResponseType(ResponseType.FORWARD);
         }
         return pageResponse;

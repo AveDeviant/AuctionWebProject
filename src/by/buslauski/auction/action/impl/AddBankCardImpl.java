@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -26,14 +27,7 @@ public class AddBankCardImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
-        } else {
-            String query = path.substring(path.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(RequestAttributes.USER);
         String paymentSystem = request.getParameter(PAYMENT_SYSTEM);

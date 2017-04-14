@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label for="login"><fmt:message key="register.username"/> </label><label
                             class="required">*</label>
-                        <input class="form-control" type="text" name="login" id="login" pattern="[\w-_]{6,}" required
+                        <input class="form-control" type="text" name="login" id="login" pattern="[\w-_]{6,32}" required
                                title="<fmt:message key="login.username.restrict"/>">
                         <span class="help-block"><fmt:message key="login.username.restrict"/> </span>
                     </div>
@@ -60,8 +60,7 @@
                     </div>
                     <div class="form-group">
                         <label for="mail"><fmt:message key="register.email"/></label><label class="required">*</label>
-                        <input class="form-control" type="email" name="mail" id="mail" required
-                               pattern="[\w]{3,}@[a-z]{4,}.[a-z]{2,3}">
+                        <input class="form-control" type="email" name="mail" id="mail" required>
                     </div>
                     <br/>
                     <button class="button-auction" type="submit" onclick="validateForm()"><fmt:message

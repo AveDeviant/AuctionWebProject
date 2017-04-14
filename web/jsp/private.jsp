@@ -20,52 +20,71 @@
     <c:if test="${user eq null or user.getRole().getValue()!='customer'}">
         <c:redirect url="/Controller"/>
     </c:if>
+    <div class="row">
+        <div class="col-sm-6">
+            <c:choose>
+                <c:when test="${!user.getBets().isEmpty()}">
+                    <table class="table" id="user-stat">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th><fmt:message key="admin.user.edit.availability"/></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="bet" items="${user.getBets()}">
+                            <tr>
+                                <td><c:out value="${bet.getDate()}"/></td>
+                                <td><c:out value="${bet.getLotTitle()}"/></td>
+                                <td><c:out value="${bet.getBet()}"/></td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <fmt:message key="private.emptyBetList"/>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        <div class="col-sm-6">
+            <c:choose>
+                <c:when test="${user.getBankCard() eq null }">
+                    <fmt:message key="bankaccount.registration.notice"/>
+                    <button class="button-auction" type="button" onclick="showCardForm()"><fmt:message
+                            key="register.page.title"/></button>
+                    <div id="cardForm" style="display: none;">
+                        <form action="${pageContext.request.contextPath}/Controller" method="post">
+                            <input  type="radio" name="system" value="Visa" checked>Visa
+                            <input  type="radio" name="system" value="MasterCard">MasterCard
+                            <br/>
+                            <input class="form-control" name="number" required pattern="\d{4}-\d{4}-\d{4}-\d{4}"
+                                   title="<fmt:message key="bankaccount.registration.card"/>"
+                                   placeholder="XXXX-XXXX-XXXX-XXXX">
+                            <br>
+                            <button class="button-auction" type="submit" name="command" value="addBankAccount">
+                                <fmt:message key="card.register.button"/></button>
+                            <input type="hidden" name="jspPath"
+                                   value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
 
-    <c:choose>
-        <c:when test="${user.getBankCard() eq null }">
-            <fmt:message key="bankaccount.registration.notice"/>
-            <button class="button-auction" type="button" onclick="showCardForm()"><fmt:message
-                    key="register.page.title"/></button>
-            <div id="cardForm" style="display: none;">
-                <form action="${pageContext.request.contextPath}/Controller" method="post">
-                    <input type="radio" name="system" value="Visa" checked>Visa
-                    <input type="radio" name="system" value="MasterCard">MasterCard
-                    <br/>
-                    <input name="number" required pattern="\d{4}-\d{4}-\d{4}-\d{4}"
-                           title="<fmt:message key="bankaccount.registration.card"/> ">
-                    <br>
-                    <button class="button-auction" type="submit" name="command" value="addBankAccount">
-                        <fmt:message key="card.register.button"/></button>
-                    <input type="hidden" name="jspPath"
-                           value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-
-                </form>
-                <label class="alert-danger">
-                    <c:if test="${bankErr !=null}">
-                        <fmt:message key="${bankErr}"/>
-                    </c:if>
-                </label>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <fmt:message key="bankaccount.userinfo"/><br/>
-            <c:out value="${user.getBankCard().toString()}"/>
-        </c:otherwise>
-    </c:choose>
-        <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=message"><fmt:message
-                key="messages.page.reference"/> </a>
-    <c:choose>
-        <c:when test="${!user.getBets().isEmpty()}">
-            <c:forEach var="bet" items="${user.getBets()}">
-                <c:out value="${bet.getDate()}"/>
-                <c:out value="${bet.getLotTitle()}"/>
-                <c:out value="${bet.getBet()}"/>
-            </c:forEach>
-        </c:when>
-        <c:otherwise>
-            <fmt:message key="private.emptyBetList"/>
-        </c:otherwise>
-    </c:choose>
+                        </form>
+                        <label class="alert-danger">
+                            <c:if test="${bankErr !=null}">
+                                <fmt:message key="${bankErr}"/>
+                            </c:if>
+                        </label>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h3><fmt:message key="bankaccount.userinfo"/></h3><br/>
+                    <h5><c:out value="${user.getBankCard().toString()}"/></h5>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+    <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=message"><fmt:message
+            key="messages.page.reference"/> </a>
     <form name="logout" action="${pageContext.request.contextPath}/Controller" method="post">
         <button class="button-auction" type="submit" name="button"><fmt:message key="private.button.logout"/></button>
         <input type="hidden" name="command" value="logout">

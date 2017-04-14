@@ -35,7 +35,8 @@
             </c:if>
             <div class="row">
                 <div class="col-sm-12">
-                    <form name="addingLot" action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data" method="post">
+                    <form name="addingLot" action="${pageContext.request.contextPath}/Controller"
+                          enctype="multipart/form-data" method="post">
                         <label for="title"><fmt:message key="admin.lot.title"/> </label>
                         <input class="form-control" type="text" name="title" id="title"
                                title="<fmt:message key="admin.lot.title.restrict"/>" required>
@@ -45,7 +46,8 @@
                         <label for="description"><fmt:message key="admin.lot.description"/> </label>
                         <textarea class="form-control" rows="4" name="description" id="description"
                                   oninput=" return checkLength()"></textarea>
-                        <label class="help-block" id="symbolCount"></label><br/><label id="descriptErr" class="alert-danger">
+                        <label class="help-block" id="symbolCount"></label><br/><label id="descriptErr"
+                                                                                       class="alert-danger">
                     </label><br/>
                         <label for="image"><fmt:message key="admin.lot.image"/> </label>
                         <input class="form-control" type="file" name="image" id="image" required><br/>
@@ -59,8 +61,7 @@
                                placeholder="<fmt:message key="bet.restrict"/>"><br/>
                         <label for="availableTiming"><fmt:message key="lot.timing"/> </label>
                         <input class="form-control" type="date" name="availableTiming" id="availableTiming">
-                        <label class="alert-danger" id="errDate" style="display: none"><fmt:message
-                                key="admin.lot.timing.err"/> </label><br/>
+                        <label class="alert-danger" id="errDate"></label><br/>
                         <label for="category"><fmt:message key="admin.lot.value"/> </label>
                         <select name="category" id="category">
                             <c:forEach var="option" items="${categories}">
@@ -93,12 +94,12 @@
         var currentTime = new Date();
         if (date.getTime() < currentTime) {
             valid = false;
-            errDate.style.display = "inline";
+            errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';
         }
         if (textArea.length > 1000) {
             valid = false;
             var error = document.getElementById("descriptErr");
-            error.innerHTML =<fmt:message key="description.length.error"/>;
+            error.innerHTML = '<fmt:message key="description.length.error"/>';
         }
         return valid;
     }

@@ -1,6 +1,6 @@
 package by.buslauski.auction.service.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
+import by.buslauski.auction.dao.*;
 import by.buslauski.auction.dao.impl.BetDaoImpl;
 import by.buslauski.auction.dao.impl.CategoryDaoImpl;
 import by.buslauski.auction.dao.impl.LotDaoImpl;
@@ -17,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,32 +35,38 @@ public class LotServiceImpl extends AbstractService implements LotService {
                        String image, BigDecimal price, boolean availability,
                        String category, String availableDate) throws ServiceException {
         LocalDate date = LocalDate.parse(availableDate);
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-        LotDaoImpl lotDao = new LotDaoImpl();
+        DaoHelper daoHelperCategory = new DaoHelper();
+        DaoHelper daoHelperLot = new DaoHelper();
         try {
+            CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+            LotDaoImpl lotDao = new LotDaoImpl();
+            daoHelperCategory.initDao(categoryDao);
+            daoHelperLot.initDao(lotDao);
             if (LotValidator.checkLot(title, description, date)) {
-                int categoryId = categoryDao.findCategoryByName(category);
+                int categoryId = categoryDao.findCategoryIdByName(category);
                 lotDao.addLot(userId, categoryId, title, description, image, price, availableDate, availability, price);
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            categoryDao.returnConnection();
-            lotDao.returnConnection();
+            daoHelperCategory.release();
+            daoHelperLot.release();
         }
 
     }
 
     @Override
     public ArrayList<Lot> getAllLots() throws ServiceException {
-        LotDaoImpl lotDao = new LotDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         ArrayList<Lot> lots = null;
         try {
+            LotDaoImpl lotDao = new LotDaoImpl();
+            daoHelper.initDao(lotDao);
             lots = lotDao.findAllLots();
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            lotDao.returnConnection();
+            daoHelper.release();
         }
         return lots;
     }
@@ -71,14 +76,16 @@ public class LotServiceImpl extends AbstractService implements LotService {
      */
     @Override
     public ArrayList<Lot> getAvailableLots() throws ServiceException {
-        LotDaoImpl lotDao = new LotDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         ArrayList<Lot> availableLots = null;
         try {
+            LotDaoImpl lotDao = new LotDaoImpl();
+            daoHelper.initDao(lotDao);
             availableLots = lotDao.findAvailableLots();
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            lotDao.returnConnection();
+            daoHelper.release();
         }
         return availableLots;
     }
@@ -86,19 +93,23 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     @Override
     public Lot getLotById(long lotId) throws ServiceException {
-        LotDaoImpl lotDao = new LotDaoImpl();
-        BetDaoImpl betDao = new BetDaoImpl();
+        DaoHelper daoHelperLot = new DaoHelper();
+        DaoHelper daoHelperBet = new DaoHelper();
         Lot lot = null;
         try {
+            LotDaoImpl lotDao = new LotDaoImpl();
+            daoHelperLot.initDao(lotDao);
             lot = lotDao.findLotById(lotId);
             if (lot != null) {
+                BetDaoImpl betDao = new BetDaoImpl();
+                daoHelperBet.initDao(betDao);
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            lotDao.returnConnection();
-            betDao.returnConnection();
+            daoHelperLot.release();
+            daoHelperBet.release();
         }
         return lot;
     }
@@ -110,22 +121,24 @@ public class LotServiceImpl extends AbstractService implements LotService {
      */
     @Override
     public Lot getAvailableLotById(long lotId) throws ServiceException {
-        BetDaoImpl betDao = new BetDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         Lot lot = null;
         try {
             ArrayList<Lot> lots = getAvailableLots();
-            for (int i = 0; i < lots.size(); i++) {
-                if (lots.get(i).getId() == lotId) {
-                    lot = lots.get(i);
+            for (Lot availableLot : lots) {
+                if (availableLot.getId() == lotId) {
+                    lot = availableLot;
                 }
             }
             if (lot != null) {
+                BetDaoImpl betDao = new BetDaoImpl();
+                daoHelper.initDao(betDao);
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            betDao.returnConnection();
+            daoHelper.release();
         }
         return lot;
     }
@@ -150,12 +163,16 @@ public class LotServiceImpl extends AbstractService implements LotService {
      */
     @Override
     public ArrayList<Lot> getLotsWithOverTiming() throws ServiceException {
+        DaoHelper daoHelperLot = new DaoHelper();
+        DaoHelper daoHelperBet = new DaoHelper();
         ArrayList<Lot> lots = null;
-        LotDaoImpl lotDao = new LotDaoImpl();
-        BetDaoImpl betDao = new BetDaoImpl();
         try {
+            LotDao lotDao = new LotDaoImpl();
+            daoHelperLot.initDao(lotDao);
             lots = lotDao.findLotsWithOverTiming();
             if (!lots.isEmpty()) {
+                BetDaoImpl betDao = new BetDaoImpl();
+                daoHelperBet.initDao(betDao);
                 for (Lot lot : lots) {
                     lot.getBets().addAll(betDao.getBetsByLotId(lot.getId())); // adding bets to the current lot.
                 }
@@ -163,8 +180,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            lotDao.returnConnection();
-            betDao.returnConnection();
+            daoHelperBet.release();
+            daoHelperLot.release();
         }
         return lots;
     }
@@ -184,19 +201,23 @@ public class LotServiceImpl extends AbstractService implements LotService {
     @Override
     public void editLot(long lotId, String category, String title, String image, BigDecimal price,
                         boolean availability, String availableDate) throws ServiceException {
+        DaoHelper daoHelperCategory = new DaoHelper();
+        DaoHelper daoHelperLot = new DaoHelper();
         LocalDate localDate = LocalDate.parse(availableDate);
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-        LotDaoImpl lotDao = new LotDaoImpl();
         try {
-            int categoryId = categoryDao.findCategoryByName(category);
+            CategoryDao categoryDao = new CategoryDaoImpl();
+            LotDao lotDao = new LotDaoImpl();
+            daoHelperCategory.initDao(categoryDao);
+            int categoryId = categoryDao.findCategoryIdByName(category);
             if (LotValidator.checkLot(title, localDate)) {
+                daoHelperLot.initDao(lotDao);
                 lotDao.editLot(lotId, categoryId, title, price, image, availability, availableDate);
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            categoryDao.returnConnection();
-            lotDao.returnConnection();
+            daoHelperCategory.release();
+            daoHelperLot.release();
         }
 
     }
@@ -211,13 +232,15 @@ public class LotServiceImpl extends AbstractService implements LotService {
      */
     @Override
     public void deleteLot(long lotId) throws ServiceException {
-        LotDaoImpl lotDao = new LotDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            LotDao lotDao = new LotDaoImpl();
+            daoHelper.initDao(lotDao);
             lotDao.deleteLot(lotId);
         } catch (DAOException e) {
             throw new ServiceException();
         } finally {
-            lotDao.returnConnection();
+            daoHelper.release();
         }
     }
 
@@ -231,44 +254,28 @@ public class LotServiceImpl extends AbstractService implements LotService {
      */
     @Override
     public void resetBids(Lot lot) throws ServiceException {
-        LocalDate date = null;
+        DaoHelper daoHelper = new DaoHelper();
         Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
         BigDecimal currentPrice = lot.getCurrentPrice();
         long customerId = lastBet.getUserId();
-        date = addDaysToDate();
-        ProxyConnection connection = null;
+        LocalDate date = addDaysToDate();
         try {
-            connection = pool.takeConnectionFromPool();
-            connection.setAutoCommit(false);
-            BetDaoImpl betDao = new BetDaoImpl(connection);
+            BetDao betDao = new BetDaoImpl();
+            LotDao lotDao = new LotDaoImpl();
+            OrderDao orderDao = new OrderDaoImpl();
+            daoHelper.beginTransaction(betDao, lotDao, orderDao);
             betDao.resetBets(lot.getId());
-            LotDaoImpl lotDao = new LotDaoImpl(connection);
             lotDao.returnLotToBids(lot.getId(), lot.getPrice(), date);
-            OrderDaoImpl orderDao = new OrderDaoImpl(connection);
             orderDao.addCancelledOrder(lot.getId(), customerId, currentPrice);
-            connection.commit();
-            ArrayList<Bet> lotBets = lot.getBets();
-            lotBets.clear();            // clear bet list
-            lot.setBets(lotBets);       // set empty bet list to lot
-        } catch (DAOException | SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-            }
+            daoHelper.commit();
+            lot.getBets().clear(); // clear bet list
+
+        } catch (DAOException e) {
+            daoHelper.rollback();
             LOGGER.log(Level.ERROR, e);
             throw new ServiceException(e);
         } finally {
-            if (connection != null) {
-                try {
-                    connection.setAutoCommit(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            returnConnection(connection);
+            daoHelper.endTransaction();
         }
 
     }

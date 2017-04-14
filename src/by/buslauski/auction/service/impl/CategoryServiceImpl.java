@@ -1,6 +1,7 @@
 package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.dao.CategoryDao;
+import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.impl.CategoryDaoImpl;
 import by.buslauski.auction.entity.Category;
 import by.buslauski.auction.exception.DAOException;
@@ -17,25 +18,31 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
 
     @Override
     public ArrayList<Category> getAllCategories() throws ServiceException {
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         ArrayList<Category> categories = null;
         try {
+            CategoryDao categoryDao = new CategoryDaoImpl();
+            daoHelper.initDao(categoryDao);
             categories = categoryDao.getAllCategories();
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            categoryDao.returnConnection();
+            daoHelper.release();
         }
         return categories;
     }
 
     @Override
     public void addCategory(String name) throws ServiceException {
-        CategoryDao categoryDao = new CategoryDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            CategoryDao categoryDao = new CategoryDaoImpl();
+            daoHelper.initDao(categoryDao);
             categoryDao.addCategory(name);
         } catch (DAOException e) {
             throw new ServiceException(e);
+        } finally {
+            daoHelper.release();
         }
     }
 

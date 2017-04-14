@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
@@ -30,14 +31,8 @@ public class AddCategoryImp implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
         String categoryName = request.getParameter(CATEGORY_NAME);
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
-        } else {
-            pageResponse.setPage(controller.concat(path.substring(path.lastIndexOf("?"))));
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         try {
             if (CategoryValidator.checkCategoryForValid(categoryName)) {
                 categoryService.addCategory(categoryName);

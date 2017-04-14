@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -37,9 +38,6 @@ public class MessageCommandImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
-        String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
-
         if (user == null) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.AUTHORIZATION_PAGE);
@@ -63,15 +61,11 @@ public class MessageCommandImpl implements Command {
             } else {
                 // bug
                 long recipientId = Long.parseLong(request.getParameter(RECIPIENT_ID));
+                System.out.println(recipientId);
                 User customer = userService.findUserById(recipientId);
                 messageService.addMessage(theme, text, user, customer);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
-                if (path.endsWith("?")) {
-                    pageResponse.setPage(path);
-                } else {
-                    String query = path.substring(path.lastIndexOf("?"));
-                    pageResponse.setPage(controller + query);
-                }
+              pageResponse.setPage(returnPageWithQuery(request));
             }
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e);

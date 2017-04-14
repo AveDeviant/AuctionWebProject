@@ -54,9 +54,6 @@
                     <li><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=message"><img
                             style="width: 23px;height: 23px;"
                             src="${pageContext.request.contextPath}/css/icons/mail.png"></a>
-                        <%--<img style="width: 23px;height: 23px;"--%>
-                             <%--src="${pageContext.request.contextPath}/css/icons/mail.png">--%>
-                        <%--<span class="glyphicon glyphicon-envelope">--%>
                     </li>
                 </c:if>
                 <c:if test="${user !=null && (!user.getWinningBets().isEmpty())}">

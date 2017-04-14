@@ -1,5 +1,8 @@
 package by.buslauski.auction.service.impl;
 
+import by.buslauski.auction.dao.BetDao;
+import by.buslauski.auction.dao.DaoHelper;
+import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.BetDaoImpl;
 import by.buslauski.auction.dao.impl.UserDaoImpl;
 import by.buslauski.auction.entity.Bet;
@@ -26,10 +29,12 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public User authorizationChecking(String username, String password) throws ServiceException {
         User user = null;
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             String passwordMD5 = Md5Converter.convertToMd5(password);
-            String returnedPwd = userDao.checkPasswordByLogin(username);
+            String returnedPwd = userDao.findPasswordByLogin(username);
             if (PASSWORD_NOT_FOUND.equals(returnedPwd)) {
                 return user;
             }
@@ -39,7 +44,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
         return user;
     }
@@ -54,7 +59,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public void setWinner(User user) throws ServiceException {
         ArrayList<Lot> lots = lotService.getLotsWithOverTiming();
         ArrayList<Bet> winningBets = new ArrayList<>();
-
         for (Lot lot : lots) {
             if (!lot.getBets().isEmpty() && lot.getAvailability()) {   // if lot have confirmed bets
                 Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
@@ -73,13 +77,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public ArrayList<User> getAllCustomers() throws ServiceException {
         ArrayList<User> users = null;
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             users = userDao.getAllCustomers();
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
         return users;
     }
@@ -87,13 +93,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public ArrayList<Bet> getUserBets(User user) throws ServiceException {
         ArrayList<Bet> bets = null;
-        BetDaoImpl betDao = new BetDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            BetDao betDao = new BetDaoImpl();
+            daoHelper.initDao(betDao);
             bets = betDao.getUserBets(user.getUserId());
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            betDao.returnConnection();
+            daoHelper.release();
         }
         return bets;
     }
@@ -101,44 +109,50 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public void updateUserInfo(long userId, String name, String city,
                                String address, String phone) throws ServiceException {
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             userDao.updateUserInfo(userId, name, city, address, phone);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
     }
 
     /**
      * Ban or unban costumer using customer ID.
      *
-     * @param userId  User ID whose status should be updated.
+     * @param userId User ID whose status should be updated.
      * @param access true - unban costumer
      *               false - ban costumer
      */
     @Override
     public void changeAccess(long userId, boolean access) throws ServiceException {
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             userDao.changeAccess(userId, access);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
     }
 
     @Override
     public User registerUser(String userName, String password, String email) throws ServiceException {
         User user = null;
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         if (!UserValidator.checkEmail(email)) {
             return user;
         }
         try {
             if (uniqueCheck(userName, email)) {
+                UserDao userDao = new UserDaoImpl();
+                daoHelper.initDao(userDao);
                 String pwdMd5 = Md5Converter.convertToMd5(password);
                 userDao.addUser(ROLE_ID_CUSTOMER, userName, email, pwdMd5);
                 user = userDao.findUserByUsername(userName);
@@ -146,7 +160,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
         return user;
 
@@ -154,14 +168,16 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     @Override
     public User findAdmin() throws ServiceException {
-        UserDaoImpl userDao = new UserDaoImpl();
         User user = null;
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             user = userDao.findAdmin();
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
         return user;
     }
@@ -169,32 +185,40 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public User findUserById(long userId) throws ServiceException {
         User user = null;
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
             user = userDao.findUserById(userId);
         } catch (DAOException e) {
 
             throw new ServiceException(e);
         } finally {
-            userDao.returnConnection();
+            daoHelper.release();
         }
         return user;
     }
 
-    /** Checking user's username and password for uniqueness
+    /**
+     * Checking user's username and password for uniqueness
+     *
      * @param userName entered username
      * @param email    entered password
      * @return false - entered values have been already used by other users.
      * true - database doesn't contains entered values.
      */
     private boolean uniqueCheck(String userName, String email) throws ServiceException {
-        UserDaoImpl userDao = new UserDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
-            if (!userDao.checkPasswordByLogin(userName).equals("") || userDao.findUserByEmail(email)) {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
+            if (!userDao.findPasswordByLogin(userName).equals("") || userDao.findUserByEmail(email)) {
                 return false;
             }
         } catch (DAOException e) {
             throw new ServiceException();
+        } finally {
+            daoHelper.release();
         }
         return true;
     }

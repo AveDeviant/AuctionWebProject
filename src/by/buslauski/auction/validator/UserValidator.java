@@ -8,9 +8,8 @@ import java.util.regex.Pattern;
  */
 public class UserValidator {
     private static final String PASSWORD_REGEXP = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d])[\\w_-]{8,}$";
-    private static final String Pass = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d])[\\w_-]{8,}$";
-    private static final String MAIL_REGEXP = "[\\w]{3,}@[a-z]{4,}.[a-z]{2,3}";
-    private static final String USERNAME_REGEXP = "[\\w_-]{6,}";
+    private static final String MAIL_REGEXP = "^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    private static final String USERNAME_REGEXP = "[\\w_-]{6,32}";
     private static final String NAME_REGEXP = "[A-Za-z А-Яа-я ]{2,}";
     private static final String CITY_REGEXP = "[\\w,-.А-Яа-я ]{5,}";
     private static final String ADDRESS_REGEXP = "[\\w\\d,-.А-Яа-я ]{5,}";
@@ -23,7 +22,7 @@ public class UserValidator {
         return (matcherPwd.matches() && matcherUnm.matches());
     }
 
-    public static boolean checkEmail(String email){
+    public static boolean checkEmail(String email) {
         Pattern pattern = Pattern.compile(MAIL_REGEXP);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();

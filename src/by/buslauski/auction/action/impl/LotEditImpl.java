@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -19,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -48,8 +50,8 @@ public class LotEditImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        User user =(User) request.getSession().getAttribute(RequestAttributes.USER);
-        if (user==null || !Role.ADMIN.getValue().equals(user.getRole().getValue())){
+        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        if (user == null || !Role.ADMIN.getValue().equals(user.getRole().getValue())) {
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
             return pageResponse;
@@ -76,7 +78,7 @@ public class LotEditImpl implements Command {
             }
             String uploadPath = request.getServletContext().getRealPath(UPLOAD);
             Uploading uploading = new Uploading();
-            String image = UPLOAD + "/" + uploading.uploadFile(uploadPath, lotImage);
+            String image = UPLOAD + File.separator + uploading.uploadFile(uploadPath, lotImage);
             String lotTitle = request.getParameter(LOT_TITLE);
             String startingPrice = request.getParameter(STARTING_PRICE);
             boolean availability = Boolean.parseBoolean(request.getParameter(AVAILABILITY));
@@ -84,14 +86,7 @@ public class LotEditImpl implements Command {
             String category = request.getParameter(CATEGORY);
             lotService.editLot(id, category, lotTitle, image, new BigDecimal(startingPrice), availability, availableDate);
             pageResponse.setResponseType(ResponseType.REDIRECT);
-            String controller = request.getRequestURI();
-            String path = request.getParameter(RequestAttributes.JSP_PATH);
-            if (path.endsWith("?")) {
-                pageResponse.setPage(path);
-            } else {
-                String query = path.substring(path.lastIndexOf("?"));
-                pageResponse.setPage(controller + query);
-            }
+            pageResponse.setPage(returnPageWithQuery(request));
         } catch (ServiceException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);

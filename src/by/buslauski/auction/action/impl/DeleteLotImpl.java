@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
@@ -30,14 +31,7 @@ public class DeleteLotImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
-        } else {
-            String controller = request.getRequestURI();
-            String query = path.substring(path.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
-        }
+        pageResponse.setPage(returnPageWithQuery(request));
         try {
             long lotId = Long.parseLong(request.getParameter(LOT_ID));
             lotService.deleteLot(lotId);

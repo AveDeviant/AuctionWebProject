@@ -1,5 +1,7 @@
 package by.buslauski.auction.action;
 
+import by.buslauski.auction.action.impl.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -44,7 +46,7 @@ public class CommandFactory {
             case REGISTRATION:
                 return new RegistrationCommandImpl();
             case LOGOUT:
-                return new LogoutCommandImp();
+                return new LogoutCommandImpl();
             case ADD_LOT:
                 return new AddLotImpl();
             case GET_LOTS:

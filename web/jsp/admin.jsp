@@ -41,7 +41,11 @@
                 <span class="err" id="errTitle" style="display: none"><fmt:message
                         key="admin.lot.title.restrict"/> </span>
                 <label for="description"><fmt:message key="admin.lot.description"/> </label>
-                <textarea class="form-control" rows="4" id="description" name="description"></textarea>
+                <textarea class="form-control" rows="4" id="description" name="description"
+                          oninput=" return checkLength()"></textarea>
+                <label class="help-block" id="symbolCount"></label><br/><label id="descriptErr"
+                                                                               class="alert-danger">
+            </label><br/>
                 <label for="image"><fmt:message key="admin.lot.image"/> </label>
                 <input type="file" class="form-control" name="image" id="image" required>
                 <c:if test="${imageErr!=null}">
@@ -60,7 +64,7 @@
                         <option value="${option.getValue()}" selected><c:out value="${option.getValue()}"/></option>
                     </c:forEach>
                 </select> <br/>
-                <button class="button-auction" type="submit" onclick=" return checkDate()"><fmt:message
+                <button class="button-auction" type="submit" onclick=" return checkInput()"><fmt:message
                         key="button.add"/></button>
                 <input type="hidden" name="command" value="addLot"/>
                 <input type="hidden" name="jspPath"
@@ -69,14 +73,15 @@
         </div>
         <div class="col-sm-4">
             <label class="alert-danger">
-            <c:if test="${categoryErr!=null}">
-                <fmt:message key="${categoryErr}"/>
-            </c:if>
+                <c:if test="${categoryErr!=null}">
+                    <fmt:message key="${categoryErr}"/>
+                </c:if>
             </label>
-            <h3><fmt:message key="admin.edit.page.category.title"/> </h3>
+            <h3><fmt:message key="admin.edit.page.category.title"/></h3>
             <form method="get" action="${pageContext.request.contextPath}/Controller">
                 <label for="name"><fmt:message key="admin.new.category"/></label>
-                <input class="form-control" type="text" name="name" id="name" required pattern="[A-Za-z А-Яа-я-]{2,}"><br/>
+                <input class="form-control" type="text" name="name" id="name" required
+                       pattern="[A-Za-z А-Яа-я-]{2,}"><br/>
                 <button type="submit" class="button-auction"><fmt:message key="button.add"/></button>
                 <input type="hidden" name="command" value="addCategory">
                 <input type="hidden" name="jspPath"
@@ -87,9 +92,10 @@
             <h3><fmt:message key="admin.management"/></h3>
             <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=editLot"><fmt:message
                     key="admin.lot.edit"/> </a></h6><br/>
-           <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=editUser"><fmt:message
-                   key="admin.user.edit"/> </a></h6><br/>
-            <h6><a href="${pageContext.request.contextPath}/Controller?command=getOrders"><fmt:message key="admin.order.edit"/></a></h6><br/>
+            <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=editUser"><fmt:message
+                    key="admin.user.edit"/> </a></h6><br/>
+            <h6><a href="${pageContext.request.contextPath}/Controller?command=getOrders"><fmt:message
+                    key="admin.order.edit"/></a></h6><br/>
             <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=message"><fmt:message
                     key="messages.page.reference"/> </a></h6>
         </div>
@@ -97,20 +103,22 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="text-center">
-    <form name="logout" action="${pageContext.request.contextPath}/Controller" method="post">
-        <button class="button-auction" type="submit" name="button"><fmt:message key="private.button.logout"/></button>
-        <input type="hidden" name="command" value="logout">
-        <input type="hidden" name="jspPath"
-               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}"/><br>
-    </form>
+                <form name="logout" action="${pageContext.request.contextPath}/Controller" method="post">
+                    <button class="button-auction" type="submit" name="button"><fmt:message
+                            key="private.button.logout"/></button>
+                    <input type="hidden" name="command" value="logout">
+                    <input type="hidden" name="jspPath"
+                           value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}"/><br>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <script>
-    function checkDate() {
+    function checkInput() {
         var valid = true;
         var checkedDate = document.addingLot.availableTiming.value;
+        var textArea = document.getElementById("description").value;
         var errDate = document.getElementById("errDate");
         var arr = checkedDate.toString().split("-");
         var year = arr[0];
@@ -120,9 +128,23 @@
         var currentTime = new Date();
         if (date.getTime() < currentTime) {
             valid = false;
-            errDate.style.display = "inline";
+            errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';
+        }
+        if (textArea.length > 1000) {
+            valid = false;
+            var error = document.getElementById("descriptErr");
+            error.innerHTML = '<fmt:message key="description.length.error"/>';
         }
         return valid;
+    }
+
+    function checkLength() {
+        var textArea = document.getElementById("description").value;
+        var count = document.getElementById("symbolCount");
+        count.innerHTML = String(1000 - textArea.length);
+        if (textArea.length > 1000) {
+            count.style.color = "red";
+        }
     }
 </script>
 </body>

@@ -56,6 +56,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
         return messages;
     }
 
+    @Override
     public long countUserUnreadMessages(long userId) throws DAOException {
         long count = 0;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_COUNT_UNREAD_MESSAGES)) {
@@ -71,6 +72,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
         return count;
     }
 
+    @Override
     public void changeMessageStatus(long userId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_RESET_UNREAD_STATUS)) {
             preparedStatement.setLong(1, userId);

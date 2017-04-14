@@ -31,14 +31,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String SQL_SELECT_ADMIN = "SELECT * FROM user JOIN role ON user.id_role=role.id_role " +
             "WHERE name='admin' LIMIT 1";
 
-
-    public UserDaoImpl() {
-    }
-
-    public UserDaoImpl(ProxyConnection connection) {
-        super(connection);
-    }
-
+    @Override
     public ArrayList<User> getAllCustomers() throws DAOException {
         ArrayList<User> customers = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_USERS)) {
@@ -53,7 +46,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         return customers;
     }
 
-    public String checkPasswordByLogin(String username) throws DAOException {
+    @Override
+    public String findPasswordByLogin(String username) throws DAOException {
         String password = "";
         try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USER_AND_BANK)) {
             statement.setString(1, username);
@@ -70,6 +64,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         return password;
     }
 
+    @Override
     public User findUserByUsername(String username) throws DAOException {
         User user = null;
         try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USER_AND_BANK)) {
@@ -120,6 +115,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         }
     }
 
+    @Override
     public void changeAccess(long userId, boolean access) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_CHANGE_USER_ACCESS)) {
             preparedStatement.setBoolean(1, access);
@@ -131,6 +127,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         }
     }
 
+    @Override
     public boolean findUserByEmail(String email) throws DAOException {
         try (PreparedStatement statement = connection.prepareStatement(SQL_SEARCH_EMAIl)) {
             statement.setString(1, email);
@@ -145,6 +142,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         return true;
     }
 
+    @Override
     public void updateUserInfo(long userId, String realName, String city, String address, String phone) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_INFO)) {
             preparedStatement.setString(1, realName);
@@ -159,6 +157,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         }
     }
 
+    @Override
     public User findAdmin() throws DAOException {
         User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ADMIN)) {

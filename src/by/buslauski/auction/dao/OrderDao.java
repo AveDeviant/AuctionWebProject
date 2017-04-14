@@ -14,4 +14,6 @@ public interface OrderDao {
     void addOrder(long customerId, long lotId, BigDecimal price) throws DAOException;
 
     ArrayList<Order> getAllOrders() throws DAOException;
+
+    void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws DAOException;
 }

@@ -14,4 +14,8 @@ public interface BetDao {
     void addBet(long userId, long lotId, BigDecimal price) throws DAOException;
 
     ArrayList<Bet> getBetsByLotId(long lotId) throws DAOException;
+
+    ArrayList<Bet> getUserBets(long userId) throws DAOException;
+
+    void resetBets(long lotId) throws DAOException;
 }

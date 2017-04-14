@@ -1,5 +1,6 @@
-package by.buslauski.auction.action;
+package by.buslauski.auction.action.impl;
 
+import by.buslauski.auction.action.Command;
 import by.buslauski.auction.entity.Category;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;

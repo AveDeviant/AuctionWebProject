@@ -1,5 +1,7 @@
 package by.buslauski.auction.service.impl;
 
+import by.buslauski.auction.dao.DaoHelper;
+import by.buslauski.auction.dao.MessageDao;
 import by.buslauski.auction.dao.impl.MessageDaoImpl;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
@@ -17,26 +19,30 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
 
     @Override
     public void addMessage(String theme, String text, User sender, User recipient) throws ServiceException {
-        MessageDaoImpl messageDao = new MessageDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            MessageDao messageDao = new MessageDaoImpl();
+            daoHelper.initDao(messageDao);
             messageDao.addMessage(theme, text, sender, recipient);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            messageDao.returnConnection();
+            daoHelper.release();
         }
     }
 
     @Override
     public ArrayList<UserMessage> findMessages(long userId) throws ServiceException {
         ArrayList<UserMessage> messages = new ArrayList<>();
-        MessageDaoImpl messageDao = new MessageDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            MessageDao messageDao = new MessageDaoImpl();
+            daoHelper.initDao(messageDao);
             messages.addAll(messageDao.findUserMessages(userId));
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            messageDao.returnConnection();
+            daoHelper.release();
         }
         return messages;
     }
@@ -48,26 +54,30 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
 
     @Override
     public void changeMessageStatus(long userId) throws ServiceException {
-        MessageDaoImpl messageDao = new MessageDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            MessageDao messageDao = new MessageDaoImpl();
+            daoHelper.initDao(messageDao);
             messageDao.changeMessageStatus(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            messageDao.returnConnection();
+            daoHelper.release();
         }
     }
 
 
     private long countUserUnreadMessages(long userId) throws ServiceException {
         long count = 0;
-        MessageDaoImpl messageDao = new MessageDaoImpl();
+        DaoHelper daoHelper = new DaoHelper();
         try {
+            MessageDao messageDao = new MessageDaoImpl();
+            daoHelper.initDao(messageDao);
             count = messageDao.countUserUnreadMessages(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
-            messageDao.returnConnection();
+            daoHelper.release();
         }
         return count;
     }
