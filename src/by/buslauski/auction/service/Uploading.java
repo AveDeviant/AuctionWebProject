@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 
 /**
  * Created by Acer on 16.03.2017.
@@ -36,7 +37,18 @@ public class Uploading {
         for (String st : data) {
             st = st.trim();
             if (st.startsWith(PART_FILENAME_HEADER)) {
-                return st.substring(st.lastIndexOf("=") + 2, st.length() - 1);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(LocalDateTime.now().toString());
+                int length = stringBuilder.length();
+                if (length > st.length()) {
+                    stringBuilder.append(st.substring(st.lastIndexOf("=") + 2 + length, st.length() - 1));
+                } else {
+                    return st.substring(st.lastIndexOf("=") + 2, st.length() - 1);
+                }
+                String fileName = stringBuilder.toString();
+                fileName = fileName.replaceAll(Character.toString(':'), "");
+                System.out.println(fileName);
+                return fileName;
             }
         }
         return "";

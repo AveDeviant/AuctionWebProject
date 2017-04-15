@@ -7,9 +7,8 @@ import java.time.LocalDate;
  * Created by Acer on 17.03.2017.
  */
 public class LotValidator {
-    private static final int MIN_TITLE_LENGTH = 6;
-    private static final int MAX_TITLE_LENGTH = 45;
     private static final int MAX_DESCRIPTION_LENGTH = 1000;
+    private static final String LOT_TITLE_REGEXP = "[\\w\\s\"-,!()'А-Яа-я-]{6,45}";
 
     public static boolean checkLot(String title, LocalDate date) {
         return (checkTitle(title) && checkDate(date));
@@ -19,9 +18,8 @@ public class LotValidator {
         return (checkTitle(title) && checkDescription(description) && checkDate(date));
     }
 
-    //regexp
     private static boolean checkTitle(String title) {
-        return title.length() >= MIN_TITLE_LENGTH && title.length() <= MAX_TITLE_LENGTH;
+        return title.matches(LOT_TITLE_REGEXP);
     }
 
     private static boolean checkDescription(String description) {
