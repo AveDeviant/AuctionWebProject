@@ -25,6 +25,7 @@
     </jsp:include>
     <c:forEach var="message" items="${user.getUserMessages()}">
         <c:out value="${message.getSenderUsername()}"/>
+        <c:out value="${message.getTheme()}"/>
         <c:out value="${message.getContent()}"/>
         <c:if test="${user.getRole().getValue() eq 'admin' and message.getSenderId()!=user.getUserId()}">
             <button type="button" class="button-auction" onclick="showMessageForm(${message.getSenderId()})"><fmt:message key="admin.message.button"/></button>

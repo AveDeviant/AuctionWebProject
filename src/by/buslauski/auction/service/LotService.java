@@ -36,4 +36,6 @@ public interface LotService {
     void resetBids(Lot lot) throws ServiceException;
 
     boolean checkWaitingPeriod(Lot lot);
+
+    void changeLotBiddingStatus(long lotId, boolean status) throws ServiceException;
 }

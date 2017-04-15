@@ -76,7 +76,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <h6>${lot.getDescription()}</h6>
+            <h6 class="text-center">${lot.getDescription()}</h6>
         </div>
     </div>
     <div class="row">

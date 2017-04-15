@@ -2,12 +2,15 @@ package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.MessageDao;
+import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.MessageDaoImpl;
+import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
 import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.UserService;
 
 import java.util.ArrayList;
 
@@ -15,6 +18,8 @@ import java.util.ArrayList;
  * Created by Acer on 31.03.2017.
  */
 public class MessageServiceImpl extends AbstractService implements MessageService {
+    private static final String AUCTION_NOTIFICATION = "AUCTION RESULT";
+    private static UserService userService = new UserServiceImpl();
 
 
     @Override
@@ -64,6 +69,24 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
         } finally {
             daoHelper.release();
         }
+    }
+
+    @Override
+    public void createNotificationForTrader(User dealer, Bet bet) throws ServiceException {
+        StringBuilder messageContent = new StringBuilder();
+        User customer = userService.findUserById(bet.getUserId());
+        messageContent.append("Title: ").append(bet.getLotTitle());
+        messageContent.append("\n");
+        messageContent.append("Price: ").append(bet.getBet());
+        messageContent.append("\n");
+        messageContent.append("Purchaser: ").append(customer.getName());
+        messageContent.append("\n");
+        messageContent.append("Address: ").append(customer.getCity()).append(", ").append(customer.getAddress());
+        messageContent.append("\n");
+        messageContent.append("E-mail: ").append(customer.getEmail());
+        messageContent.append("\n");
+        messageContent.append("Phone number: ").append(customer.getPhoneNumber());
+        addMessage(AUCTION_NOTIFICATION, messageContent.toString(),customer,dealer);
     }
 
 

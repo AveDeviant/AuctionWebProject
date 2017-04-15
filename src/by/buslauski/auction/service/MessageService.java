@@ -1,5 +1,6 @@
 package by.buslauski.auction.service;
 
+import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
 import by.buslauski.auction.exception.ServiceException;
@@ -17,4 +18,6 @@ public interface MessageService {
     boolean haveUnreadMessages(long userId) throws ServiceException;
 
     void changeMessageStatus(long userId) throws ServiceException;
+
+    void createNotificationForTrader(User dealer, Bet bet) throws ServiceException;
 }

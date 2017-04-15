@@ -29,7 +29,8 @@
         </c:if>
     </label>
     <div class="col-sm-4">
-        <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data" name="editLot">
+        <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data"
+              name="editLot">
             <label for="id"><fmt:message key="admin.lot.edit.id"/></label>
             <input class="form-control" type="number" name="id" id="id" required>
             <label for="title"><fmt:message key="admin.lot.edit.title"/></label>
@@ -65,6 +66,7 @@
             <th>ID</th>
             <th><fmt:message key="lot.edit.table.lot.title"/></th>
             <th><fmt:message key="lot.edit.page.category"/></th>
+            <th><fmt:message key="admin.lot.edit.title.image"/></th>
             <th><fmt:message key="lot.edit.table.lot.price"/></th>
             <th><fmt:message key="lot.edit.table.lot.current"/></th>
             <th><fmt:message key="lot.edit.table.lot.date"/></th>
@@ -78,6 +80,7 @@
                 <td><c:out value="${lot.getId()}"/></td>
                 <td><c:out value="${lot.getTitle()}"/></td>
                 <td><c:out value="${lot.getCategory()}"/></td>
+                <td><img src="${lot.getImage()}" style="width: 20%"/></td>
                 <td><c:out value="${lot.getPrice()}"/></td>
                 <td><c:out value="${lot.getCurrentPrice()}"/></td>
                 <td><c:out value="${lot.getDateAvailable()}"/></td>
@@ -98,6 +101,28 @@
                         <input type="hidden" name="lotId" value="${lot.getId()}">
                         <input type="hidden" name="jspPath"
                                value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="${pageContext.request.contextPath}/Controller">
+                        <c:choose>
+                            <c:when test="${lot.getAvailability() eq true}">
+                                <button class="button-auction" type="submit"><fmt:message key="admin.edit.lot.withdraw"/></button>
+                                <input type="hidden" name="command" value="lotStatus">
+                                <input type="hidden" name="id" value="${lot.getId()}">
+                                <input type="hidden" name="status" value="false">
+                                <input type="hidden" name="jspPath"
+                                       value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                            </c:when>
+                            <c:otherwise>
+                                <button class="button-auction" type="submit"><fmt:message key="admin.edit.lot.accept"/></button>
+                                <input type="hidden" name="command" value="lotStatus">
+                                <input type="hidden" name="id" value="${lot.getId()}">
+                                <input type="hidden" name="status" value="true">
+                                <input type="hidden" name="jspPath"
+                                       value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                            </c:otherwise>
+                        </c:choose>
                     </form>
                 </td>
             </tr>

@@ -297,6 +297,27 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
+     * Withdraw the lot or put the lot up for bids
+     *
+     * @param lotId  lot which status should be changed
+     * @param status true - put up lot for auction
+     *               false - withdraw lot
+     * @throws ServiceException
+     */
+    @Override
+    public void changeLotBiddingStatus(long lotId, boolean status) throws ServiceException {
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            LotDao lotDao = new LotDaoImpl();
+            daoHelper.initDao(lotDao);
+            lotDao.changeLotBiddingStatus(lotId, status);
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new ServiceException();
+        }
+    }
+
+    /**
      * Editing lot date before returning lot to bids.
      * Adding 10 days to current date to get a new date to make the lot available for auction bids.
      *

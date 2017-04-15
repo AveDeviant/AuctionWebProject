@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +19,6 @@ public class Uploading {
     public String uploadFile(String absolutePath, Part filePart) {
         try {
             InputStream stream = filePart.getInputStream();
-
             File path = new File(absolutePath);
             if (!path.exists()) {
                 path.mkdir();
@@ -26,7 +26,7 @@ public class Uploading {
             File data = new File(path, getFileNameFromPath(filePart));
             Files.copy(stream, data.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
         return getFileNameFromPath(filePart);
     }
@@ -38,16 +38,18 @@ public class Uploading {
             st = st.trim();
             if (st.startsWith(PART_FILENAME_HEADER)) {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(LocalDateTime.now().toString());
+                LocalDateTime now = LocalDateTime.now();
+                stringBuilder.append(now.toString());
                 int length = stringBuilder.length();
+                System.out.println(length);
                 if (length > st.length()) {
-                    stringBuilder.append(st.substring(st.lastIndexOf("=") + 2 + length, st.length() - 1));
-                } else {
-                    return st.substring(st.lastIndexOf("=") + 2, st.length() - 1);
+                    stringBuilder.append(st.substring(st.lastIndexOf("=") + 2, st.length() - 1));
+                    System.out.println(stringBuilder.toString());
+                } else {   // пока не решил, стоит ли исходя из длины обрезать
+                    stringBuilder.append(st.substring(st.lastIndexOf("=") + 2, st.length() - 1));
                 }
                 String fileName = stringBuilder.toString();
-                fileName = fileName.replaceAll(Character.toString(':'), "");
-                System.out.println(fileName);
+                fileName = fileName.replaceAll(Character.toString(':'), "").trim();
                 return fileName;
             }
         }

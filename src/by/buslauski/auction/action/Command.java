@@ -15,9 +15,9 @@ public interface Command {
 
     /**
      * @param request
-     * @return Array of two strings:
-     * array[0] - response type (forward or redirect)
-     * array[1] - page for response
+     * @return An object containing two fields:
+     * PageResponse - response type (forward or redirect)
+     * String page - page for response
      */
     PageResponse execute(HttpServletRequest request);
 

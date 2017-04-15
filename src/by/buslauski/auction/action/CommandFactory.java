@@ -32,6 +32,7 @@ public class CommandFactory {
     private static final String DELETE_LOT = "deleteLot";
     private static final String GET_MESSAGES ="getMessages";
     private static final String ADD_CATEGORY="addCategory";
+    private static final String LOT_STATUS="lotStatus";
 
     public Command getCurrentCommand(HttpServletRequest request) {
         String command = request.getParameter(COMMAND_PARAM);
@@ -85,6 +86,8 @@ public class CommandFactory {
                 return new GetMessagesImpl();
             case ADD_CATEGORY:
                 return new AddCategoryImp();
+            case LOT_STATUS:
+                return new LotStatusEditImpl();
             default:
                 return new InitCommandImpl();
         }

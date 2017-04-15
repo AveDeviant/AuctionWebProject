@@ -21,7 +21,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             "phone_number, access, real_name, id_account, system, card_number, money_amount FROM user LEFT JOIN account ON user.id_user=account.id_user " +
             "JOIN role ON user.id_role=role.id_role WHERE username=?";
     private static final String SQL_SEARCH_EMAIl = "SELECT id_user from user WHERE email=?";
-    private static final String SQL_INSERT_USER = "INSERT INTO user VALUES (NULL,?,?,?,?,NULL,NULL ,NULL,?,NULL)";
+    private static final String SQL_INSERT_USER = "INSERT INTO user VALUES (NULL,?,?,?,?,NULL,NULL ,NULL,TRUE,NULL)";
     private static final String SQL_SELECT_ALL_USERS = "SELECT id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name " +
             "FROM user JOIN role ON user.id_role=role.id_role WHERE name='customer' ORDER BY id_user";
     private static final String SQL_SELECT_USER_BY_ID = "SELECT id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name " +
@@ -108,7 +108,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             statement.setString(2, userName);
             statement.setString(3, email);
             statement.setString(4, password);
-            statement.setBoolean(5, true);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(e);

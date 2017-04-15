@@ -9,9 +9,13 @@ import by.buslauski.auction.dao.impl.LotDaoImpl;
 import by.buslauski.auction.dao.impl.OrderDaoImpl;
 import by.buslauski.auction.entity.BankCard;
 import by.buslauski.auction.entity.Bet;
+import by.buslauski.auction.entity.Role;
+import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.service.BankService;
+import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.util.AmountGenerator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +27,9 @@ import java.math.BigDecimal;
  * Created by Acer on 20.03.2017.
  */
 public class BankServiceImpl extends AbstractService implements BankService {
-
     private static final Logger LOGGER = LogManager.getLogger();
+    private static UserService userService = new UserServiceImpl();
+    private static MessageService messageService = new MessageServiceImpl();
 
     @Override
     public BankCard addAccount(long userId, String system, String cardNumber) throws ServiceException {
@@ -62,7 +67,8 @@ public class BankServiceImpl extends AbstractService implements BankService {
     }
 
     /**
-     * Transfer money from customer's to recipient bank account.
+     * If auction is owner of lot transfer money from customer's to recipient bank account.
+     * In other case creating notification for trader for auction result.
      * Creating order with SUCCESS status.
      * Withdraw lot from bids (change field 'available' to false)
      *
@@ -76,14 +82,18 @@ public class BankServiceImpl extends AbstractService implements BankService {
         DaoHelper daoHelper = new DaoHelper();
         BigDecimal moneyAmount = bet.getBet();
         try {
-
             BankAccountDao bankAccountDao = new BankAccountDaoImpl();
             LotDao lotDao = new LotDaoImpl();
             OrderDao orderDao = new OrderDaoImpl();
             daoHelper.beginTransaction(bankAccountDao, lotDao, orderDao);
             BankCard bankCardRecipient = findRecipient(lotId);
-            BigDecimal customerBalance = bankAccountDao.findCardByUserId(customerId).getMoneyAmount();
             long recipientId = bankCardRecipient.getUserId();
+            User dealer = userService.findUserById(recipientId);
+            if (dealer.getRole() != Role.ADMIN) {      //if auction doesn't own the lot
+                messageService.createNotificationForTrader(dealer, bet);  // create notification for user, who offered lot
+                return true;
+            }
+            BigDecimal customerBalance = bankAccountDao.findCardByUserId(customerId).getMoneyAmount();
             BigDecimal newBalanceCustomer = customerBalance.subtract(moneyAmount);  // calculate customer's new balance
             BigDecimal newBalanceRecipient = bankCardRecipient.getMoneyAmount();
             newBalanceRecipient = newBalanceRecipient.add(moneyAmount);          // calculate recipient's balance
@@ -91,6 +101,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
             orderDao.addOrder(customerId, lotId, moneyAmount); // creating order
             lotDao.withdrawLot(lotId);   //withdraw lot from bids - set available to false.
             daoHelper.commit();
+
             return success;
         } catch (DAOException e) {
             daoHelper.rollback();
@@ -138,6 +149,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
             daoHelper.release();
         }
     }
+
 
     /**
      * Find a bank account whose owner has placed lot for bidding.

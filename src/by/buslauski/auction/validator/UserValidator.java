@@ -13,6 +13,7 @@ public class UserValidator {
     private static final String NAME_REGEXP = "[A-Za-z А-Яа-я ]{2,}";
     private static final String CITY_REGEXP = "[\\w,-.А-Яа-я ]{5,}";
     private static final String ADDRESS_REGEXP = "[\\w\\d,-.А-Яа-я ]{5,}";
+    private static final String PHONE_REGEXP = "[\\d+()-]{3,18}";
 
     public static boolean checkLoginPassword(String username, String password) {
         Pattern patternPwd = Pattern.compile(PASSWORD_REGEXP);
@@ -36,6 +37,6 @@ public class UserValidator {
         Matcher matcherName = patternName.matcher(realName);
         Matcher matcherCity = patternCity.matcher(city);
         Matcher matcherAddress = patternAddress.matcher(address);
-        return matcherName.matches() && matcherCity.matches() && matcherAddress.matches();
+        return matcherName.matches() && matcherCity.matches() && matcherAddress.matches() && phone.matches(PHONE_REGEXP);
     }
 }

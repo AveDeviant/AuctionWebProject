@@ -52,7 +52,7 @@
                 <input class="form-control" type="text" required pattern="[\w\d,-.А-Яа-я ]{5,}" name="address"
                        id="address">
                 <label for="phone"><fmt:message key="order.page.phone"/></label><label class="required">*</label>
-                <input class="form-control" type="text" required name="phone" id="phone"><br/>
+                <input class="form-control" type="text" required name="phone" id="phone" pattern="[\d+()-]{3,18}"><br/>
                 <button class="button-auction" type="submit" name="command" value="buy"><fmt:message
                         key="order.button.buy"/></button>
                 <input type="hidden" name="jspPath"

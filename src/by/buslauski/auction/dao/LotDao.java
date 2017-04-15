@@ -34,4 +34,6 @@ public interface LotDao {
     void returnLotToBids(long lotId, BigDecimal price, LocalDate date) throws DAOException;
 
     void deleteLot(long lotId) throws DAOException;
+
+    void changeLotBiddingStatus(long lotId, boolean status) throws DAOException;
 }
