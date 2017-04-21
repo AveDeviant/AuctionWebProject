@@ -19,7 +19,9 @@
 <div class="container">
     <label class="alert-danger">
     <c:if test="${messageErr!=null}">
+        <div class=" alert alert-danger alert-dismissable fade in">
         <fmt:message key="${messageErr}"/>
+        </div>
     </c:if>
     </label>
     <c:if test="${user eq null or user.getRole().getValue() eq 'customer'}">

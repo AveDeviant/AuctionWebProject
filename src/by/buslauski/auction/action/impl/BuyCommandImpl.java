@@ -32,6 +32,24 @@ public class BuyCommandImpl implements Command {
     private static UserService userService = new UserServiceImpl();
     private static LotService lotService = new LotServiceImpl();
 
+    /**
+     * Updating customer's personal information.
+     * Payment transaction from customer to auction or creation notification for trader about auction results.
+     * Removing first winning bet from customer's bet list.
+     * Withdraw lot from bids.
+     *
+     * Checked situations:
+     * Customer unable to register his order;
+     * Customer's current balance is less than lot price;
+     * Customer exceeded auction waiting period (10 days);
+     * Invalid customer's personal information;
+     * Exception during payment transaction.
+     *
+     * @param request
+     * @return A PageResponse object containing two fields:
+     * ResponseType - response type (forward or redirect)
+     * String page - page for response
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
@@ -42,12 +60,13 @@ public class BuyCommandImpl implements Command {
         String phone = request.getParameter(PHONE_PARAM);
         Bet winningBet = user.getWinningBets().get(0);
         pageResponse.setPage(returnPageWithQuery(request));
-        if (!user.getAccess()) {
-            pageResponse.setResponseType(ResponseType.FORWARD);
-            request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.USER_BANNED);
-            return pageResponse;
-        }
         try {
+            user = userService.findUserById(user.getUserId()); // updating user info
+            if (!user.getAccess()) {
+                pageResponse.setResponseType(ResponseType.FORWARD);
+                request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.USER_BANNED);
+                return pageResponse;
+            }
             // The winnings are not processed within 10 days.
             if (!lotService.checkWaitingPeriod(lotService.getLotById(winningBet.getLotId()))) {
                 user.getWinningBets().remove(winningBet);

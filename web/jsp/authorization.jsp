@@ -47,12 +47,12 @@
                                pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[\d])[\w_-]{8,}$">
                     </div>
                     <br>
-                    <button class="button-auction" type="submit" name="button"><fmt:message key="login.button.login"/></button>
-                    <label class="alert-danger">
+                    <button class="button-auction" type="submit" name="button"><fmt:message key="login.button.login"/></button><br/>
                         <c:if test="${authorizationError !=null}">
+                            <div class=" alert alert-danger alert-dismissable fade in">
                             <fmt:message key="${authorizationError}"/>
+                            </div>
                         </c:if>
-                    </label>
                     <input type="hidden" name="command" value="authorization">
                     <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>
                 </form>

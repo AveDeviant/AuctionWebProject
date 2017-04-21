@@ -21,6 +21,14 @@ import javax.servlet.http.HttpServletRequest;
 public class OrderCommandImpl implements Command {
     private static final String LOT_ATTRIBUTE = "lot";
 
+    /**
+     * Showing order page with first lot in customer's winning list.
+     *
+     * @param request
+     * @return PageResponse - an object containing two fields:
+     * ResponseType - forward.
+     * String page - /jsp/order.jsp
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();

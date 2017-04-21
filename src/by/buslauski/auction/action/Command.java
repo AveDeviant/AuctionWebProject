@@ -14,6 +14,8 @@ public interface Command {
     Logger LOGGER = LogManager.getLogger();
 
     /**
+     * Handling client request.
+     *
      * @param request
      * @return An object containing two fields:
      * PageResponse - response type (forward or redirect)
@@ -21,6 +23,12 @@ public interface Command {
      */
     PageResponse execute(HttpServletRequest request);
 
+    /**
+     * Get query string from URI.
+     *
+     * @param request
+     * @return
+     */
     default String returnPageWithQuery(HttpServletRequest request) {
         String controller = request.getRequestURI();
         String path = request.getParameter(RequestAttributes.JSP_PATH);

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class Order {
     private long orderId;
     private long userId;
+    private long traderId;
     private long lotId;
     private BigDecimal payment;
     private LocalDateTime dateTime;
@@ -32,6 +33,14 @@ public class Order {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getTraderId() {
+        return traderId;
+    }
+
+    public void setTraderId(long traderId) {
+        this.traderId = traderId;
     }
 
     public long getLotId() {
@@ -96,5 +105,41 @@ public class Order {
 
     public void setCostumerPhone(String costumerPhone) {
         this.costumerPhone = costumerPhone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (orderId != order.orderId) return false;
+        if (userId != order.userId) return false;
+        if (traderId != order.traderId) return false;
+        if (lotId != order.lotId) return false;
+        if (accept != order.accept) return false;
+        if (!payment.equals(order.payment)) return false;
+        if (!dateTime.equals(order.dateTime)) return false;
+        if (!costumerName.equals(order.costumerName)) return false;
+        if (!costumerCity.equals(order.costumerCity)) return false;
+        if (!costumerAddress.equals(order.costumerAddress)) return false;
+        return costumerPhone.equals(order.costumerPhone);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (orderId ^ (orderId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (traderId ^ (traderId >>> 32));
+        result = 31 * result + (int) (lotId ^ (lotId >>> 32));
+        result = 31 * result + payment.hashCode();
+        result = 31 * result + dateTime.hashCode();
+        result = 31 * result + (accept ? 1 : 0);
+        result = 31 * result + costumerName.hashCode();
+        result = 31 * result + costumerCity.hashCode();
+        result = 31 * result + costumerAddress.hashCode();
+        result = 31 * result + costumerPhone.hashCode();
+        return result;
     }
 }

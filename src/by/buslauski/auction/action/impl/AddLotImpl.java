@@ -9,7 +9,9 @@ import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
-import by.buslauski.auction.service.Uploading;
+import by.buslauski.auction.service.FileUploadingManager;
+import by.buslauski.auction.validator.BetValidator;
+import by.buslauski.auction.validator.LotValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +38,6 @@ public class AddLotImpl implements Command {
     private static final String USER_SESSION = "user";
     private static final String AVAILABLE_TIMER = "availableTiming";
     private static final String IMAGE_ERROR = "imageErr";
-    private static final String OFFER_ERROR = "offerErr";
     private static final String ADD_ERROR = "addErr";
     private static LotService lotService = new LotServiceImpl();
 
@@ -47,18 +48,13 @@ public class AddLotImpl implements Command {
         try {
             User user = (User) request.getSession().getAttribute(USER_SESSION);
             long userId = user.getUserId();
-            if (user.getBankCard() == null) {
-                pageResponse.setResponseType(ResponseType.FORWARD);
-                request.setAttribute(OFFER_ERROR, ResponseMessage.OFFER_REGISTER_CARD);
-                return pageResponse;
-            }
             String lotTitle = request.getParameter(LOT_TITLE);
             String lotPrice = request.getParameter(LOT_PRICE);
             String lotDescription = request.getParameter(LOT_DESCRIPTION);
             String lotCategory = request.getParameter(LOT_CATEGORY);
             boolean availability = false;
             String lotTimer = request.getParameter(AVAILABLE_TIMER);
-            if (Role.ADMIN.getValue().equals(user.getRole().getValue())) {
+            if (Role.ADMIN == user.getRole()) {
                 lotTimer = request.getParameter(AVAILABLE_TIMER);
                 availability = true;
             }
@@ -73,10 +69,16 @@ public class AddLotImpl implements Command {
                 }
             }
             String uploadPath = request.getServletContext().getRealPath(UPLOAD);
-            Uploading uploading = new Uploading();
-            String image = UPLOAD + File.separator + uploading.uploadFile(uploadPath, lotImage);
-            lotService.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability, lotCategory, lotTimer);
-            pageResponse.setResponseType(ResponseType.REDIRECT);
+            FileUploadingManager fileUploadingManager = new FileUploadingManager();
+            String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);
+            if (LotValidator.checkLot(lotTitle, lotDescription, lotTimer) && BetValidator.checkPriceForValid(lotPrice)) {
+                lotService.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability,
+                        lotCategory, lotTimer);
+                pageResponse.setResponseType(ResponseType.REDIRECT);
+            } else {
+                request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_VALUE);
+                pageResponse.setResponseType(ResponseType.FORWARD);
+            }
         } catch (ServiceException e) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             request.setAttribute(ADD_ERROR, ResponseMessage.OPERATION_ERROR);

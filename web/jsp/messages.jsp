@@ -24,11 +24,13 @@
         <jsp:param name="command" value="getMessages"/>
     </jsp:include>
     <c:forEach var="message" items="${user.getUserMessages()}">
+        <c:out value="${message.getDateTime()}"/>
         <c:out value="${message.getSenderUsername()}"/>
         <c:out value="${message.getTheme()}"/>
         <c:out value="${message.getContent()}"/>
         <c:if test="${user.getRole().getValue() eq 'admin' and message.getSenderId()!=user.getUserId()}">
-            <button type="button" class="button-auction" onclick="showMessageForm(${message.getSenderId()})"><fmt:message key="admin.message.button"/></button>
+            <button type="button" class="button-auction" onclick="showMessageForm(${message.getSenderId()})">
+                <fmt:message key="admin.message.button"/></button>
             <form id=${message.getSenderId()} method="post" action="${pageContext.request.contextPath}/Controller"
                   style="display:none;">
                 <label for="theme"><fmt:message key="faq.form.theme"/></label>
@@ -45,7 +47,7 @@
         <br/>
     </c:forEach>
 
-    <label>Остались неразрешенные вопросы? Задайте их здесь</label>
+    <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=faq"><fmt:message key="messages.page.notice"/></a>
 </div>
 <script>
     function showMessageForm(a) {

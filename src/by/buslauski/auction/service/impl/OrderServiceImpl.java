@@ -18,7 +18,6 @@ import java.util.ArrayList;
  * Created by Acer on 30.03.2017.
  */
 public class OrderServiceImpl extends AbstractService implements OrderService {
-    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public ArrayList<Order> getAllOrders() throws ServiceException {
@@ -29,6 +28,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
             daoHelper.initDao(orderDao);
             orders = orderDao.getAllOrders();
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -36,20 +36,4 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
         return orders;
     }
 
-
-    @Override
-    public void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws ServiceException {
-        DaoHelper daoHelper = new DaoHelper();
-        try {
-            OrderDao orderDao = new OrderDaoImpl();
-            daoHelper.initDao(orderDao);
-            orderDao.addCancelledOrder(lotId, userId, payment);
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e + "Exception during adding order into database");
-            throw new ServiceException(e);
-        } finally {
-            daoHelper.release();
-        }
-
-    }
 }

@@ -17,10 +17,13 @@ public class LocaleCommandImpl implements Command {
     private static final String LOCAL_ATTRIBUTE = "locale";
     private static final String SELECTED_LANGUAGE = "lang";
 
-    /** Change application localization.
+    /**
+     * Change application localization.
      *
-     * @param request
-     * @return
+     * @param request HttpServletRequest
+     * @return A PageResponse object containing two fields:
+     * ResponseType - type of response (forward or redirect)
+     * String page - page for response
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

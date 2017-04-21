@@ -24,7 +24,9 @@
         <jsp:param name="command" value="getUsers"/>
     </jsp:include>
     <c:if test="${editErr !=null}">
-        <fmt:message key="${editErr}"/>
+        <div class=" alert alert-danger alert-dismissable fade in">
+            <fmt:message key="${editErr}"/>
+        </div>
     </c:if>
     <table class="table">
         <thead>
@@ -53,7 +55,8 @@
                     <c:choose>
                         <c:when test="${customer.getAccess() eq true}">
                             <form action="${pageContext.request.contextPath}/Controller" method="post">
-                                <button type="submit" class="button-auction"><fmt:message key="admin.user.edit.ban"/></button>
+                                <button type="submit" class="button-auction"><fmt:message
+                                        key="admin.user.edit.ban"/></button>
                                 <input type="hidden" name="id" value="${customer.getUserId()}">
                                 <input type="hidden" name="command" value="editAccess">
                                 <input type="hidden" name="state" value="banned">
@@ -63,7 +66,8 @@
                         </c:when>
                         <c:otherwise>
                             <form action="${pageContext.request.contextPath}/Controller" method="post">
-                                <button type="submit" class="button-auction"><fmt:message key="admin.user.edit.unban"/></button>
+                                <button type="submit" class="button-auction"><fmt:message
+                                        key="admin.user.edit.unban"/></button>
                                 <input type="hidden" name="id" value="${customer.getUserId()}">
                                 <input type="hidden" name="command" value="editAccess">
                                 <input type="hidden" name="state" value="unbanned">

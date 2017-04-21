@@ -23,7 +23,6 @@ import java.math.BigDecimal;
  * Created by Acer on 21.03.2017.
  */
 public class BetServiceImpl extends AbstractService implements BetService {
-    private static final Logger LOGGER = LogManager.getLogger();
 
 
     @Override
@@ -66,7 +65,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
     @Override
     public boolean checkBetValue(Lot lot, BigDecimal bet) {
         BigDecimal price = lot.getCurrentPrice();
-        return (bet.compareTo(price) > 0);
+        return bet.compareTo(price) > 0;
     }
 
 

@@ -28,13 +28,13 @@ public class InitCommandImpl implements Command {
 
 
     /**
-     * Default command. Get available lots for bids from database and
-     * displays it to main page. Displaying appropriate message if the list is empty.
+     * Init command. Get available lots for bids from database and
+     * displays it to main page. Displaying appropriate message in case the list is empty.
      *
      * @param request
-     * @return Array of two strings:
-     * array[0] - response type (forward or redirect)
-     * array[1] - page for response
+     * @return An object PageResponse containing two fields:
+     * ResponseType - response type (forward or redirect)
+     * String page - page for response /jsp/main.jsp
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

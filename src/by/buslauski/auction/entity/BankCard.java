@@ -60,4 +60,27 @@ public class BankCard {
         return cardSystem +": " + stringBuilder.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BankCard bankCard = (BankCard) o;
+
+        if (cardId != bankCard.cardId) return false;
+        if (userId != bankCard.userId) return false;
+        if (!cardSystem.equals(bankCard.cardSystem)) return false;
+        if (!cardNumber.equals(bankCard.cardNumber)) return false;
+        return moneyAmount.equals(bankCard.moneyAmount);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (cardId ^ (cardId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + cardSystem.hashCode();
+        result = 31 * result + cardNumber.hashCode();
+        result = 31 * result + moneyAmount.hashCode();
+        return result;
+    }
 }

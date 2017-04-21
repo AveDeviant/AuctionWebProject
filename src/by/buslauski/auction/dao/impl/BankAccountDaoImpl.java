@@ -1,6 +1,5 @@
 package by.buslauski.auction.dao.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
 import by.buslauski.auction.dao.BankAccountDao;
 import by.buslauski.auction.entity.BankCard;
 import by.buslauski.auction.exception.DAOException;
@@ -22,8 +21,6 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
             "FROM account where id_account=?";
     private static final String SQL_FIND_CARD_BY_USER = "SELECT id_account, id_user, system, card_number, money_amount " +
             "FROM account where id_user=?";
-    private static final String SQL_FIND_RECIPIENT_ACCOUNT = "SELECT id_account, account.id_user, title, system, card_number, money_amount " +
-            "FROM account JOIN lot ON account.id_user=lot.id_user WHERE id_lot=?";
     private static final String SQL_UPDATE_ACCOUNT = "UPDATE account SET money_amount=? WHERE id_user=?";
 
     @Override
@@ -77,22 +74,6 @@ public class BankAccountDaoImpl extends AbstractDao implements BankAccountDao {
         BankCard bankCard = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_CARD_BY_USER)) {
             preparedStatement.setLong(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                bankCard = initBankCard(resultSet);
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, e);
-            throw new DAOException();
-        }
-        return bankCard;
-    }
-
-    @Override
-    public BankCard findRecipientAccount(long lotId) throws DAOException {
-        BankCard bankCard = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_RECIPIENT_ACCOUNT)) {
-            preparedStatement.setLong(1, lotId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 bankCard = initBankCard(resultSet);

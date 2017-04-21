@@ -25,7 +25,8 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>ID lot</th>
+            <th>Lot ID</th>
+            <th><fmt:message key="order.title.trader"/></th>
             <th><fmt:message key="order.title.customer.id"/></th>
             <th><fmt:message key="order.title.customer.name"/></th>
             <th><fmt:message key="order.title.customer.city"/></th>
@@ -40,6 +41,7 @@
             <tr>
                 <td><c:out value="${order.getOrderId()}"/></td>
                 <td><c:out value="${order.getLotId()}"/></td>
+                <td><c:out value="${order.getTraderId()}"/></td>
                 <td><c:out value="${order.getUserId()}"/></td>
                 <td><c:out value="${order.getCostumerName()}"/></td>
                 <td><c:out value="${order.getCostumerCity()}"/></td>

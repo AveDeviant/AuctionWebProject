@@ -1,6 +1,5 @@
 package by.buslauski.auction.dao.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
 import by.buslauski.auction.dao.BetDao;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.exception.DAOException;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
  */
 public class BetDaoImpl extends AbstractDao implements BetDao {
     private static final String SQL_ADD_BET = "INSERT INTO bet VALUES (NULL,?,?,?,NOW())";
-    private static final String SQL_SELECT_BETS_BY_LOT = "SELECT id_bet, id_lot, id_user, bet, date FROM bet" +
-            " WHERE id_lot=?";
+    private static final String SQL_SELECT_BETS_BY_LOT = "SELECT id_bet, bet.id_lot, title, bet.id_user, bet, date FROM bet" +
+            " JOIN lot ON bet.id_lot=lot.id_lot WHERE lot.id_lot=?";
     private static final String SQL_SELECT_USER_BETS = "SELECT id_bet, bet.id_lot, bet.id_user, title, bet, date FROM " +
             "bet JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=?";
     private static final String SQL_RESET_LOT_BETS = "DELETE FROM bet WHERE id_lot=?";
@@ -94,6 +93,7 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
                 resultSet.getBigDecimal("bet")
         );
         bet.setDate(DateTimeParser.parseDate(resultSet.getString("date")));
+        bet.setLotTitle(resultSet.getString("title"));
         return bet;
     }
 

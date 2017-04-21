@@ -1,6 +1,5 @@
 package by.buslauski.auction.dao.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
 import by.buslauski.auction.dao.CategoryDao;
 import by.buslauski.auction.entity.Category;
 import by.buslauski.auction.exception.DAOException;

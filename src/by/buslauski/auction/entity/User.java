@@ -151,4 +151,48 @@ public class User {
     public void setUnreadMessages(boolean unreadMessages) {
         this.unreadMessages = unreadMessages;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (userId != user.userId) return false;
+        if (roleId != user.roleId) return false;
+        if (access != user.access) return false;
+        if (unreadMessages != user.unreadMessages) return false;
+        if (!userName.equals(user.userName)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!city.equals(user.city)) return false;
+        if (!address.equals(user.address)) return false;
+        if (!phoneNumber.equals(user.phoneNumber)) return false;
+        if (!name.equals(user.name)) return false;
+        if (role != user.role) return false;
+        if (!bankCard.equals(user.bankCard)) return false;
+        if (!bets.equals(user.bets)) return false;
+        if (!winningBets.equals(user.winningBets)) return false;
+        return userMessages.equals(user.userMessages);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (userId ^ (userId >>> 32));
+        result = 31 * result + roleId;
+        result = 31 * result + userName.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + city.hashCode();
+        result = 31 * result + address.hashCode();
+        result = 31 * result + phoneNumber.hashCode();
+        result = 31 * result + (access ? 1 : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + role.hashCode();
+        result = 31 * result + bankCard.hashCode();
+        result = 31 * result + bets.hashCode();
+        result = 31 * result + winningBets.hashCode();
+        result = 31 * result + userMessages.hashCode();
+        result = 31 * result + (unreadMessages ? 1 : 0);
+        return result;
+    }
 }

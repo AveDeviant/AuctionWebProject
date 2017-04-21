@@ -27,7 +27,6 @@ import java.math.BigDecimal;
  * Created by Acer on 20.03.2017.
  */
 public class BankServiceImpl extends AbstractService implements BankService {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static UserService userService = new UserServiceImpl();
     private static MessageService messageService = new MessageServiceImpl();
 
@@ -67,8 +66,8 @@ public class BankServiceImpl extends AbstractService implements BankService {
     }
 
     /**
-     * If auction is owner of lot transfer money from customer's to recipient bank account.
-     * In other case creating notification for trader for auction result.
+     * If auction is owner of lot than transfer money from customer's to recipient bank account.
+     * In other case creating notification for trader about auction result.
      * Creating order with SUCCESS status.
      * Withdraw lot from bids (change field 'available' to false)
      *
@@ -86,23 +85,26 @@ public class BankServiceImpl extends AbstractService implements BankService {
             LotDao lotDao = new LotDaoImpl();
             OrderDao orderDao = new OrderDaoImpl();
             daoHelper.beginTransaction(bankAccountDao, lotDao, orderDao);
-            BankCard bankCardRecipient = findRecipient(lotId);
-            long recipientId = bankCardRecipient.getUserId();
-            User dealer = userService.findUserById(recipientId);
+            User dealer = userService.findTrader(bet.getLotId());
+            System.out.println(dealer.getUserId());
             if (dealer.getRole() != Role.ADMIN) {      //if auction doesn't own the lot
                 messageService.createNotificationForTrader(dealer, bet);  // create notification for user, who offered lot
+                orderDao.addOrder(customerId, dealer.getUserId(), lotId, moneyAmount, true); // creating order with SUCCESS status
+                lotDao.withdrawLot(lotId);
+                daoHelper.commit();
                 return true;
+            } else { // do payment
+                BankCard auctionAccount = bankAccountDao.findCardByUserId(dealer.getUserId());
+                BigDecimal customerBalance = bankAccountDao.findCardByUserId(customerId).getMoneyAmount();
+                BigDecimal newBalanceCustomer = customerBalance.subtract(moneyAmount);  // calculate customer's new balance
+                BigDecimal newBalanceRecipient = auctionAccount.getMoneyAmount();
+                newBalanceRecipient = newBalanceRecipient.add(moneyAmount);          // calculate recipient's balance
+                boolean success = bankAccountDao.doPayment(customerId, dealer.getUserId(), newBalanceCustomer, newBalanceRecipient);
+                orderDao.addOrder(customerId, dealer.getUserId(), lotId, moneyAmount, true); // creating order
+                lotDao.withdrawLot(lotId);   //withdraw lot from bids - set available to false.
+                daoHelper.commit();
+                return success;
             }
-            BigDecimal customerBalance = bankAccountDao.findCardByUserId(customerId).getMoneyAmount();
-            BigDecimal newBalanceCustomer = customerBalance.subtract(moneyAmount);  // calculate customer's new balance
-            BigDecimal newBalanceRecipient = bankCardRecipient.getMoneyAmount();
-            newBalanceRecipient = newBalanceRecipient.add(moneyAmount);          // calculate recipient's balance
-            boolean success = bankAccountDao.doPayment(customerId, recipientId, newBalanceCustomer, newBalanceRecipient);
-            orderDao.addOrder(customerId, lotId, moneyAmount); // creating order
-            lotDao.withdrawLot(lotId);   //withdraw lot from bids - set available to false.
-            daoHelper.commit();
-
-            return success;
         } catch (DAOException e) {
             daoHelper.rollback();
             LOGGER.log(Level.ERROR, e + " Exception during paying.");
@@ -128,11 +130,11 @@ public class BankServiceImpl extends AbstractService implements BankService {
     }
 
     /**
-     * Check for uniqueness of card number
+     * Check card number for uniqueness.
      *
      * @param cardNumber entered card number of the form XXXX-XXXX-XXXX-XXXX.
      * @return true - database doesn't store checking number
-     * false - database contains checking number
+     * false - database store checking number
      */
     private boolean checkNumberForUnique(String cardNumber) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
@@ -149,27 +151,5 @@ public class BankServiceImpl extends AbstractService implements BankService {
             daoHelper.release();
         }
     }
-
-
-    /**
-     * Find a bank account whose owner has placed lot for bidding.
-     *
-     * @param lotId Lot ID
-     * @return payee's bank account
-     * @throws ServiceException
-     */
-    private BankCard findRecipient(long lotId) throws ServiceException {
-        DaoHelper daoHelper = new DaoHelper();
-
-        BankAccountDao bankAccountDao = new BankAccountDaoImpl();
-        daoHelper.initDao(bankAccountDao);
-
-        try {
-            return bankAccountDao.findRecipientAccount(lotId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        } finally {
-            daoHelper.release();
-        }
-    }
 }
+

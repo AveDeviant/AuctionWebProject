@@ -36,7 +36,7 @@ public class Lot {
         this.dateAvailable = dateAvailable;
         this.currentPrice = currentPrice;
         this.bets = new ArrayList<>();
-        this.category=category;
+        this.category = category;
     }
 
     public String getTitle() {
@@ -130,7 +130,46 @@ public class Lot {
     public void setCategory(String category) {
         this.category = category;
     }
-    public String getCategory(){
+
+    public String getCategory() {
         return category;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lot lot = (Lot) o;
+
+        if (id != lot.id) return false;
+        if (userId != lot.userId) return false;
+        if (availability != lot.availability) return false;
+        if (categoryId != lot.categoryId) return false;
+        if (!title.equals(lot.title)) return false;
+        if (!price.equals(lot.price)) return false;
+        if (!image.equals(lot.image)) return false;
+        if (!description.equals(lot.description)) return false;
+        if (!category.equals(lot.category)) return false;
+        if (!dateAvailable.equals(lot.dateAvailable)) return false;
+        if (!currentPrice.equals(lot.currentPrice)) return false;
+        return bets.equals(lot.bets);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title.hashCode();
+        result = 31 * result + (int) (id ^ (id >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + price.hashCode();
+        result = 31 * result + image.hashCode();
+        result = 31 * result + description.hashCode();
+        result = 31 * result + (availability ? 1 : 0);
+        result = 31 * result + categoryId;
+        result = 31 * result + category.hashCode();
+        result = 31 * result + dateAvailable.hashCode();
+        result = 31 * result + currentPrice.hashCode();
+        result = 31 * result + bets.hashCode();
+        return result;
     }
 }

@@ -16,35 +16,22 @@ import java.util.ArrayList;
  * Created by Acer on 30.03.2017.
  */
 public class OrderDaoImpl extends AbstractDao implements OrderDao {
-    private static final String SQL_SELECT_ALL_ORDERS = "SELECT id_order, order.id_user, id_lot, payment, date, accept," +
+    private static final String SQL_SELECT_ALL_ORDERS = "SELECT id_order, order.id_user,id_trader, id_lot, payment, date, accept," +
             " real_name, city, address, phone_number FROM auction.order JOIN user ON order.id_user=user.id_user ORDER BY id_order";
-    private static final String SQL_ADD_CANCELLED_ORDER = "INSERT INTO auction.order VALUES(NULL,?,?,?,NOW(),FALSE)";
-    private static final String SQL_CREATE_ORDER = "INSERT INTO auction.order VALUES(NULL,?,?,?,NOW(),?)";
+    private static final String SQL_ADD_ORDER = "INSERT INTO auction.order VALUES(NULL,?,?,?,?,NOW(),?)";
 
 
     @Override
-    public void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws DAOException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_CANCELLED_ORDER)) {
-            preparedStatement.setLong(1, userId);
-            preparedStatement.setLong(2, lotId);
-            preparedStatement.setBigDecimal(3, payment);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.log(Level.ERROR,e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void addOrder(long customerId, long lotId, BigDecimal price) throws DAOException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_CREATE_ORDER)) {
+    public void addOrder(long customerId, long traderId, long lotId, BigDecimal price, boolean accept) throws DAOException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_ORDER)) {
             preparedStatement.setLong(1, customerId);
-            preparedStatement.setLong(2, lotId);
-            preparedStatement.setBigDecimal(3, price);
-            preparedStatement.setBoolean(4, true);
+            preparedStatement.setLong(2, traderId);
+            preparedStatement.setLong(3, lotId);
+            preparedStatement.setBigDecimal(4, price);
+            preparedStatement.setBoolean(5, accept);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR,e);
+            LOGGER.log(Level.ERROR, e);
             throw new DAOException(e);
         }
     }
@@ -58,7 +45,7 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
                 orders.add(initOrder(resultSet));
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR,e);
+            LOGGER.log(Level.ERROR, e);
             throw new DAOException(e);
         }
         return orders;
@@ -68,6 +55,7 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
         Order order = new Order();
         order.setOrderId(resultSet.getLong("id_order"));
         order.setUserId(resultSet.getLong("id_user"));
+        order.setTraderId(resultSet.getLong("id_trader"));
         order.setLotId(resultSet.getLong("id_lot"));
         order.setPayment(resultSet.getBigDecimal("payment"));
         order.setCostumerName(resultSet.getString("real_name"));

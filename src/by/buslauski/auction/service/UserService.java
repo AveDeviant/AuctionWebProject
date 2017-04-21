@@ -28,4 +28,6 @@ public interface UserService {
     User findAdmin() throws ServiceException;
 
     User findUserById(long userId) throws ServiceException;
+
+    User findTrader(long lotId) throws ServiceException;
 }

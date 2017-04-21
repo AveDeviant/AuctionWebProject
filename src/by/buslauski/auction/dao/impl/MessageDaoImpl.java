@@ -3,7 +3,6 @@ package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.MessageDao;
 import by.buslauski.auction.entity.UserMessage;
-import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.util.DateTimeParser;
 import org.apache.logging.log4j.Level;
@@ -17,21 +16,24 @@ import java.util.ArrayList;
  * Created by Acer on 31.03.2017.
  */
 public class MessageDaoImpl extends AbstractDao implements MessageDao {
-    private static final String SQL_ADD_MESSAGE = "INSERT INTO message VALUES(NULL,?,?,?,?,NOW(),?,?,FALSE)";
-    private static final String SQL_SELECT_USER_MESSAGES = "SELECT * FROM message WHERE id_recipient=? OR id_sender=? ORDER BY id_message";
+    private static final String SQL_ADD_MESSAGE = "INSERT INTO message VALUES(NULL,?,?,?,?,NOW(),FALSE)";
+    private static final String SQL_SELECT_USER_MESSAGES = "SELECT id_message, message.id_sender," +
+            " message.id_recipient, theme, content, date, sender.username AS sender_name," +
+            " recipient.username AS recipient_name  FROM message" +
+            " JOIN user AS sender ON message.id_sender = sender.id_user" +
+            " JOIN user AS recipient ON message.id_recipient = recipient.id_user" +
+            " WHERE message.id_recipient=? OR message.id_sender=? ORDER BY id_message";
     private static final String SQL_COUNT_UNREAD_MESSAGES = "SELECT COUNT(*) AS count FROM message WHERE id_recipient=? " +
             "AND readed=FALSE";
     private static final String SQL_RESET_UNREAD_STATUS = "UPDATE message SET readed=TRUE WHERE id_recipient=?";
 
     @Override
-    public void addMessage(String theme, String text, User sender, User recipient) throws DAOException {
+    public void addMessage(String theme, String text, long senderId, long recipientId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_MESSAGE)) {
-            preparedStatement.setLong(1, sender.getUserId());
-            preparedStatement.setLong(2, recipient.getUserId());
+            preparedStatement.setLong(1, senderId);
+            preparedStatement.setLong(2, recipientId);
             preparedStatement.setString(3, theme);
             preparedStatement.setString(4, text);
-            preparedStatement.setString(5, sender.getUserName());
-            preparedStatement.setString(6, recipient.getUserName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e);
@@ -90,8 +92,8 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
         userMessage.setRecipientId(resultSet.getLong("id_recipient"));
         userMessage.setTheme(resultSet.getString("theme"));
         userMessage.setContent(resultSet.getString("content"));
-        userMessage.setSenderUsername(resultSet.getString("sender_username"));
-        userMessage.setRecipientUsername(resultSet.getString("recipient_username"));
+        userMessage.setSenderUsername(resultSet.getString("sender_name"));
+        userMessage.setRecipientUsername(resultSet.getString("recipient_name"));
         userMessage.setDateTime(DateTimeParser.parseDate(resultSet.getString("date")));
         return userMessage;
     }

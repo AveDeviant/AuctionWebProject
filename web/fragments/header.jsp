@@ -5,13 +5,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">--%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/darkstrap.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Jura" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <%--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>--%>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <fmt:setLocale value="${locale}"/>
     <fmt:setBundle basename="properties.locale"/>
 </head>

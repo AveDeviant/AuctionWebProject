@@ -20,7 +20,7 @@ public class UserValidatorTest {
     @Test
     public void checkLoginPasswordTestValidInput() {
         String validUsername="username";
-        String validPassword = "IamAdmin95";
+        String validPassword = "passWor1d";
         boolean actual = UserValidator.checkLoginPassword(validUsername,validPassword);
         Assert.assertEquals(true,actual);
     }

@@ -23,11 +23,11 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <label class="text-center alert-danger">
-                <c:if test="${addErr!=null}">
+            <c:if test="${addErr!=null}">
+                <div class=" alert alert-danger alert-dismissable fade in">
                     <fmt:message key="${addErr}"/>
-                </c:if>
-            </label>
+                </div>
+            </c:if>
         </div>
     </div>
     <div class="row">
@@ -72,11 +72,11 @@
             </form>
         </div>
         <div class="col-sm-4">
-            <label class="alert-danger">
-                <c:if test="${categoryErr!=null}">
+            <c:if test="${categoryErr!=null}">
+                <div class=" alert alert-danger alert-dismissable fade in">
                     <fmt:message key="${categoryErr}"/>
-                </c:if>
-            </label>
+                </div>
+            </c:if>
             <h3><fmt:message key="admin.edit.page.category.title"/></h3>
             <form method="get" action="${pageContext.request.contextPath}/Controller">
                 <label for="name"><fmt:message key="admin.new.category"/></label>

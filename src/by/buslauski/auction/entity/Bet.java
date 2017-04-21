@@ -62,10 +62,36 @@ public class Bet {
     }
 
     public void setLotTitle(String lotTitle) {
-        this.lotTitle=lotTitle;
+        this.lotTitle = lotTitle;
     }
+
     public String getLotTitle() {
         return lotTitle;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Bet bet1 = (Bet) o;
+
+        if (betId != bet1.betId) return false;
+        if (lotId != bet1.lotId) return false;
+        if (userId != bet1.userId) return false;
+        if (!bet.equals(bet1.bet)) return false;
+        if (!date.equals(bet1.date)) return false;
+        return lotTitle.equals(bet1.lotTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (betId ^ (betId >>> 32));
+        result = 31 * result + (int) (lotId ^ (lotId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + bet.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + lotTitle.hashCode();
+        return result;
+    }
 }

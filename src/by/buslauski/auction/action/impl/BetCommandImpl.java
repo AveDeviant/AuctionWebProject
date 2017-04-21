@@ -33,7 +33,12 @@ public class BetCommandImpl implements Command {
     private static BankServiceImpl bankService = new BankServiceImpl();
     private static UserService userService = new UserServiceImpl();
 
-
+    /**
+     * Bet operation. Updating lot current price and insert the bet into database.
+     *
+     * @param request
+     * @return
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
@@ -55,8 +60,14 @@ public class BetCommandImpl implements Command {
             return pageResponse;
         }
         try {
+            user = userService.findUserById(user.getUserId()); // updating user info
             if (user.getAccess()) {
                 Lot lot = lotService.getAvailableLotById(lotId);
+                if (lot.getUserId() == user.getUserId()) {
+                    request.setAttribute(BET_ERROR, ResponseMessage.BET_ON_OWN_LOT);
+                    pageResponse.setResponseType(ResponseType.FORWARD);
+                    return pageResponse;
+                }
                 if (!lotService.checkActuality(lot)) {
                     request.setAttribute(BET_ERROR, ResponseMessage.BET_TIMEOUT);
                     pageResponse.setResponseType(ResponseType.FORWARD);

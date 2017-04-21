@@ -21,7 +21,9 @@
     <div class="row">
         <div class="col-sm-12">
             <c:if test="${orderError!=null}">
-                <label class="alert-danger text-center"><fmt:message key="${orderError}"/> </label>
+                <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="${orderError}"/>
+                </div>
             </c:if>
         </div>
     </div>

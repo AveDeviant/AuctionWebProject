@@ -30,5 +30,6 @@ public class ResponseMessage {
     public static final String INVALID_CARD_NUMBER="bank.card.error";
     public static final String ADDING_CATEGORY_ERROR="category.add.error";
     public static final String INVALID_VALUE = "invalid.value";
+    public static final String BET_ON_OWN_LOT = "bet.owner.error";
 
 }

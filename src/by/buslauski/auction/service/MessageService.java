@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by Acer on 14.04.2017.
  */
 public interface MessageService {
-    void addMessage(String theme, String text, User sender, User recipient) throws ServiceException;
+    void addMessage(String theme, String text, long senderId, long recipientId) throws ServiceException;
 
     ArrayList<UserMessage> findMessages(long userId) throws ServiceException;
 

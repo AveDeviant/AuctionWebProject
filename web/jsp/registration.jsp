@@ -52,11 +52,11 @@
                         <label class="alert-danger" id="errPwd2" style="display: none">
                             <fmt:message key="registration.passwords.not.equals"/>
                         </label>
-                        <label class="alert-danger">
                             <c:if test="${registrationError !=null}">
+                                <div class=" alert alert-danger alert-dismissable fade in">
                                 <fmt:message key="${registrationError}"/>
+                                </div>
                             </c:if>
-                        </label>
                     </div>
                     <div class="form-group">
                         <label for="mail"><fmt:message key="register.email"/></label><label class="required">*</label>

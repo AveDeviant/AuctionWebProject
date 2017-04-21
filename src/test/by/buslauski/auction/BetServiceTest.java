@@ -27,8 +27,8 @@ public class BetServiceTest {
     }
 
     @Test
-    public void checkBetValueTest() {
-        BigDecimal bet = new BigDecimal(300.00);
+    public void checkBetValueTestIncorrectBet() {
+        BigDecimal bet = new BigDecimal(302.10);
         boolean actual = betService.checkBetValue(testLot, bet);
         Assert.assertEquals(false, actual);
     }

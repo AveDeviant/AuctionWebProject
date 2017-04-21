@@ -60,7 +60,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         ArrayList<Lot> lots = lotService.getLotsWithOverTiming();
         ArrayList<Bet> winningBets = new ArrayList<>();
         for (Lot lot : lots) {
-            if (!lot.getBets().isEmpty() && lot.getAvailability()) {   // if lot have confirmed bets
+            if (!lot.getBets().isEmpty() && lot.getAvailability()) {   // if lot has confirmed bets
                 Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
                 if (lastBet.getUserId() == user.getUserId()) {
                     if (lotService.checkWaitingPeriod(lot)) {
@@ -199,11 +199,27 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return user;
     }
 
+    @Override
+    public User findTrader(long lotId) throws ServiceException {
+        User user = null;
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
+            user = userDao.findTrader(lotId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        } finally {
+            daoHelper.release();
+        }
+        return user;
+    }
+
     /**
-     * Checking user's username and password for uniqueness
+     * Checking user's username and email for uniqueness
      *
      * @param userName entered username
-     * @param email    entered password
+     * @param email    entered email
      * @return false - entered values have been already used by other users.
      * true - database doesn't contains entered values.
      */

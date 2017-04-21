@@ -53,19 +53,17 @@ public class MessageCommandImpl implements Command {
             return pageResponse;
         }
         try {
-            if (Role.CUSTOMER.getValue().equals(user.getRole().getValue())) {
+            if (Role.CUSTOMER == user.getRole()) {
                 User admin = userService.findAdmin();
-                messageService.addMessage(theme, text, user, admin);
+                messageService.addMessage(theme, text, user.getUserId(), admin.getUserId());
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 pageResponse.setPage(PageNavigation.FAQ_PAGE);
             } else {
-                // bug
                 long recipientId = Long.parseLong(request.getParameter(RECIPIENT_ID));
-                System.out.println(recipientId);
                 User customer = userService.findUserById(recipientId);
-                messageService.addMessage(theme, text, user, customer);
+                messageService.addMessage(theme, text, user.getUserId(), customer.getUserId());
                 pageResponse.setResponseType(ResponseType.REDIRECT);
-              pageResponse.setPage(returnPageWithQuery(request));
+                pageResponse.setPage(returnPageWithQuery(request));
             }
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e);

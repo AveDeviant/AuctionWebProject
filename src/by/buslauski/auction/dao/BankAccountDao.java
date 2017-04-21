@@ -18,8 +18,6 @@ public interface BankAccountDao {
 
     BankCard findCardByUserId(long userId) throws DAOException;
 
-    BankCard findRecipientAccount(long lotId) throws DAOException;
-
     boolean doPayment(long customerId, long recipientId, BigDecimal newBalanceCustomer,
                       BigDecimal newBalanceRecipient) throws DAOException;
 }

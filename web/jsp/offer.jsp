@@ -30,8 +30,10 @@
                     key="offer.lot.reference.authorization"/></a>
         </c:when>
         <c:otherwise>
-            <c:if test="${offerErr !=null}">
-                <fmt:message key="offer.bank.account"/>
+            <c:if test="${addErr !=null}">
+                <div class=" alert alert-danger alert-dismissable fade in">
+                    <fmt:message key="${addErr}"/>
+                </div>
             </c:if>
             <div class="row">
                 <div class="col-sm-12">
@@ -58,7 +60,8 @@
                         <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}"
                                required
                                title="<fmt:message key="bet.restrict"/>"
-                               placeholder="<fmt:message key="bet.restrict"/>"><br/>
+                               placeholder="<fmt:message key="bet.restrict"/>">
+                         <br/>
                         <label for="availableTiming"><fmt:message key="lot.timing"/> </label>
                         <input class="form-control" type="date" name="availableTiming" id="availableTiming">
                         <label class="alert-danger" id="errDate"></label><br/>
@@ -86,6 +89,7 @@
         var checkedDate = document.addingLot.availableTiming.value;
         var textArea = document.getElementById("description").value;
         var errDate = document.getElementById("errDate");
+        var MAX_PRICE = 9999999.99;
         var arr = checkedDate.toString().split("-");
         var year = arr[0];
         var month = arr[1];

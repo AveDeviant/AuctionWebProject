@@ -19,14 +19,15 @@
 <body>
 <div class="container">
 
-    <c:if test="${banned !=null}">
-        <div class="row">
-            <div class="col-sm-12">
-                <label class="text-center alert-danger"><fmt:message key="${banned}"/> </label>
-            </div>
+    <c:if test="${banned ne null}">
+        <div class=" alert alert-danger alert-dismissable fade in">
+            <fmt:message key="user.banned.title"/></div>
+    </c:if>
+    <c:if test="${auctionOwner ne null}">
+        <div class="alert alert-warning aler-dismissable fade in">
+            <c:out value="${auctionOwner}"/>
         </div>
     </c:if>
-
     <div class="row">
         <div class="col-sm-12">
             <h1 class="text-center">${lot.getTitle()}</h1>
@@ -54,8 +55,13 @@
 
                         <label for="price"><fmt:message key="lot.bet.input"/></label>
                         <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}"
-                           required title="<fmt:message key="bet.restrict"/> "
-                               placeholder="<fmt:message key="bet.restrict"/>"><br/>
+                               required title="<fmt:message key="bet.restrict"/> "
+                               placeholder="<fmt:message key="bet.restrict"/>">
+                        <c:if test="${betErr ne null}">
+                        <div class=" alert alert-danger alert-dismissable fade in">
+                            <fmt:message key="${betErr}"/>
+                        </div>
+                        </c:if> <br/>
                         <button class="button-auction" type="submit" name="command" value="makeBet"><fmt:message
                                 key="lot.bet.button"/></button>
                         <input type="hidden" name="lotId" value="${lot.getId()}">
@@ -64,11 +70,6 @@
                                value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
 
                     </form>
-                    <label class="alert-danger">
-                        <c:if test="${betErr != null}">
-                            <fmt:message key="${betErr}"/>
-                        </c:if>
-                    </label>
                 </c:otherwise>
             </c:choose>
 
@@ -80,9 +81,10 @@
         </div>
     </div>
     <div class="row">
-    <div align="center"> <button class="button-auction" type="button" onclick="showBets()"><fmt:message
-            key="lot.page.button.showBets"/></button>
-    </div>
+        <div align="center">
+            <button class="button-auction" type="button" onclick="showBets()"><fmt:message
+                    key="lot.page.button.showBets"/></button>
+        </div>
     </div>
     <br/>
     <div id="bets" style="display: none;">
@@ -94,11 +96,11 @@
                 <div class="col-sm-6" align="center">
                     <label class="text-center"><c:out value="${bet.getBet()}"/></label>
                 </div>
-                </div>
+            </div>
         </c:forEach>
     </div>
 </div>
-    </div>
+</div>
 </div>
 <script>
     function showBets() {

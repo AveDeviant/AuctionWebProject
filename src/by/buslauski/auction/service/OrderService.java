@@ -12,5 +12,4 @@ import java.util.ArrayList;
 public interface OrderService {
     ArrayList<Order> getAllOrders() throws ServiceException;
 
-    void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws ServiceException;
 }

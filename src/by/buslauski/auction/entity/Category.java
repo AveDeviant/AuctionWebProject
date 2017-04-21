@@ -27,4 +27,22 @@ public class Category {
     public int getCategoryId() {
         return categoryId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Category category = (Category) o;
+
+        if (categoryId != category.categoryId) return false;
+        return value.equals(category.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = categoryId;
+        result = 31 * result + value.hashCode();
+        return result;
+    }
 }

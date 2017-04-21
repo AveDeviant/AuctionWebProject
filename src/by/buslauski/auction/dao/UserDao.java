@@ -28,4 +28,6 @@ public interface UserDao {
                         String address, String phone) throws DAOException;
 
     User findAdmin() throws DAOException;
+
+    User findTrader(long lotId) throws DAOException;
 }

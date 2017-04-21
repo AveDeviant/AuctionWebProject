@@ -2,7 +2,6 @@ package by.buslauski.auction.action.impl;
 
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.constant.RequestAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -27,8 +26,9 @@ public class AccessEditImpl implements Command {
      *
      * @param request
      * @return PageResponse - An object containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * ResponseType - redirect in case successful operation.
+     * forward - in case operation failed (an exception has been thrown)
+     * String page - page for response.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

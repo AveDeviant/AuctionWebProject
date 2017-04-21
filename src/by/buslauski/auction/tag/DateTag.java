@@ -41,7 +41,7 @@ public class DateTag extends TagSupport {
             Date date = java.sql.Date.valueOf(lot.getDateAvailable());
             String dateAsString = dateFormat.format(date);
             JspWriter writer = pageContext.getOut();
-            writer.write(String.valueOf(dateAsString));
+            writer.write(dateAsString);
         } catch (IOException e) {
             LOGGER.log(Level.ERROR, e);
             throw new JspTagException();

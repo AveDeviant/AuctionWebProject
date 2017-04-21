@@ -1,18 +1,11 @@
 package by.buslauski.auction.service.impl;
 
-import by.buslauski.auction.connection.ConnectionPool;
-import by.buslauski.auction.connection.ProxyConnection;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Acer on 03.04.2017.
+ * Created by Acer on 21.04.2017.
  */
-abstract class AbstractService {
-    static ConnectionPool pool = ConnectionPool.getInstance();
-
-    void returnConnection(ProxyConnection connection) {
-        if (connection != null) {
-            pool.returnConnectionToPool(connection);
-        }
-    }
+ class AbstractService {
+     static final Logger LOGGER = LogManager.getLogger();
 }

@@ -27,7 +27,6 @@ import java.util.ArrayList;
  */
 public class LotServiceImpl extends AbstractService implements LotService {
     private static final int WAITING_PERIOD = 10;       // waiting period for registration of the won lot, in days.
-    private static Logger LOGGER = LogManager.getLogger();
 
 
     @Override
@@ -42,11 +41,11 @@ public class LotServiceImpl extends AbstractService implements LotService {
             LotDaoImpl lotDao = new LotDaoImpl();
             daoHelperCategory.initDao(categoryDao);
             daoHelperLot.initDao(lotDao);
-            if (LotValidator.checkLot(title, description, date)) {
                 int categoryId = categoryDao.findCategoryIdByName(category);
                 lotDao.addLot(userId, categoryId, title, description, image, price, availableDate, availability, price);
-            }
+
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelperCategory.release();
@@ -64,6 +63,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.initDao(lotDao);
             lots = lotDao.findAllLots();
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -72,7 +72,9 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
-     * @return ArrayList of lots which available for bidding
+     * Get available lots from database.
+     *
+     * @return ArrayList of lots that have access to the auction.
      */
     @Override
     public ArrayList<Lot> getAvailableLots() throws ServiceException {
@@ -83,6 +85,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.initDao(lotDao);
             availableLots = lotDao.findAvailableLots();
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -106,6 +109,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
             }
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelperLot.release();
@@ -115,8 +119,10 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
-     * @param lotId
-     * @return
+     * Find lot which has permission to bids using lot ID.
+     * Set bets to this lot.
+     * @param lotId lot ID.
+     * @return Lot object.
      * @throws ServiceException
      */
     @Override
@@ -136,6 +142,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
             }
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -145,7 +152,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Method checks if the lot are still available for bidding.
-     * Lot bidding time ends at 00:00:00
+     * Lot bidding time ends at 00:00:00.
      *
      * @param lot checked lot.
      * @return true -  lot available for bidding
@@ -159,7 +166,10 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
-     * @return ArrayList containing lots which bidding time is over.
+     * Get lots from database which bidding time has ended.
+     * If lot have access to the auction find bets by lot for determine the winner of the auction.
+     *
+     * @return lots for which the auction is ended.
      */
     @Override
     public ArrayList<Lot> getLotsWithOverTiming() throws ServiceException {
@@ -174,10 +184,13 @@ public class LotServiceImpl extends AbstractService implements LotService {
                 BetDaoImpl betDao = new BetDaoImpl();
                 daoHelperBet.initDao(betDao);
                 for (Lot lot : lots) {
-                    lot.getBets().addAll(betDao.getBetsByLotId(lot.getId())); // adding bets to the current lot.
+                    if (lot.getAvailability()) {  // check for lot access to the auction
+                        lot.getBets().addAll(betDao.getBetsByLotId(lot.getId())); // adding bets to the current lot.
+                    }
                 }
             }
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelperBet.release();
@@ -203,16 +216,13 @@ public class LotServiceImpl extends AbstractService implements LotService {
                         boolean availability, String availableDate) throws ServiceException {
         DaoHelper daoHelperCategory = new DaoHelper();
         DaoHelper daoHelperLot = new DaoHelper();
-        LocalDate localDate = LocalDate.parse(availableDate);
         try {
             CategoryDao categoryDao = new CategoryDaoImpl();
             LotDao lotDao = new LotDaoImpl();
             daoHelperCategory.initDao(categoryDao);
             int categoryId = categoryDao.findCategoryIdByName(category);
-            if (LotValidator.checkLot(title, localDate)) {
                 daoHelperLot.initDao(lotDao);
                 lotDao.editLot(lotId, categoryId, title, price, image, availability, availableDate);
-            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
@@ -238,6 +248,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.initDao(lotDao);
             lotDao.deleteLot(lotId);
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR,e);
             throw new ServiceException();
         } finally {
             daoHelper.release();
@@ -248,9 +259,9 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * Method is called in case rejecting payment by costumer.
      * Lot returns in list of lots which available for bidding.
      * Cancelled order added into database for further admin investigation.
-     * Delete all bets for this lot.
+     * Delete all bets made for this lot.
      *
-     * @param lot lot which must be returned to list
+     * @param lot lot which must be returned to lot list.
      */
     @Override
     public void resetBids(Lot lot) throws ServiceException {
@@ -266,7 +277,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.beginTransaction(betDao, lotDao, orderDao);
             betDao.resetBets(lot.getId());
             lotDao.returnLotToBids(lot.getId(), lot.getPrice(), date);
-            orderDao.addCancelledOrder(lot.getId(), customerId, currentPrice);
+            orderDao.addOrder(customerId, lot.getUserId(), lot.getId(), currentPrice, false);
             daoHelper.commit();
             lot.getBets().clear(); // clear bet list
 

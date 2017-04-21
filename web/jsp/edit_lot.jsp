@@ -23,11 +23,11 @@
     <jsp:include page="${pageContext.request.contextPath}/Controller">
         <jsp:param name="command" value="getLots"/>
     </jsp:include>
-    <label class="alert-danger">
         <c:if test="${editErr != null}">
+        <div class=" alert alert-danger alert-dismissable fade in">
             <fmt:message key="${editErr}"/>
+        </div>
         </c:if>
-    </label>
     <div class="col-sm-4">
         <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data"
               name="editLot">

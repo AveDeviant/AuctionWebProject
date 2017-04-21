@@ -28,7 +28,7 @@ public class GoToCommandImpl implements Command {
      *
      * @param request
      * @return An object containing two fields:
-     * ResponseType- response type (forward or redirect)
+     * ResponseType- forward or redirect
      * page - page for response
      */
     @Override

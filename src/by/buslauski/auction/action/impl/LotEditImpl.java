@@ -12,7 +12,9 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
-import by.buslauski.auction.service.Uploading;
+import by.buslauski.auction.service.FileUploadingManager;
+import by.buslauski.auction.validator.BetValidator;
+import by.buslauski.auction.validator.LotValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,10 +44,12 @@ public class LotEditImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
+     * Editing lot title, starting price, image, availability for bids, timing, lot category.
+     *
      * @param request
-     * @return Array of two strings:
-     * array[0] - response type (forward or redirect)
-     * array[1] - path for response
+     * @return A PageResponse object containing two fields:
+     * ResponseType - type of response (forward or redirect)
+     * String page - page for response
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -77,15 +81,20 @@ public class LotEditImpl implements Command {
                 }
             }
             String uploadPath = request.getServletContext().getRealPath(UPLOAD);
-            Uploading uploading = new Uploading();
-            String image = UPLOAD + File.separator + uploading.uploadFile(uploadPath, lotImage);
+            FileUploadingManager fileUploadingManager = new FileUploadingManager();
+            String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);
             String lotTitle = request.getParameter(LOT_TITLE);
             String startingPrice = request.getParameter(STARTING_PRICE);
             boolean availability = Boolean.parseBoolean(request.getParameter(AVAILABILITY));
             String availableDate = request.getParameter(AVAILABLE_TIMING);
             String category = request.getParameter(CATEGORY);
-            lotService.editLot(id, category, lotTitle, image, new BigDecimal(startingPrice), availability, availableDate);
-            pageResponse.setResponseType(ResponseType.REDIRECT);
+            if (LotValidator.checkLot(lotTitle, availableDate) && BetValidator.checkPriceForValid(startingPrice)) {
+                lotService.editLot(id, category, lotTitle, image, new BigDecimal(startingPrice), availability, availableDate);
+                pageResponse.setResponseType(ResponseType.REDIRECT);
+            } else {
+                pageResponse.setResponseType(ResponseType.FORWARD);
+                request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_VALUE);
+            }
             pageResponse.setPage(returnPageWithQuery(request));
         } catch (ServiceException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.OPERATION_ERROR);

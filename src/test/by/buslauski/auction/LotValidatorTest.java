@@ -16,8 +16,8 @@ public class LotValidatorTest {
     public void checkLotTestInvalidInput() {
         String lotTitle = "Example";
         String lotDescription = "Such test, much invalid,  woooow";
-        LocalDate localDate = LocalDate.parse("2017-03-03");
-        boolean actual = LotValidator.checkLot(lotTitle,lotDescription,localDate);
-        Assert.assertEquals(false,actual);
+        String date = "2017-03-03";
+        boolean actual = LotValidator.checkLot(lotTitle, lotDescription, date);
+        Assert.assertEquals(false, actual);
     }
 }

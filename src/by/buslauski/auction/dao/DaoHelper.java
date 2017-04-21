@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class DaoHelper {
 
-    private Logger LOG = LogManager.getLogger();
+    private Logger LOGGER = LogManager.getLogger();
 
     private ProxyConnection connection = ConnectionPool.getInstance().takeConnectionFromPool();
 
@@ -22,7 +22,7 @@ public class DaoHelper {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            LOG.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
         }
         for (Object dao : daos) {
             ((AbstractDao) dao).setConnection(connection);
@@ -33,7 +33,7 @@ public class DaoHelper {
         try {
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            LOG.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
         }
         ConnectionPool.getInstance().returnConnectionToPool(connection);
     }
@@ -42,7 +42,7 @@ public class DaoHelper {
         try {
             connection.commit();
         } catch (SQLException e) {
-            LOG.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
         }
     }
 
@@ -50,7 +50,7 @@ public class DaoHelper {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            LOG.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
         }
     }
 

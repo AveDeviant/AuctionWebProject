@@ -11,9 +11,8 @@ import java.util.ArrayList;
  */
 public interface OrderDao {
 
-    void addOrder(long customerId, long lotId, BigDecimal price) throws DAOException;
+    void addOrder(long customerId, long traderId, long lotId, BigDecimal price, boolean accept) throws DAOException;
 
     ArrayList<Order> getAllOrders() throws DAOException;
 
-    void addCancelledOrder(long lotId, long userId, BigDecimal payment) throws DAOException;
 }

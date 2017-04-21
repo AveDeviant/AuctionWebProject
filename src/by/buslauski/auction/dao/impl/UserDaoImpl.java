@@ -1,6 +1,5 @@
 package by.buslauski.auction.dao.impl;
 
-import by.buslauski.auction.connection.ProxyConnection;
 import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.entity.BankCard;
 import by.buslauski.auction.entity.Role;
@@ -30,6 +29,11 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String SQL_CHANGE_USER_ACCESS = "UPDATE user SET access=? WHERE id_user=?";
     private static final String SQL_SELECT_ADMIN = "SELECT * FROM user JOIN role ON user.id_role=role.id_role " +
             "WHERE name='admin' LIMIT 1";
+    private static final String SQL_SELECT_TRADER = "SELECT user.id_user, user.id_role, name, username, email, password," +
+            " city, address, phone_number, access, real_name " +
+            "FROM user " +
+            "JOIN role ON user.id_role=role.id_role " +
+            "JOIN lot ON user.id_user=lot.id_user WHERE id_lot=?";
 
     @Override
     public ArrayList<User> getAllCustomers() throws DAOException {
@@ -171,6 +175,22 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         return user;
     }
 
+    @Override
+    public User findTrader(long lotId) throws DAOException {
+        User user = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TRADER)) {
+            preparedStatement.setLong(1, lotId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = initUser(resultSet);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new DAOException(e);
+        }
+        return user;
+    }
+
     private BankCard initUserBankCard(ResultSet resultSet) throws SQLException {
         BankCard bankCard = new BankCard();
         bankCard.setCardId(resultSet.getLong("id_account"));
@@ -194,6 +214,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
                 resultSet.getString("email"),
                 resultSet.getBoolean("access"),
                 role);
+        user.setName(resultSet.getString("real_name"));
+        user.setAddress(resultSet.getString("address"));
+        user.setCity(resultSet.getString("city"));
+        user.setPhoneNumber(resultSet.getString("phone_number"));
         return user;
     }
 

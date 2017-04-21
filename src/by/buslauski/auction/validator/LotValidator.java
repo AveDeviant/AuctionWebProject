@@ -8,13 +8,13 @@ import java.time.LocalDate;
  */
 public class LotValidator {
     private static final int MAX_DESCRIPTION_LENGTH = 1000;
-    private static final String LOT_TITLE_REGEXP = "[\\w\\s\"-,!()'А-Яа-я-]{6,45}";
+    private static final String LOT_TITLE_REGEXP = "[\\w\\s\"-,!().'А-Яа-я-]{6,45}";
 
-    public static boolean checkLot(String title, LocalDate date) {
+    public static boolean checkLot(String title, String date) {
         return (checkTitle(title) && checkDate(date));
     }
 
-    public static boolean checkLot(String title, String description, LocalDate date) {
+    public static boolean checkLot(String title, String description, String date) {
         return (checkTitle(title) && checkDescription(description) && checkDate(date));
     }
 
@@ -26,12 +26,11 @@ public class LotValidator {
         return description.length() <= MAX_DESCRIPTION_LENGTH;
     }
 
-    private static boolean checkDate(LocalDate checkedDate) {
+    private static boolean checkDate(String checkedDate) {
+        LocalDate date =LocalDate.parse(checkedDate);
         LocalDate now = LocalDate.now();
-        if (now.isAfter(checkedDate)) {
-            return false;
-        }
-        return true;
+        return now.isBefore(date);
+
     }
 
 }

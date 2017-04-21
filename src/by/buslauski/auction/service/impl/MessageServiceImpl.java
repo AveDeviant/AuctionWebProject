@@ -2,7 +2,6 @@ package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.MessageDao;
-import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.MessageDaoImpl;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
@@ -23,12 +22,12 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
 
 
     @Override
-    public void addMessage(String theme, String text, User sender, User recipient) throws ServiceException {
+    public void addMessage(String theme, String text, long senderId, long recipientId) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
         try {
             MessageDao messageDao = new MessageDaoImpl();
             daoHelper.initDao(messageDao);
-            messageDao.addMessage(theme, text, sender, recipient);
+            messageDao.addMessage(theme, text, senderId, recipientId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
@@ -86,7 +85,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
         messageContent.append("E-mail: ").append(customer.getEmail());
         messageContent.append("\n");
         messageContent.append("Phone number: ").append(customer.getPhoneNumber());
-        addMessage(AUCTION_NOTIFICATION, messageContent.toString(),customer,dealer);
+        addMessage(AUCTION_NOTIFICATION, messageContent.toString(),customer.getUserId(),dealer.getUserId());
     }
 
 

@@ -28,7 +28,8 @@
             <label class="alert-danger"><fmt:message key="${err}"/></label>
         </c:if>
         <c:if test="${banned != null}">
-            <label class="text-center alert-danger"><fmt:message key="${banned}"/> </label>
+            <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="user.banned.title"/></div>
         </c:if>
     </div>
     <div class="row">
@@ -40,43 +41,40 @@
     </div>
     <c:choose>
         <c:when test="${lotsByCategory==null}">
+            <c:set var="counter" value="${0}" scope="page"/>
             <c:forEach var="lot" items="${lots}" varStatus="status">
-                <div class="row">
-                    <div class="col-sm-8">
+                <c:if test="${(counter%2) eq 0}">
+                    <div class="row"></c:if>
+                <div class="col-sm-6">
                         <a class="lot-title"
                            href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
-                            <h2>${lot.getTitle()}</h2></a>
+                            <h4>${lot.getTitle()}</h4></a>
+                        <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-8">
-                        <img style="width:80%" src="${lot.getImage()}" alt="${lot.getTitle()}">
-                    </div>
-                    <div class="col-sm-4">
-                        <h4><fmt:message key="lot.page.currentPrice"/></h4>
-                        <h2>${lot.getCurrentPrice()}</h2>
-                    </div>
-                </div>
+                <c:set var="counter" value="${counter+1}" scope="page"/>
+                <c:if test="${(counter%2) eq 0}"></div>
+                    <br></c:if>
             </c:forEach>
         </c:when>
         <c:otherwise>
-            <label><fmt:message key="selected.category"/>${categoryValue} </label>
+            <h5 class="text center"><fmt:message key="selected.category"/>${categoryValue} </h5>
+            <c:set var="counter" value="${0}" scope="page"/>
             <c:forEach var="lot" items="${lotsByCategory}" varStatus="status">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <a class="lot-title"
-                           href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
-                            <h2>${lot.getTitle()}</h2></a>
-                        <img style="width:80%" src="${lot.getImage()}" alt="${lot.getImage()}">
-                    </div>
-                    <div class="col-sm-4">
-                        <h4><fmt:message key="lot.page.currentPrice"/></h4>
-                        <h2>${lot.getCurrentPrice()}</h2>
-                    </div>
+                <c:if test="${(counter%2) eq 0}">
+                    <div class="row"></c:if>
+                <div class="col-sm-6">
+                    <a class="lot-title"
+                       href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
+                        <h4>${lot.getTitle()}</h4></a>
+                    <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
                 </div>
+                <c:set var="counter" value="${counter+1}" scope="page"/>
+                <c:if test="${(counter%2) eq 0}"></div>
+                    <br></c:if>
             </c:forEach>
         </c:otherwise>
     </c:choose>
 </div>
+<c:import url="/fragments/footer.jsp"/>
 </body>
 </html>

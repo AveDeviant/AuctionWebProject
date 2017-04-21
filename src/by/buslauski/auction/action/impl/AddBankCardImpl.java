@@ -24,6 +24,20 @@ public class AddBankCardImpl implements Command {
     private static final String BANK_CARD_ERROR = "bankErr";
     private static BankCardValidator validator = new BankCardValidator();
 
+    /**
+     * Add user's bank card info into database.
+     * Set created bank account to user.
+     *
+     * Checked situations:
+     * Invalid input;
+     * Entered bank card has already been registered by another user;
+     * Exception during adding data into database;
+     *
+     * @param request
+     * @return PageResponse object containing two fields:
+     * ResponseType
+     * String page - page for response (/jsp/private.jsp)
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
