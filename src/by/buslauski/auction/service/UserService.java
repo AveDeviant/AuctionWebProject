@@ -2,6 +2,7 @@ package by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
+import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ public interface UserService {
 
     ArrayList<User> getAllCustomers() throws ServiceException;
 
-    ArrayList<Bet> getUserBets(User user) throws ServiceException;
 
     void updateUserInfo(long userId, String name, String city,
                         String address, String phone) throws ServiceException;
@@ -30,4 +30,10 @@ public interface UserService {
     User findUserById(long userId) throws ServiceException;
 
     User findTrader(long lotId) throws ServiceException;
+
+    ArrayList<Integer> defineRating();
+
+    void updateTraderRating(long traderId, long customerId, int rating) throws ServiceException;
+
+    void setTraderRating(User trader) throws ServiceException;
 }

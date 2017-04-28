@@ -2,7 +2,7 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -25,7 +25,7 @@ public class RejectCommandImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         Bet bet = user.getWinningBets().get(0);
         pageResponse.setPage(returnPageWithQuery(request));
         try {

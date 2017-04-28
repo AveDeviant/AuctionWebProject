@@ -1,7 +1,7 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
 import by.buslauski.auction.exception.ServiceException;
@@ -27,7 +27,7 @@ public class GetMessagesImpl implements Command {
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
             ArrayList<UserMessage> messages = messageService.findMessages(user.getUserId());
             user.setUserMessages(messages);

@@ -1,6 +1,8 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
+import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
@@ -27,7 +29,7 @@ public class ShowLotImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * Showing lot info.
+     * Showing lot and trader info.
      * Showing notification to user in case auction is owner of this lot.
      *
      * @param request
@@ -46,12 +48,12 @@ public class ShowLotImpl implements Command {
                 pageResponse.setPage(PageNavigation.PAGE_NOT_FOUND);
                 return pageResponse;
             }
-            User user = userService.findUserById(lot.getUserId());
-            if (Role.ADMIN == user.getRole()) {
-                request.setAttribute(AUCTION_OWNER, "данный лот является собственностью аукциона." +
-                        "В случае выигрыша этого лота, денежные средства будут списаны с Вашего счета" +
-                        " при подтвержении сделки Вами с одной стороны и аукциона с другой");
+            User trader = userService.findUserById(lot.getUserId());
+            userService.setTraderRating(trader);
+            if (Role.ADMIN == trader.getRole()) {
+                request.setAttribute(AUCTION_OWNER, ResponseMessage.AUCTION_PROPERTY);
             }
+            request.setAttribute(SessionAttributes.TRADER, trader);
             request.setAttribute(LOT, lot);
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.LOT_PAGE);

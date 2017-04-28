@@ -66,7 +66,7 @@ public class ConnectionPool {
         try {
             connection = DriverManager.getConnection(url, login, password);
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, e);// log error
+            LOGGER.log(Level.ERROR, e);
         }
         return new ProxyConnection(connection);
     }

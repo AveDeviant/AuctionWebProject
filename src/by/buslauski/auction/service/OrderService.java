@@ -12,4 +12,6 @@ import java.util.ArrayList;
 public interface OrderService {
     ArrayList<Order> getAllOrders() throws ServiceException;
 
+    ArrayList<Order> getUserConfirmedOrders(long userId) throws ServiceException;
+
 }

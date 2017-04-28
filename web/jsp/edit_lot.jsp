@@ -18,9 +18,9 @@
 <body>
 <div class="container-fluid">
     <c:if test="${user eq null or user.getRole().getValue()!='admin'}">
-        <c:redirect url="/Controller"/>
+        <c:redirect url="/Auction"/>
     </c:if>
-    <jsp:include page="${pageContext.request.contextPath}/Controller">
+    <jsp:include page="${pageContext.request.contextPath}/Auction">
         <jsp:param name="command" value="getLots"/>
     </jsp:include>
         <c:if test="${editErr != null}">
@@ -29,7 +29,7 @@
         </div>
         </c:if>
     <div class="col-sm-4">
-        <form action="${pageContext.request.contextPath}/Controller" method="post" enctype="multipart/form-data"
+        <form action="${pageContext.request.contextPath}/Auction" method="post" enctype="multipart/form-data"
               name="editLot">
             <label for="id"><fmt:message key="admin.lot.edit.id"/></label>
             <input class="form-control" type="number" name="id" id="id" required>
@@ -95,7 +95,7 @@
                     </c:choose>
                 </td>
                 <td>
-                    <form method="post" action="${pageContext.request.contextPath}/Controller">
+                    <form method="post" action="${pageContext.request.contextPath}/Auction">
                         <button class="button-auction" type="submit" name="command" value="deleteLot">
                             <fmt:message key="admin.edit.lot.delete"/></button>
                         <input type="hidden" name="lotId" value="${lot.getId()}">

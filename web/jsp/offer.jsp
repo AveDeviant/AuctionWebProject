@@ -26,7 +26,7 @@
     <c:choose>
         <c:when test="${user eq null}">
             <fmt:message key="offer.lot.page.notice"/>
-            <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=authorization"><fmt:message
+            <a href="${pageContext.request.contextPath}/Auction?command=goTo&page=authorization"><fmt:message
                     key="offer.lot.reference.authorization"/></a>
         </c:when>
         <c:otherwise>
@@ -37,7 +37,7 @@
             </c:if>
             <div class="row">
                 <div class="col-sm-12">
-                    <form name="addingLot" action="${pageContext.request.contextPath}/Controller"
+                    <form name="addingLot" action="${pageContext.request.contextPath}/Auction"
                           enctype="multipart/form-data" method="post">
                         <label for="title"><fmt:message key="admin.lot.title"/> </label>
                         <input class="form-control" type="text" name="title" id="title"

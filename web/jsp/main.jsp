@@ -25,7 +25,8 @@
 <div class="container">
     <div class="row">
         <c:if test="${err != null}">
-            <label class="alert-danger"><fmt:message key="${err}"/></label>
+            <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="${err}"/></div>
         </c:if>
         <c:if test="${banned != null}">
             <div class=" alert alert-danger alert-dismissable fade in">
@@ -46,11 +47,11 @@
                 <c:if test="${(counter%2) eq 0}">
                     <div class="row"></c:if>
                 <div class="col-sm-6">
-                        <a class="lot-title"
-                           href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
-                            <h4>${lot.getTitle()}</h4></a>
-                        <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
-                    </div>
+                    <a class="lot-title"
+                       href="${pageContext.request.contextPath}/Auction?command=showLot&id=${lot.getId()}">
+                        <h4>${lot.getTitle()}</h4></a>
+                    <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
+                </div>
                 <c:set var="counter" value="${counter+1}" scope="page"/>
                 <c:if test="${(counter%2) eq 0}"></div>
                     <br></c:if>
@@ -63,10 +64,10 @@
                 <c:if test="${(counter%2) eq 0}">
                     <div class="row"></c:if>
                 <div class="col-sm-6">
-                    <a class="lot-title"
-                       href="${pageContext.request.contextPath}/Controller?command=showLot&id=${lot.getId()}">
-                        <h4>${lot.getTitle()}</h4></a>
-                    <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
+                        <a class="lot-title"
+                           href="${pageContext.request.contextPath}/Auction?command=showLot&id=${lot.getId()}">
+                            <h4>${lot.getTitle()}</h4></a>
+                        <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
                 </div>
                 <c:set var="counter" value="${counter+1}" scope="page"/>
                 <c:if test="${(counter%2) eq 0}"></div>
@@ -75,6 +76,5 @@
         </c:otherwise>
     </c:choose>
 </div>
-<c:import url="/fragments/footer.jsp"/>
 </body>
 </html>

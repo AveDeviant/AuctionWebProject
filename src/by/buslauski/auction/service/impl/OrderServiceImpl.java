@@ -36,4 +36,21 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
         return orders;
     }
 
+    @Override
+    public ArrayList<Order> getUserConfirmedOrders(long userId) throws ServiceException {
+        ArrayList<Order> orders = new ArrayList<>();
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            OrderDao orderDao = new OrderDaoImpl();
+            daoHelper.initDao(orderDao);
+            orders.addAll(orderDao.getUserConfirmedOrders(userId));
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new ServiceException(e);
+        } finally {
+            daoHelper.release();
+        }
+        return orders;
+    }
+
 }

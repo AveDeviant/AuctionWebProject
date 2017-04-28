@@ -2,7 +2,7 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -43,7 +43,7 @@ public class InitCommandImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.MAIN_PAGE);
-        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
             ArrayList<Lot> availableLots = lotService.getAvailableLots();
             if (user != null && user.getAccess()) {
@@ -52,10 +52,10 @@ public class InitCommandImpl implements Command {
             if (user != null && !user.getAccess()) {
                 request.getSession().setAttribute(USER_BANNED, ResponseMessage.USER_BANNED);
             }
-            if (availableLots.isEmpty()) {
-                request.setAttribute(EMPTY_LIST, ResponseMessage.EMPTY_LOT_LIST);
-            } else {
+            if (!availableLots.isEmpty()) {
                 request.setAttribute(AVAILABLE_LOTS, availableLots);
+            } else {
+                request.setAttribute(EMPTY_LIST, ResponseMessage.EMPTY_LOT_LIST);
             }
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e);

@@ -19,6 +19,11 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
     private static final String SQL_SELECT_ALL_ORDERS = "SELECT id_order, order.id_user,id_trader, id_lot, payment, date, accept," +
             " real_name, city, address, phone_number FROM auction.order JOIN user ON order.id_user=user.id_user ORDER BY id_order";
     private static final String SQL_ADD_ORDER = "INSERT INTO auction.order VALUES(NULL,?,?,?,?,NOW(),?)";
+    private static final String SQL_SELECT_USER_CONFIRMED_ORDERS = "SELECT id_order, order.id_user, id_trader, trader.username, order.id_lot, title, payment, date, accept," +
+            " customer.real_name, customer.city, customer.address, customer.phone_number FROM auction.order" +
+            " JOIN user AS customer ON order.id_user=customer.id_user" +
+            " JOIN user AS trader ON id_trader=trader.id_user" +
+            " JOIN lot ON order.id_lot=lot.id_lot WHERE order.id_user=? ORDER BY id_order";
 
 
     @Override
@@ -43,6 +48,25 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 orders.add(initOrder(resultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new DAOException(e);
+        }
+        return orders;
+    }
+
+    @Override
+    public ArrayList<Order> getUserConfirmedOrders(long userId) throws DAOException {
+        ArrayList<Order> orders = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_CONFIRMED_ORDERS)) {
+            preparedStatement.setLong(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Order order = initOrder(resultSet);
+                order.setTraderUsername(resultSet.getString("trader.username"));
+                order.setLotTitle(resultSet.getString("title"));
+                orders.add(order);
             }
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e);

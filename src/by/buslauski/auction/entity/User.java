@@ -22,6 +22,7 @@ public class User {
     private ArrayList<Bet> winningBets;
     private ArrayList<UserMessage> userMessages;
     private boolean unreadMessages;
+    private double userRating;
 
     public User(long userId, int roleId, String userName, String email, boolean access,
                 Role role) {
@@ -150,6 +151,14 @@ public class User {
 
     public void setUnreadMessages(boolean unreadMessages) {
         this.unreadMessages = unreadMessages;
+    }
+
+    public double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(double userRating) {
+        this.userRating = userRating;
     }
 
     @Override

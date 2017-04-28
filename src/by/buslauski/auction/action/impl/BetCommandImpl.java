@@ -5,7 +5,7 @@ import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
@@ -30,7 +30,7 @@ public class BetCommandImpl implements Command {
     private static final String AUTHORIZATION_ERROR = "authorizationError";
     private static LotService lotService = new LotServiceImpl();
     private static BetService betService = new BetServiceImpl();
-    private static BankServiceImpl bankService = new BankServiceImpl();
+    private static BankService bankService = new BankServiceImpl();
     private static UserService userService = new UserServiceImpl();
 
     /**
@@ -43,7 +43,7 @@ public class BetCommandImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(RequestAttributes.USER);
+        User user = (User) session.getAttribute(SessionAttributes.USER);
         long lotId = Long.valueOf(request.getParameter(LOT_ID_PARAM));
         pageResponse.setPage(returnPageWithQuery(request));
         if (user == null) {
@@ -90,7 +90,7 @@ public class BetCommandImpl implements Command {
                     return pageResponse;
                 }
                 betService.addBet(userId, lotId, newPrice);
-                user.setBets(userService.getUserBets(user));
+                user.setBets(betService.getUserBets(user));
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 return pageResponse;
             } else {

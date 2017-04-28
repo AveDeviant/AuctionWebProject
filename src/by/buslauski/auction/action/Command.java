@@ -1,6 +1,6 @@
 package by.buslauski.auction.action;
 
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.response.PageResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +18,8 @@ public interface Command {
      *
      * @param request
      * @return An object containing two fields:
-     * PageResponse - response type (forward or redirect)
-     * String page - page for response
+     * ResponseType - response type (forward or redirect).
+     * String page - page for response.
      */
     PageResponse execute(HttpServletRequest request);
 
@@ -31,7 +31,7 @@ public interface Command {
      */
     default String returnPageWithQuery(HttpServletRequest request) {
         String controller = request.getRequestURI();
-        String path = request.getParameter(RequestAttributes.JSP_PATH);
+        String path = request.getParameter(SessionAttributes.JSP_PATH);
         if (path.endsWith("?")) {
             return path;
         } else {
@@ -39,4 +39,15 @@ public interface Command {
             return controller + query;
         }
     }
+
+    default String definePathToSuccessPage(HttpServletRequest request) {
+        String controller = request.getRequestURI();
+        String command = "command=goTo";
+        String successPage = "page=success";
+        StringBuilder stringBuilder = new StringBuilder(controller);
+        stringBuilder.append("?").append(command);
+        stringBuilder.append("&").append(successPage);
+        return stringBuilder.toString();
+    }
+
 }

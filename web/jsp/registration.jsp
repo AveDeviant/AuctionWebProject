@@ -67,7 +67,9 @@
                             key="register.button.register"/></button>
                     <input type="hidden" name="command" value="registration">
                 </form>
-                <label class="required">*</label><fmt:message key="login.notice.unnecessary"/>
+                <label class="required">*</label><fmt:message key="login.notice.necessary"/><br/>
+                <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=faq">
+                    <fmt:message key="registration.page.rules.notice"/></a>
             </div>
         </div>
     </div>

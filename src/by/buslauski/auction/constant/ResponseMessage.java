@@ -19,7 +19,6 @@ public class ResponseMessage {
     public static final String ACCESS_DENIED = "access.denied";
     public static final String EMPTY_LOT_LIST = "lots.empty";
     public static final String BET_TIMEOUT = "bet.timeout";
-    public static final String OFFER_REGISTER_CARD = "offer.bank.account";
     public static final String MESSAGE_ERROR_AUTHORIZATION = "message.error.authorization";
     public static final String MESSAGE_ERROR_INVALID = "message.error.invalid";
     public static final String INCORRECT_USER_INFORMATION = "user.info.incorrect";
@@ -31,5 +30,6 @@ public class ResponseMessage {
     public static final String ADDING_CATEGORY_ERROR="category.add.error";
     public static final String INVALID_VALUE = "invalid.value";
     public static final String BET_ON_OWN_LOT = "bet.owner.error";
+    public static final String AUCTION_PROPERTY = "lot.property.auction";
 
 }

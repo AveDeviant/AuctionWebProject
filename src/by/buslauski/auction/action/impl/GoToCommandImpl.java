@@ -21,7 +21,8 @@ public class GoToCommandImpl implements Command {
     private static final String PERSONAL_PAGE = "private";
     private static final String ADMIN_PAGE = "admin";
     private static final String FAQ_PAGE = "faq";
-    private static final String MESSAGE_PAGE="message";
+    private static final String MESSAGE_PAGE = "message";
+    private static final String SUCCESS_PAGE ="success";
 
     /**
      * Page navigation.
@@ -66,6 +67,9 @@ public class GoToCommandImpl implements Command {
                 return pageResponse;
             case MESSAGE_PAGE:
                 pageResponse.setPage(PageNavigation.MESSAGE_PAGE);
+                return pageResponse;
+            case SUCCESS_PAGE:
+                pageResponse.setPage(PageNavigation.SUCCESS_PAGE);
                 return pageResponse;
             default:
                 pageResponse.setPage(PageNavigation.INDEX_PAGE);

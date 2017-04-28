@@ -33,3 +33,11 @@ function checkLength() {
         count.style.color = "red";
     }
 }
+    function showCardForm() {
+        var form = document.getElementById("cardForm");
+        if (form.style.display==="none"){
+            form.style.display="inline";
+        } else {
+            form.style.display="none";
+        }
+    }

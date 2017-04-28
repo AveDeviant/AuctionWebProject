@@ -2,7 +2,7 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
@@ -10,6 +10,7 @@ import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.PageBrowser;
 import by.buslauski.auction.service.impl.MessageServiceImpl;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
@@ -37,7 +38,7 @@ public class MessageCommandImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         if (user == null) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.AUTHORIZATION_PAGE);
@@ -48,28 +49,30 @@ public class MessageCommandImpl implements Command {
         String text = request.getParameter(MESSAGE_TEXT);
         if (!MessageValidator.checkMessage(text)) {
             pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(PageNavigation.FAQ_PAGE);
+            pageResponse.setPage(returnPageWithQuery(request));
             request.setAttribute(MESSAGE_ERROR, ResponseMessage.MESSAGE_ERROR_INVALID);
             return pageResponse;
         }
         try {
-            if (Role.CUSTOMER == user.getRole()) {
+            if (Role.CUSTOMER == user.getRole()) {   // message from customer to admin.
                 User admin = userService.findAdmin();
                 messageService.addMessage(theme, text, user.getUserId(), admin.getUserId());
-                pageResponse.setResponseType(ResponseType.REDIRECT);
-                pageResponse.setPage(PageNavigation.FAQ_PAGE);
-            } else {
+//                pageResponse.setPage(PageNavigation.FAQ_PAGE);
+            } else {                                // message from admin to customer.
                 long recipientId = Long.parseLong(request.getParameter(RECIPIENT_ID));
                 User customer = userService.findUserById(recipientId);
                 messageService.addMessage(theme, text, user.getUserId(), customer.getUserId());
-                pageResponse.setResponseType(ResponseType.REDIRECT);
-                pageResponse.setPage(returnPageWithQuery(request));
+//                pageResponse.setPage(returnPageWithQuery(request));
             }
+            pageResponse.setResponseType(ResponseType.REDIRECT);
+            PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
+            browser.addPageToHistory(returnPageWithQuery(request));
+            pageResponse.setPage(definePathToSuccessPage(request));
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e);
             request.setAttribute(MESSAGE_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(PageNavigation.INDEX_PAGE);
+            pageResponse.setPage(PageNavigation.FAQ_PAGE);
         }
         return pageResponse;
     }

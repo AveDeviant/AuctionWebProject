@@ -23,11 +23,6 @@
         <div class=" alert alert-danger alert-dismissable fade in">
             <fmt:message key="user.banned.title"/></div>
     </c:if>
-    <c:if test="${auctionOwner ne null}">
-        <div class="alert alert-warning aler-dismissable fade in">
-            <c:out value="${auctionOwner}"/>
-        </div>
-    </c:if>
     <div class="row">
         <div class="col-sm-12">
             <h1 class="text-center">${lot.getTitle()}</h1>
@@ -35,13 +30,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <img class="img-responsive" src="${lot.getImage()}">
+            <h6>${lot.getDescription()}</h6>
         </div>
-        <div class="col-sm-4">
-            <h4><fmt:message key="lot.page.startingPrice"/></h4>
+        <div class="col-sm-3">
+            <h5><fmt:message key="lot.page.startingPrice"/></h5>
             <h2>${lot.getPrice()}</h2>
-            <h4><fmt:message key="lot.page.currentPrice"/></h4>
+            <h5><fmt:message key="lot.page.currentPrice"/></h5>
             <h2>${lot.getCurrentPrice()}</h2>
             <h5><fmt:message key="lot.timing"/></h5>
             <h4><avail-date:avail-date/></h4>
@@ -51,16 +47,15 @@
                         <fmt:message key="lot.bet.button"/></button>
                 </c:when>
                 <c:otherwise>
-                    <form action="${pageContext.request.contextPath}/Controller" method="post">
-
+                    <form action="${pageContext.request.contextPath}/Auction" method="post">
                         <label for="price"><fmt:message key="lot.bet.input"/></label>
                         <input class="form-control" type="text" name="price" id="price" pattern="^[1-9][0-9]*.[0-9]{2}"
                                required title="<fmt:message key="bet.restrict"/> "
                                placeholder="<fmt:message key="bet.restrict"/>">
                         <c:if test="${betErr ne null}">
-                        <div class=" alert alert-danger alert-dismissable fade in">
-                            <fmt:message key="${betErr}"/>
-                        </div>
+                            <div class=" alert alert-danger alert-dismissable fade in">
+                                <fmt:message key="${betErr}"/>
+                            </div>
                         </c:if> <br/>
                         <button class="button-auction" type="submit" name="command" value="makeBet"><fmt:message
                                 key="lot.bet.button"/></button>
@@ -72,32 +67,40 @@
                     </form>
                 </c:otherwise>
             </c:choose>
-
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <h6 class="text-center">${lot.getDescription()}</h6>
-        </div>
-    </div>
-    <div class="row">
-        <div align="center">
+        <div class="col-sm-3">
+            <h5><fmt:message key="trader.ref"/></h5>
+            <h3>${trader.getUserName()}</h3>
+            <h5><fmt:message key="trader.rating"/></h5>
+            <c:choose>
+                <c:when test="${trader.getUserRating() eq 0.0}">
+                    <h5><fmt:message key="trader.rating.unable"/></h5>
+                </c:when>
+                <c:otherwise>
+                    <h3>${trader.getUserRating()}</h3>
+                </c:otherwise>
+            </c:choose>
+            <c:if test="${auctionOwner ne null}">
+                <div class="alert alert-warning aler-dismissable fade in">
+                    <fmt:message key="${auctionOwner}"/>
+                </div>
+            </c:if>
             <button class="button-auction" type="button" onclick="showBets()"><fmt:message
                     key="lot.page.button.showBets"/></button>
-        </div>
-    </div>
-    <br/>
-    <div id="bets" style="display: none;">
-        <c:forEach var="bet" items="${lot.getBets()}">
-            <div class="row">
-                <div class="col-sm-6" align="center">
-                    <label class="text-center"><c:out value="${bet.getDate()}"/></label>
-                </div>
-                <div class="col-sm-6" align="center">
-                    <label class="text-center"><c:out value="${bet.getBet()}"/></label>
-                </div>
+            <br/>
+            <div id="bets" style="display: none;">
+                <c:forEach var="bet" items="${lot.getBets()}">
+                    <div class="row">
+                        <div class="col-sm-6" align="center">
+                            <label class="text-center"><c:out value="${bet.getDate()}"/></label>
+                        </div>
+                        <div class="col-sm-6" align="center">
+                            <label class="text-center"><c:out value="${bet.getBet()}"/></label>
+                        </div>
+                    </div>
+                </c:forEach>
             </div>
-        </c:forEach>
+        </div>
     </div>
 </div>
 </div>

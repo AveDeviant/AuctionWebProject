@@ -19,8 +19,9 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
     private static final String SQL_ADD_BET = "INSERT INTO bet VALUES (NULL,?,?,?,NOW())";
     private static final String SQL_SELECT_BETS_BY_LOT = "SELECT id_bet, bet.id_lot, title, bet.id_user, bet, date FROM bet" +
             " JOIN lot ON bet.id_lot=lot.id_lot WHERE lot.id_lot=?";
-    private static final String SQL_SELECT_USER_BETS = "SELECT id_bet, bet.id_lot, bet.id_user, title, bet, date FROM " +
-            "bet JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=?";
+    private static final String SQL_SELECT_USER_BETS = "SELECT id_bet, bet.id_lot, bet.id_user, title, bet, date" +
+            " FROM bet" +
+            " JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=?";
     private static final String SQL_RESET_LOT_BETS = "DELETE FROM bet WHERE id_lot=?";
 
 
@@ -34,7 +35,6 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e);
             throw new DAOException(e);
-
         }
     }
 
@@ -64,7 +64,6 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Bet bet = initBet(resultSet);
-                bet.setLotTitle(resultSet.getString("title"));
                 userBets.add(bet);
             }
         } catch (SQLException e) {

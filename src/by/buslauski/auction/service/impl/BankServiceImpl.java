@@ -86,14 +86,13 @@ public class BankServiceImpl extends AbstractService implements BankService {
             OrderDao orderDao = new OrderDaoImpl();
             daoHelper.beginTransaction(bankAccountDao, lotDao, orderDao);
             User dealer = userService.findTrader(bet.getLotId());
-            System.out.println(dealer.getUserId());
             if (dealer.getRole() != Role.ADMIN) {      //if auction doesn't own the lot
                 messageService.createNotificationForTrader(dealer, bet);  // create notification for user, who offered lot
                 orderDao.addOrder(customerId, dealer.getUserId(), lotId, moneyAmount, true); // creating order with SUCCESS status
                 lotDao.withdrawLot(lotId);
                 daoHelper.commit();
                 return true;
-            } else { // do payment
+            } else { // payment
                 BankCard auctionAccount = bankAccountDao.findCardByUserId(dealer.getUserId());
                 BigDecimal customerBalance = bankAccountDao.findCardByUserId(customerId).getMoneyAmount();
                 BigDecimal newBalanceCustomer = customerBalance.subtract(moneyAmount);  // calculate customer's new balance

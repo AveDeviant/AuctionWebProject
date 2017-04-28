@@ -18,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 /**
  * Created by Acer on 21.03.2017.
@@ -66,6 +67,22 @@ public class BetServiceImpl extends AbstractService implements BetService {
     public boolean checkBetValue(Lot lot, BigDecimal bet) {
         BigDecimal price = lot.getCurrentPrice();
         return bet.compareTo(price) > 0;
+    }
+
+    @Override
+    public ArrayList<Bet> getUserBets(User user) throws ServiceException {
+        ArrayList<Bet> bets = new ArrayList<>();
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            BetDao betDao = new BetDaoImpl();
+            daoHelper.initDao(betDao);
+            bets.addAll(betDao.getUserBets(user.getUserId()));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        } finally {
+            daoHelper.release();
+        }
+        return bets;
     }
 
 

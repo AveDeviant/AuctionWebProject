@@ -33,7 +33,7 @@
     <div class="row">
         <div class="col-sm-offset-4 col-sm-4">
             <div class="window">
-                <form action="${pageContext.request.contextPath}/Controller" method="post">
+                <form action="${pageContext.request.contextPath}/Auction" method="post">
                     <div class="form-group">
                         <label for="login"><fmt:message key="login.title.login"/></label><label
                             class="error">*</label>
@@ -57,7 +57,7 @@
                     <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>
                 </form>
                 <br>
-                <label class="error">*</label><fmt:message key="login.notice.unnecessary"/><br/>
+                <label class="error">*</label><fmt:message key="login.notice.necessary"/><br/>
                 <fmt:message key="login.firsttime.title"/>
                 <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=registration"><fmt:message
                         key="login.button.register"/></a>

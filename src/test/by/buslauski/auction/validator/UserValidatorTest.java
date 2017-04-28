@@ -1,4 +1,4 @@
-package test.by.buslauski.auction;
+package test.by.buslauski.auction.validator;
 
 import by.buslauski.auction.validator.UserValidator;
 import org.junit.Assert;

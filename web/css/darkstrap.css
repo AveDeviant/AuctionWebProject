@@ -220,12 +220,13 @@ h5 {
 
 h6 {
     font-size: 16px;
-    color: #424242;
+    /*color: #424242;*/
+    color: #B3B6B7;
 }
 
 p {
-    /*color: #B3B6B7;*/
-    color: #424242;
+    color: #B3B6B7;
+    /*color: #424242;*/
 }
 
 hr {

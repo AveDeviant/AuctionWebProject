@@ -30,9 +30,12 @@ public class CommandFactory {
     private static final String MESSAGE = "message";
     private static final String GET_CATEGORIES = "getCategories";
     private static final String DELETE_LOT = "deleteLot";
-    private static final String GET_MESSAGES ="getMessages";
-    private static final String ADD_CATEGORY="addCategory";
-    private static final String LOT_STATUS="lotStatus";
+    private static final String GET_MESSAGES = "getMessages";
+    private static final String ADD_CATEGORY = "addCategory";
+    private static final String LOT_STATUS = "lotStatus";
+    private static final String USER_OPERATIONS = "getOperations";
+    private static final String TRADER_RATING = "updateRating";
+    private static final String BACK_BUTTON = "back";
 
     public Command getCurrentCommand(HttpServletRequest request) {
         String command = request.getParameter(COMMAND_PARAM);
@@ -88,6 +91,12 @@ public class CommandFactory {
                 return new AddCategoryImp();
             case LOT_STATUS:
                 return new LotStatusEditImpl();
+            case USER_OPERATIONS:
+                return new GetUserOperationsImpl();
+            case TRADER_RATING:
+                return new TraderRatingImpl();
+            case BACK_BUTTON:
+                return new BackCommandImpl();
             default:
                 return new InitCommandImpl();
         }

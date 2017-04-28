@@ -15,4 +15,8 @@ public interface OrderDao {
 
     ArrayList<Order> getAllOrders() throws DAOException;
 
+    ArrayList<Order> getUserConfirmedOrders(long userId) throws DAOException;
+
+
+
 }

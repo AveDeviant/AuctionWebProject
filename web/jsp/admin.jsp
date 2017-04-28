@@ -33,7 +33,7 @@
     <div class="row">
         <div class="col-sm-4">
             <h3><fmt:message key="admin.edit.page.lot.title"/></h3>
-            <form name="addingLot" action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data"
+            <form name="addingLot" action="${pageContext.request.contextPath}/Auction" enctype="multipart/form-data"
                   method="post">
                 <label for="title"><fmt:message key="admin.lot.title"/> </label>
                 <input class="form-control" type="text" id="title" name="title"
@@ -78,7 +78,7 @@
                 </div>
             </c:if>
             <h3><fmt:message key="admin.edit.page.category.title"/></h3>
-            <form method="get" action="${pageContext.request.contextPath}/Controller">
+            <form method="get" action="${pageContext.request.contextPath}/Auction">
                 <label for="name"><fmt:message key="admin.new.category"/></label>
                 <input class="form-control" type="text" name="name" id="name" required
                        pattern="[A-Za-z А-Яа-я-]{2,}"><br/>
@@ -90,20 +90,20 @@
         </div>
         <div class="col-sm-4">
             <h3><fmt:message key="admin.management"/></h3>
-            <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=editLot"><fmt:message
+            <h6><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=editLot"><fmt:message
                     key="admin.lot.edit"/> </a></h6><br/>
-            <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=editUser"><fmt:message
+            <h6><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=editUser"><fmt:message
                     key="admin.user.edit"/> </a></h6><br/>
-            <h6><a href="${pageContext.request.contextPath}/Controller?command=getOrders"><fmt:message
+            <h6><a href="${pageContext.request.contextPath}/Auction?command=getOrders"><fmt:message
                     key="admin.order.edit"/></a></h6><br/>
-            <h6><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=message"><fmt:message
+            <h6><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=message"><fmt:message
                     key="messages.page.reference"/> </a></h6>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
             <div class="text-center">
-                <form name="logout" action="${pageContext.request.contextPath}/Controller" method="post">
+                <form name="logout" action="${pageContext.request.contextPath}/Auction" method="post">
                     <button class="button-auction" type="submit" name="button"><fmt:message
                             key="private.button.logout"/></button>
                     <input type="hidden" name="command" value="logout">

@@ -1,6 +1,7 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -8,6 +9,7 @@ import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.PageBrowser;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.FileUploadingManager;
 import by.buslauski.auction.validator.BetValidator;
@@ -75,6 +77,10 @@ public class AddLotImpl implements Command {
                 lotService.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability,
                         lotCategory, lotTimer);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
+                PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
+                browser.addPageToHistory(returnPageWithQuery(request));
+                pageResponse.setPage(definePathToSuccessPage(request));
+                return pageResponse;
             } else {
                 request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_VALUE);
                 pageResponse.setResponseType(ResponseType.FORWARD);
@@ -87,4 +93,5 @@ public class AddLotImpl implements Command {
         }
         return pageResponse;
     }
+
 }

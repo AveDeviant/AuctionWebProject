@@ -2,7 +2,7 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
@@ -54,7 +54,7 @@ public class LotEditImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         if (user == null || !Role.ADMIN.getValue().equals(user.getRole().getValue())) {
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
@@ -66,7 +66,7 @@ public class LotEditImpl implements Command {
             if (lot == null) {
                 request.setAttribute(EDIT_ERROR, ResponseMessage.LOT_ID_DOESNT_EXISTS);
                 pageResponse.setResponseType(ResponseType.FORWARD);
-                pageResponse.setPage(request.getParameter(RequestAttributes.JSP_PATH));
+                pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
                 return pageResponse;
             }
             Part lotImage = request.getPart(LOT_IMAGE);
@@ -76,7 +76,7 @@ public class LotEditImpl implements Command {
                 if (!type.startsWith(IMAGE_MIME_TYPE)) {
                     request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
                     pageResponse.setResponseType(ResponseType.FORWARD);
-                    pageResponse.setPage(request.getParameter(RequestAttributes.JSP_PATH));
+                    pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
                     return pageResponse;
                 }
             }
@@ -99,7 +99,7 @@ public class LotEditImpl implements Command {
         } catch (ServiceException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(request.getParameter(RequestAttributes.JSP_PATH));
+            pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
         } catch (ServletException | IOException e) {
             LOGGER.log(Level.ERROR, e + "Exception during uploading image");
         }

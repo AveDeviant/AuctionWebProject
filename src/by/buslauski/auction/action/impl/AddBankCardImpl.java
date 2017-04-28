@@ -5,7 +5,7 @@ import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.BankCard;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
@@ -43,7 +43,7 @@ public class AddBankCardImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setPage(returnPageWithQuery(request));
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(RequestAttributes.USER);
+        User user = (User) session.getAttribute(SessionAttributes.USER);
         String paymentSystem = request.getParameter(PAYMENT_SYSTEM);
         String cardNumber = request.getParameter(CARD_NUMBER);
         long userId = user.getUserId();

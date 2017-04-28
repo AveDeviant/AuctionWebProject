@@ -10,7 +10,6 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.service.LotService;
-import by.buslauski.auction.validator.LotValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

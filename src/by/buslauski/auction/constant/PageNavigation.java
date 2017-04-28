@@ -19,4 +19,5 @@ public class PageNavigation {
     public static final String OFFER_LOT="/jsp/offer.jsp";
     public static final String ADMIN_PAGE="/jsp/admin.jsp";
     public static final String MESSAGE_PAGE="/jsp/messages.jsp";
+    public static final String SUCCESS_PAGE ="/jsp/success.jsp";
 }

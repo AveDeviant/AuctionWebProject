@@ -18,6 +18,8 @@ public class Order {
     private String costumerCity;
     private String costumerAddress;
     private String costumerPhone;
+    private String lotTitle;
+    private String traderUsername;
 
     public long getOrderId() {
         return orderId;
@@ -105,6 +107,22 @@ public class Order {
 
     public void setCostumerPhone(String costumerPhone) {
         this.costumerPhone = costumerPhone;
+    }
+
+    public String getLotTitle() {
+        return lotTitle;
+    }
+
+    public void setLotTitle(String lotTitle) {
+        this.lotTitle = lotTitle;
+    }
+
+    public String getTraderUsername() {
+        return traderUsername;
+    }
+
+    public void setTraderUsername(String traderUsername) {
+        this.traderUsername = traderUsername;
     }
 
     @Override

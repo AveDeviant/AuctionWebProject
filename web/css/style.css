@@ -28,6 +28,24 @@ body {
     transition-property: background-color;
     color: #ffffff;
 }
+.button-show-bet {
+    border: none;
+    padding: 4px 6px;
+    background-color: darkgoldenrod;
+    transition-property: background-color;
+    color: #ffffff;
+}
+.user-operations {
+    border: none;
+    padding: 4px 6px;
+    background-color: darkgoldenrod;
+    transition-property: background-color;
+    color: #ffffff;
+}
+.user-operations:hover .button-auction:hover{
+    transition-duration: 0.5s;
+    background-color: goldenrod;
+}
 
 .button-auction-disabled {
     border: none;
@@ -37,10 +55,10 @@ body {
     color: #ffffff;
 }
 
-.button-auction:hover {
-    transition-duration: 0.5s;
-    background-color: goldenrod;
-}
+/*.button-auction:hover {*/
+    /*transition-duration: 0.5s;*/
+    /*background-color: goldenrod;*/
+/*}*/
 
 .error {
     color: red;
@@ -91,4 +109,15 @@ body {
 
 #user-stat .table head {
     color: #0B0B0B;
+}
+
+#logout {
+    border: none;
+    background-color: #ffffff;
+    color:darkgoldenrod;
+    transition-property: color;
+}
+#logout:hover {
+    transition-duration: 0.5s;
+    color: #B3B6B7;
 }

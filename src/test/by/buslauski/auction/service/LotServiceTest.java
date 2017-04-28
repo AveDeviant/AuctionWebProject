@@ -1,4 +1,4 @@
-package test.by.buslauski.auction;
+package test.by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.service.LotService;

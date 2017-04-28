@@ -17,7 +17,7 @@ public class AmountGenerator {
         Random random = new Random();
         double money = random.nextInt(20000) * random.nextDouble();
         BigDecimal moneyAmount = new BigDecimal(money);
-        moneyAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        moneyAmount = moneyAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return moneyAmount;
     }
 }

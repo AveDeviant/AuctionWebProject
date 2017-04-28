@@ -30,4 +30,8 @@ public interface UserDao {
     User findAdmin() throws DAOException;
 
     User findTrader(long lotId) throws DAOException;
+
+    void updateTraderRating(long traderId, long customerId, int rating) throws DAOException;
+
+    double findTraderRating(long traderId) throws DAOException;
 }

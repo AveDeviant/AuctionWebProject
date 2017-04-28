@@ -32,8 +32,11 @@
         <textarea type="text" name="content" id="content" required rows="5" class="form-control"></textarea>
         <br/>
         <button class="button-auction" type="submit" name="command" value="message"><fmt:message key="faq.form.send"/> </button>
+        <input type="hidden" name="jspPath"
+               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+
     </form>
-        <label class="required">*</label><fmt:message key="login.notice.unnecessary"/>
+        <label class="required">*</label><fmt:message key="login.notice.necessary"/>
     </c:if>
 </div>
 </body>

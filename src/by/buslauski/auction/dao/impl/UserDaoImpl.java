@@ -17,7 +17,8 @@ import java.util.ArrayList;
  */
 public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String SQL_SELECT_USER_AND_BANK = "SELECT user.id_user, user.id_role, name, username, email, password, city, address," +
-            "phone_number, access, real_name, id_account, system, card_number, money_amount FROM user LEFT JOIN account ON user.id_user=account.id_user " +
+            "phone_number, access, real_name, id_account, system, card_number, money_amount FROM user " +
+            "LEFT JOIN account ON user.id_user=account.id_user " +
             "JOIN role ON user.id_role=role.id_role WHERE username=?";
     private static final String SQL_SEARCH_EMAIl = "SELECT id_user from user WHERE email=?";
     private static final String SQL_INSERT_USER = "INSERT INTO user VALUES (NULL,?,?,?,?,NULL,NULL ,NULL,TRUE,NULL)";
@@ -34,6 +35,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             "FROM user " +
             "JOIN role ON user.id_role=role.id_role " +
             "JOIN lot ON user.id_user=lot.id_user WHERE id_lot=?";
+    private static final String SQL_UPDATE_TRADER_RATING = "INSERT INTO trader_rating VALUES (NULL,?,?,?)";
+    private static final String SQL_SELECT_TRADER_RATING = "SELECT AVG(rating) AS rating FROM trader_rating WHERE id_trader=?";
 
     @Override
     public ArrayList<User> getAllCustomers() throws DAOException {
@@ -189,6 +192,35 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             throw new DAOException(e);
         }
         return user;
+    }
+
+    @Override
+    public void updateTraderRating(long traderId, long customerId, int rating) throws DAOException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_TRADER_RATING)) {
+            preparedStatement.setLong(1, traderId);
+            preparedStatement.setLong(2, customerId);
+            preparedStatement.setInt(3, rating);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public double findTraderRating(long traderId) throws DAOException {
+        double rating = 0;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TRADER_RATING)) {
+            preparedStatement.setLong(1, traderId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                rating = resultSet.getDouble("rating");
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new DAOException(e);
+        }
+        return rating;
     }
 
     private BankCard initUserBankCard(ResultSet resultSet) throws SQLException {

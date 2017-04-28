@@ -20,7 +20,7 @@
     <c:if test="${user eq null or user.getRole().getValue()!='admin'}">
         <c:redirect url="/Controller"/>
     </c:if>
-    <jsp:include page="${pageContext.request.contextPath}/Controller">
+    <jsp:include page="${pageContext.request.contextPath}/Auction">
         <jsp:param name="command" value="getUsers"/>
     </jsp:include>
     <c:if test="${editErr !=null}">
@@ -54,7 +54,7 @@
                 <td>
                     <c:choose>
                         <c:when test="${customer.getAccess() eq true}">
-                            <form action="${pageContext.request.contextPath}/Controller" method="post">
+                            <form action="${pageContext.request.contextPath}/Auction" method="post">
                                 <button type="submit" class="button-auction"><fmt:message
                                         key="admin.user.edit.ban"/></button>
                                 <input type="hidden" name="id" value="${customer.getUserId()}">
@@ -65,7 +65,7 @@
                             </form>
                         </c:when>
                         <c:otherwise>
-                            <form action="${pageContext.request.contextPath}/Controller" method="post">
+                            <form action="${pageContext.request.contextPath}/Auction" method="post">
                                 <button type="submit" class="button-auction"><fmt:message
                                         key="admin.user.edit.unban"/></button>
                                 <input type="hidden" name="id" value="${customer.getUserId()}">

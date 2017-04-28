@@ -4,10 +4,11 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
+import by.buslauski.auction.service.PageBrowser;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -18,8 +19,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by Acer on 13.03.2017.
  */
-public class
-RegistrationCommandImpl implements Command {
+public class RegistrationCommandImpl implements Command {
     private static final String REGISTRATION_ERROR_ATTR = "registrationError";
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
@@ -50,7 +50,8 @@ RegistrationCommandImpl implements Command {
                 return pageResponse;
             }
             HttpSession session = request.getSession();
-            session.setAttribute(RequestAttributes.USER, user);
+            session.setAttribute(SessionAttributes.USER, user);
+            session.setAttribute(SessionAttributes.PAGE_BROWSER, new PageBrowser());
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
         } catch (ServiceException e) {

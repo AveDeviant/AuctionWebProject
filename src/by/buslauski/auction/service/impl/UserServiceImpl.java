@@ -1,9 +1,7 @@
 package by.buslauski.auction.service.impl;
 
-import by.buslauski.auction.dao.BetDao;
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.UserDao;
-import by.buslauski.auction.dao.impl.BetDaoImpl;
 import by.buslauski.auction.dao.impl.UserDaoImpl;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
@@ -14,7 +12,9 @@ import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.util.Md5Converter;
 import by.buslauski.auction.validator.UserValidator;
+import org.apache.logging.log4j.Level;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -88,22 +88,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.release();
         }
         return users;
-    }
-
-    @Override
-    public ArrayList<Bet> getUserBets(User user) throws ServiceException {
-        ArrayList<Bet> bets = null;
-        DaoHelper daoHelper = new DaoHelper();
-        try {
-            BetDao betDao = new BetDaoImpl();
-            daoHelper.initDao(betDao);
-            bets = betDao.getUserBets(user.getUserId());
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        } finally {
-            daoHelper.release();
-        }
-        return bets;
     }
 
     @Override
@@ -213,6 +197,47 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.release();
         }
         return user;
+    }
+
+    @Override
+    public ArrayList<Integer> defineRating() {
+        ArrayList<Integer> rating = new ArrayList<>();
+        for (int i = 1; i < 6; i++) {
+            rating.add(i);
+        }
+        return rating;
+    }
+
+    @Override
+    public void updateTraderRating(long traderId, long customerId, int rating) throws ServiceException {
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
+            userDao.updateTraderRating(traderId, customerId, rating);
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void setTraderRating(User trader) throws ServiceException {
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
+            double rating = userDao.findTraderRating(trader.getUserId());
+            BigDecimal bigDecimal = new BigDecimal(rating);
+            rating = bigDecimal.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();  //rating rounding.
+//            Double rating = new Double(bigDecimal.toString());
+            trader.setUserRating(rating);
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new ServiceException(e);
+        } finally {
+            daoHelper.release();
+        }
     }
 
     /**

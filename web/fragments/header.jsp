@@ -29,11 +29,11 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand"
-               href="${pageContext.request.contextPath}/Controller?command=goTo&page=index">Auction</a>
+               href="${pageContext.request.contextPath}/Auction?command=goTo&page=index">Auction</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=faq">How to?</a></li>
+                <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=faq"><fmt:message key="header.menu.rules"/> </a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"><fmt:message key="header.menu.categories.title"/> <span
@@ -44,7 +44,7 @@
                         </jsp:include>
                         <c:forEach var="category" items="${categories}" varStatus="status">
                             <li>
-                                <a href="${pageContext.request.contextPath}/Controller?command=lotsByCategory&categoryValue=${category.getValue()}">
+                                <a href="${pageContext.request.contextPath}/Auction?command=lotsByCategory&categoryValue=${category.getValue()}">
                                     <c:out value="${category.getValue()}"/></a></li>
                         </c:forEach>
                     </ul>
@@ -60,28 +60,28 @@
                 </c:if>
                 <c:if test="${user !=null && (!user.getWinningBets().isEmpty())}">
                     <li><a class="event-winner"
-                           href="${pageContext.request.contextPath}/Controller?command=order">
+                           href="${pageContext.request.contextPath}/Auction?command=order">
                             ${user.getWinningBets().size()}</a>
                     </li>
                 </c:if>
-                <li><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=offer"><fmt:message
+                <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=offer"><fmt:message
                         key="header.offer"/> </a></li>
                 <c:choose>
                     <c:when test="${user.getUserName() eq null}">
                         <li>
-                            <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=authorization"><fmt:message
+                            <a href="${pageContext.request.contextPath}/Auction?command=goTo&page=authorization"><fmt:message
                                     key="header.login"/></a>
                         </li>
                     </c:when>
                     <c:otherwise>
                         <c:choose>
                             <c:when test="${user.getRole().getValue() eq 'customer'}">
-                                <li><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=private">
+                                <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=private">
                                     <c:out value="${user.getUserName()}"/>
                                 </a></li>
                             </c:when>
                             <c:otherwise>
-                                <li><a href="${pageContext.request.contextPath}/Controller?command=goTo&page=admin">
+                                <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=admin">
                                     <c:out value="${user.getUserName()}"/>
                                 </a></li>
                             </c:otherwise>
@@ -93,7 +93,7 @@
                        aria-expanded="false"><fmt:message key="header.locale"/> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <form action="/Controller" method="post">
+                            <form action="${pageContext.request.contextPath}/Auction" method="post">
                                 <button class="local-spec" type="submit" name="russian">Русский</button>
                                 <input type="hidden" name="command" value="locale">
                                 <input type="hidden" name="lang" value="default">
@@ -102,7 +102,7 @@
                             </form>
                         </li>
                         <li>
-                            <form action="/Controller" method="post">
+                            <form action="${pageContext.request.contextPath}/Auction" method="post">
                                 <button class="local-spec" type="submit" name="english">English</button>
                                 <input type="hidden" name="command" value="locale">
                                 <input type="hidden" name="lang" value="en_US">

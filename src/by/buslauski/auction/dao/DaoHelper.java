@@ -13,9 +13,7 @@ import java.sql.SQLException;
  * Created by Acer on 12.04.2017.
  */
 public class DaoHelper {
-
     private Logger LOGGER = LogManager.getLogger();
-
     private ProxyConnection connection = ConnectionPool.getInstance().takeConnectionFromPool();
 
     public void beginTransaction(Object... daos) {

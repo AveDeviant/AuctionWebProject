@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
@@ -35,9 +35,9 @@ public class BuyCommandImpl implements Command {
     /**
      * Updating customer's personal information.
      * Payment transaction from customer to auction or creation notification for trader about auction results.
-     * Removing first winning bet from customer's bet list.
+     * Deleting first winning bet from customer's bet list.
      * Withdraw lot from bids.
-     *
+     * <p>
      * Checked situations:
      * Customer unable to register his order;
      * Customer's current balance is less than lot price;
@@ -53,7 +53,7 @@ public class BuyCommandImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        User user = (User) request.getSession().getAttribute(RequestAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         String realName = request.getParameter(NAME_PARAM);
         String city = request.getParameter(CITY_PARAM);
         String address = request.getParameter(ADDRESS_PARAM);
@@ -70,12 +70,13 @@ public class BuyCommandImpl implements Command {
             // The winnings are not processed within 10 days.
             if (!lotService.checkWaitingPeriod(lotService.getLotById(winningBet.getLotId()))) {
                 user.getWinningBets().remove(winningBet);
-                pageResponse.setResponseType(ResponseType.FORWARD);
+                pageResponse.setResponseType(ResponseType.REDIRECT);
+                request.getSession().setAttribute(ERROR_ATTR_MAIN_PAGE, ResponseMessage.ACCESS_DENIED);
                 pageResponse.setPage(PageNavigation.INDEX_PAGE);
                 request.setAttribute(ERROR_ATTR_MAIN_PAGE, ResponseMessage.ACCESS_DENIED);
                 return pageResponse;
             }
-            // Current customer's balance less than lot price.
+            // Current customer's balance less that lot price.
             if (!bankService.checkIsEnoughBalance(user.getUserId(), winningBet.getBet())) {
                 pageResponse.setResponseType(ResponseType.FORWARD);
                 request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.ORDER_BANK_BALANCE_ERROR);
@@ -89,8 +90,11 @@ public class BuyCommandImpl implements Command {
                     return pageResponse;
                 }
                 user.getWinningBets().remove(winningBet);
+                System.out.println(user.getWinningBets().size());
                 pageResponse.setResponseType(ResponseType.REDIRECT);
-                pageResponse.setPage(PageNavigation.INDEX_PAGE);
+                PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
+                browser.addPageToHistory(returnPageWithQuery(request));
+                pageResponse.setPage(definePathToSuccessPage(request));
                 return pageResponse;
             } else {
                 pageResponse.setResponseType(ResponseType.FORWARD);

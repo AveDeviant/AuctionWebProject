@@ -30,20 +30,14 @@ public class LocaleCommandImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         String locale = request.getParameter(SELECTED_LANGUAGE);
         HttpSession session = request.getSession();
-        String controller = request.getRequestURI();
-        pageResponse.setResponseType(ResponseType.REDIRECT);
+        pageResponse.setResponseType(ResponseType.FORWARD);
         session.setAttribute(LOCAL_ATTRIBUTE, locale);
         String path = request.getParameter(JSP_PATH);
         String main = PageNavigation.MAIN_PAGE + "?";
         if (main.equals(path)) {
-            pageResponse.setPage(controller);
-            return pageResponse;
-        }
-        if (path.endsWith("?")) {
-            pageResponse.setPage(path);
+            pageResponse.setPage(PageNavigation.INDEX_PAGE);
         } else {
-            String query = path.substring(path.lastIndexOf("?"));
-            pageResponse.setPage(controller + query);
+            pageResponse.setPage(returnPageWithQuery(request));
         }
         return pageResponse;
     }

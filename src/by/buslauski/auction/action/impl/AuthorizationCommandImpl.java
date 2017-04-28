@@ -5,10 +5,13 @@ import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.constant.RequestAttributes;
+import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
+import by.buslauski.auction.service.BetService;
 import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.PageBrowser;
+import by.buslauski.auction.service.impl.BetServiceImpl;
 import by.buslauski.auction.service.impl.MessageServiceImpl;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpSession;
  */
 public class AuthorizationCommandImpl implements Command {
     private static UserService userService = new UserServiceImpl();
+    private static BetService betService = new BetServiceImpl();
     private static MessageService messageService = new MessageServiceImpl();
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
@@ -49,12 +53,13 @@ public class AuthorizationCommandImpl implements Command {
                 return pageResponse;
             }
             HttpSession session = request.getSession();
-            session.setAttribute(RequestAttributes.USER, user);
+            session.setAttribute(SessionAttributes.USER, user);
+            session.setAttribute(SessionAttributes.PAGE_BROWSER, new PageBrowser());
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
-            user.setBets(userService.getUserBets(user));
+            user.setBets(betService.getUserBets(user));
             user.setUserMessages(messageService.findMessages(user.getUserId()));
-            if (messageService.haveUnreadMessages(user.getUserId())){
+            if (messageService.haveUnreadMessages(user.getUserId())) {
                 user.setUnreadMessages(true);
             }
             if (user.getAccess()) {
