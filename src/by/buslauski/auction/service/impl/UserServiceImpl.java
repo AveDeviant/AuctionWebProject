@@ -53,7 +53,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
      * Check lots which unable for bids but already have confirmed bets.
      * Last bet is a winning bet - the last consumer who made a bet is a winner of auction.
      *
-     * @param user add winning bets in consumer's ArrayList for further order.
+     * @param user add winning bets in consumer's ArrayList for further ordering.
      */
     @Override
     public void setWinner(User user) throws ServiceException {
@@ -127,18 +127,18 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     @Override
-    public User registerUser(String userName, String password, String email) throws ServiceException {
+    public User registerUser(String userName, String password, String alias, String email) throws ServiceException {
         User user = null;
         DaoHelper daoHelper = new DaoHelper();
         if (!UserValidator.checkEmail(email)) {
             return user;
         }
         try {
-            if (uniqueCheck(userName, email)) {
+            if (uniqueCheck(userName, email, alias)) {
                 UserDao userDao = new UserDaoImpl();
                 daoHelper.initDao(userDao);
                 String pwdMd5 = Md5Converter.convertToMd5(password);
-                userDao.addUser(ROLE_ID_CUSTOMER, userName, email, pwdMd5);
+                userDao.addUser(ROLE_ID_CUSTOMER, userName, email, pwdMd5,alias);
                 user = userDao.findUserByUsername(userName);
             }
         } catch (DAOException e) {
@@ -230,7 +230,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
             double rating = userDao.findTraderRating(trader.getUserId());
             BigDecimal bigDecimal = new BigDecimal(rating);
             rating = bigDecimal.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();  //rating rounding.
-//            Double rating = new Double(bigDecimal.toString());
             trader.setUserRating(rating);
         } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e);
@@ -241,19 +240,21 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     /**
-     * Checking user's username and email for uniqueness
+     * Checking user's login, email and alias for uniqueness
      *
-     * @param userName entered username
-     * @param email    entered email
+     * @param login entered login
+     * @param email entered email
+     * @param alias entered alias (username)
      * @return false - entered values have been already used by other users.
      * true - database doesn't contains entered values.
      */
-    private boolean uniqueCheck(String userName, String email) throws ServiceException {
+    private boolean uniqueCheck(String login, String email, String alias) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
         try {
             UserDao userDao = new UserDaoImpl();
             daoHelper.initDao(userDao);
-            if (!userDao.findPasswordByLogin(userName).equals("") || userDao.findUserByEmail(email)) {
+            if (!userDao.findPasswordByLogin(login).equals("") || userDao.findUserByEmailAlias(email, alias)) {
+                System.out.println("wtf?");
                 return false;
             }
         } catch (DAOException e) {

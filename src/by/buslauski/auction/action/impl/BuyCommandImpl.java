@@ -3,7 +3,6 @@ package by.buslauski.auction.action.impl;
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
-import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Bet;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BuyCommandImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
-    private static final String ERROR_ATTR_MAIN_PAGE = "err";
     private static final String NAME_PARAM = "name";
     private static final String CITY_PARAM = "city";
     private static final String ADDRESS_PARAM = "address";
@@ -45,9 +43,11 @@ public class BuyCommandImpl implements Command {
      * Invalid customer's personal information;
      * Exception during payment transaction.
      *
-     * @param request
-     * @return A PageResponse object containing two fields:
-     * ResponseType - response type (forward or redirect)
+     * @param request user's request
+     * @return A <code>PageResponse</code> object containing two fields:
+     * ResponseType - response type:
+     * REDIRECT - operation passed successfully;
+     * FORWARD - detected problems during operation passing.
      * String page - page for response
      */
     @Override
@@ -63,17 +63,15 @@ public class BuyCommandImpl implements Command {
         try {
             user = userService.findUserById(user.getUserId()); // updating user info
             if (!user.getAccess()) {
-                pageResponse.setResponseType(ResponseType.FORWARD);
-                request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.USER_BANNED);
+                pageResponse.setResponseType(ResponseType.REDIRECT);
+                pageResponse.setPage(definePathToAccessDeniedPage(request));
                 return pageResponse;
             }
             // The winnings are not processed within 10 days.
             if (!lotService.checkWaitingPeriod(lotService.getLotById(winningBet.getLotId()))) {
                 user.getWinningBets().remove(winningBet);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
-                request.getSession().setAttribute(ERROR_ATTR_MAIN_PAGE, ResponseMessage.ACCESS_DENIED);
-                pageResponse.setPage(PageNavigation.INDEX_PAGE);
-                request.setAttribute(ERROR_ATTR_MAIN_PAGE, ResponseMessage.ACCESS_DENIED);
+                pageResponse.setPage(definePathToAccessDeniedPage(request));
                 return pageResponse;
             }
             // Current customer's balance less that lot price.
@@ -90,7 +88,7 @@ public class BuyCommandImpl implements Command {
                     return pageResponse;
                 }
                 user.getWinningBets().remove(winningBet);
-                System.out.println(user.getWinningBets().size());
+                request.getSession().setAttribute(SessionAttributes.USER, user);  // update user object in the session scope.
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
                 browser.addPageToHistory(returnPageWithQuery(request));

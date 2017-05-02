@@ -23,7 +23,7 @@ public interface UserService {
 
     void changeAccess(long userId, boolean access) throws ServiceException;
 
-    User registerUser(String userName, String password, String email) throws ServiceException;
+    User registerUser(String userName, String password,String alias, String email) throws ServiceException;
 
     User findAdmin() throws ServiceException;
 

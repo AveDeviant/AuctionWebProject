@@ -16,7 +16,7 @@ public interface Command {
     /**
      * Handling client request.
      *
-     * @param request
+     * @param request user's request
      * @return An object containing two fields:
      * ResponseType - response type (forward or redirect).
      * String page - page for response.
@@ -26,8 +26,8 @@ public interface Command {
     /**
      * Get query string from URI.
      *
-     * @param request
-     * @return
+     * @param request user's request
+     * @return current page
      */
     default String returnPageWithQuery(HttpServletRequest request) {
         String controller = request.getRequestURI();
@@ -44,6 +44,16 @@ public interface Command {
         String controller = request.getRequestURI();
         String command = "command=goTo";
         String successPage = "page=success";
+        StringBuilder stringBuilder = new StringBuilder(controller);
+        stringBuilder.append("?").append(command);
+        stringBuilder.append("&").append(successPage);
+        return stringBuilder.toString();
+    }
+
+    default String definePathToAccessDeniedPage(HttpServletRequest request) {
+        String controller = request.getRequestURI();
+        String command = "command=goTo";
+        String successPage = "page=accessDenied";
         StringBuilder stringBuilder = new StringBuilder(controller);
         stringBuilder.append("?").append(command);
         stringBuilder.append("&").append(successPage);

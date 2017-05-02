@@ -17,18 +17,21 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <h1 class="text-center"><fmt:message key="operation.success"/></h1>
+    <div class="custom-opacity">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 class="text-center"><fmt:message key="operation.success"/></h1>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div align="center">
-                <form method="get" action="${pageContext.request.contextPath}/Auction">
-                    <button class="button-auction" type="submit"><fmt:message key="operation.success.back"/> </button>
-                    <input type="hidden" name="command" value="back">
-                </form>
+        <div class="row">
+            <div class="col-sm-12">
+                <div align="center">
+                    <form method="get" action="${pageContext.request.contextPath}/Auction">
+                        <button class="button-auction" type="submit"><fmt:message
+                                key="operation.success.back"/></button>
+                        <input type="hidden" name="command" value="back">
+                    </form>
+                </div>
             </div>
         </div>
     </div>

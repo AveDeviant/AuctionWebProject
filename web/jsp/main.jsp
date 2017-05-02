@@ -18,10 +18,12 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Jura" rel="stylesheet">
 </head>
+
 <body>
 <c:import url="/fragments/header.jsp"/>
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="properties.locale"/>
+<div class="custom-opacity">
 <div class="container">
     <div class="row">
         <c:if test="${err != null}">
@@ -76,5 +78,7 @@
         </c:otherwise>
     </c:choose>
 </div>
+</div>
+<c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </body>
 </html>

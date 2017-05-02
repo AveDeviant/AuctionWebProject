@@ -30,12 +30,10 @@ public class GetUserOperationsImpl implements Command {
     private static BetService betService = new BetServiceImpl();
 
     /**
-     * Handling client request.
+     * Get customer bets and accepted deals from database.
      *
-     * @param request
-     * @return An object containing two fields:
-     * PageResponse - response type (forward or redirect)
-     * String page - page for response
+     * @param request user's request.
+     * @return null.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

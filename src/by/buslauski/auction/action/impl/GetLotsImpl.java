@@ -20,6 +20,12 @@ public class GetLotsImpl implements Command {
     private static final String EMPTY_LIST = "emptyList";
     private static LotService lotService = new LotServiceImpl();
 
+    /**
+     * Get all lots from database.
+     *
+     * @param request user's request
+     * @return null.
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         try {

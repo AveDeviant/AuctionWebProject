@@ -10,6 +10,7 @@ public class User {
     private long userId;
     private int roleId;
     private String userName;
+    private String alias;
     private String email;
     private String city;
     private String address;
@@ -159,6 +160,14 @@ public class User {
 
     public void setUserRating(double userRating) {
         this.userRating = userRating;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     @Override

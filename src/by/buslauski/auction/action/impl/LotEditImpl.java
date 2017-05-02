@@ -46,7 +46,7 @@ public class LotEditImpl implements Command {
     /**
      * Editing lot title, starting price, image, availability for bids, timing, lot category.
      *
-     * @param request
+     * @param request user's request
      * @return A PageResponse object containing two fields:
      * ResponseType - type of response (forward or redirect)
      * String page - page for response

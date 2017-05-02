@@ -17,6 +17,7 @@
 </head>
 <body>
 <div class="container">
+    <div class="custom-opacity">
     <div class="row">
         <h1 class="text-center"><fmt:message key="offer.lot.page.head"/></h1>
     </div>
@@ -25,9 +26,11 @@
     </div>
     <c:choose>
         <c:when test="${user eq null}">
+            <div class="text-center">
             <fmt:message key="offer.lot.page.notice"/>
             <a href="${pageContext.request.contextPath}/Auction?command=goTo&page=authorization"><fmt:message
                     key="offer.lot.reference.authorization"/></a>
+            </div>
         </c:when>
         <c:otherwise>
             <c:if test="${addErr !=null}">
@@ -82,6 +85,7 @@
             </div>
         </c:otherwise>
     </c:choose>
+    </div>
 </div>
 <script>
     function checkInput() {

@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class MessageDaoImpl extends AbstractDao implements MessageDao {
     private static final String SQL_ADD_MESSAGE = "INSERT INTO message VALUES(NULL,?,?,?,?,NOW(),FALSE)";
     private static final String SQL_SELECT_USER_MESSAGES = "SELECT id_message, message.id_sender," +
-            " message.id_recipient, theme, content, date, sender.username AS sender_name," +
-            " recipient.username AS recipient_name  FROM message" +
+            " message.id_recipient, theme, content, date, sender.alias AS sender_name," +
+            " recipient.alias AS recipient_name  FROM message" +
             " JOIN user AS sender ON message.id_sender = sender.id_user" +
             " JOIN user AS recipient ON message.id_recipient = recipient.id_user" +
             " WHERE message.id_recipient=? OR message.id_sender=? ORDER BY id_message";

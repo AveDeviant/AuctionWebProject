@@ -21,9 +21,9 @@ public class GetUsersImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * Get user list from database
+     * Get customer list from database
      *
-     * @param request
+     * @param request user's request
      * @return An object PageResponse containing two fields:
      * ResponseType - response type (forward or redirect)
      * String page - page for response

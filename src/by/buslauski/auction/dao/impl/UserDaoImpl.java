@@ -17,21 +17,23 @@ import java.util.ArrayList;
  */
 public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String SQL_SELECT_USER_AND_BANK = "SELECT user.id_user, user.id_role, name, username, email, password, city, address," +
-            "phone_number, access, real_name, id_account, system, card_number, money_amount FROM user " +
+            "phone_number, access, real_name, alias, id_account, system, card_number, money_amount FROM user " +
             "LEFT JOIN account ON user.id_user=account.id_user " +
             "JOIN role ON user.id_role=role.id_role WHERE username=?";
-    private static final String SQL_SEARCH_EMAIl = "SELECT id_user from user WHERE email=?";
-    private static final String SQL_INSERT_USER = "INSERT INTO user VALUES (NULL,?,?,?,?,NULL,NULL ,NULL,TRUE,NULL)";
-    private static final String SQL_SELECT_ALL_USERS = "SELECT id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name " +
+    private static final String SQL_SEARCH_EMAIl_ALIAS = "SELECT id_user from user WHERE email=? OR alias=?";
+    private static final String SQL_INSERT_USER = "INSERT INTO user VALUES (NULL,?,?,?,?,NULL,NULL ,NULL,TRUE,NULL,?)";
+    private static final String SQL_SELECT_ALL_USERS = "SELECT id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name, alias " +
             "FROM user JOIN role ON user.id_role=role.id_role WHERE name='customer' ORDER BY id_user";
-    private static final String SQL_SELECT_USER_BY_ID = "SELECT id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name " +
-            "FROM user JOIN role ON user.id_role=role.id_role WHERE id_user=?";
+    private static final String SQL_SELECT_USER_BY_ID = "SELECT user.id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name, alias, " +
+            "id_account, system, card_number, money_amount FROM user " +
+            "JOIN role ON user.id_role=role.id_role " +
+            "LEFT JOIN account ON user.id_user=account.id_user WHERE user.id_user=?";
     private static final String SQL_UPDATE_INFO = "UPDATE user SET real_name=?, city=?, address=?, phone_number=? WHERE id_user=?";
     private static final String SQL_CHANGE_USER_ACCESS = "UPDATE user SET access=? WHERE id_user=?";
     private static final String SQL_SELECT_ADMIN = "SELECT * FROM user JOIN role ON user.id_role=role.id_role " +
             "WHERE name='admin' LIMIT 1";
     private static final String SQL_SELECT_TRADER = "SELECT user.id_user, user.id_role, name, username, email, password," +
-            " city, address, phone_number, access, real_name " +
+            " city, address, phone_number, access, real_name, alias " +
             "FROM user " +
             "JOIN role ON user.id_role=role.id_role " +
             "JOIN lot ON user.id_user=lot.id_user WHERE id_lot=?";
@@ -100,6 +102,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = initUser(resultSet);
+                if (resultSet.getString("id_account") != null) {
+                    user.setBankCard(initUserBankCard(resultSet));
+                }
             }
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e);
@@ -109,12 +114,13 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     }
 
     @Override
-    public void addUser(int id_role, String userName, String email, String password) throws DAOException {
+    public void addUser(int id_role, String userName, String email, String password, String alias) throws DAOException {
         try (PreparedStatement statement = connection.prepareStatement(SQL_INSERT_USER)) {
             statement.setInt(1, id_role);
             statement.setString(2, userName);
             statement.setString(3, email);
             statement.setString(4, password);
+            statement.setString(5, alias);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -134,9 +140,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     }
 
     @Override
-    public boolean findUserByEmail(String email) throws DAOException {
-        try (PreparedStatement statement = connection.prepareStatement(SQL_SEARCH_EMAIl)) {
+    public boolean findUserByEmailAlias(String email, String alias) throws DAOException {
+        try (PreparedStatement statement = connection.prepareStatement(SQL_SEARCH_EMAIl_ALIAS)) {
             statement.setString(1, email);
+            statement.setString(2, alias);
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
                 return false;
@@ -246,6 +253,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
                 resultSet.getString("email"),
                 resultSet.getBoolean("access"),
                 role);
+        user.setAlias(resultSet.getString("alias"));
         user.setName(resultSet.getString("real_name"));
         user.setAddress(resultSet.getString("address"));
         user.setCity(resultSet.getString("city"));

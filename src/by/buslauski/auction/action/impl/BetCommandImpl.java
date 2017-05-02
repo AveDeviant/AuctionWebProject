@@ -35,9 +35,21 @@ public class BetCommandImpl implements Command {
 
     /**
      * Bet operation. Updating lot current price and insert the bet into database.
+     * <p>
+     * Checked situations:
+     * The user isn't authorized on the site;
+     * The user hasn't registered his bank card;
+     * The user have been banned during his session on the site;
+     * The lot was withdrawn from the auction during user's session;
+     * The user tries to bet on his own lot;
+     * Invalid price entered;
+     * The entered price is less than or equals to current lot price;
+     * Insufficient funds to confirm bet;
+     * Exception during operation;
      *
-     * @param request
+     * @param request user's request
      * @return
+     * @see BetValidator
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -62,41 +74,47 @@ public class BetCommandImpl implements Command {
         try {
             user = userService.findUserById(user.getUserId()); // updating user info
             if (user.getAccess()) {
-                Lot lot = lotService.getAvailableLotById(lotId);
-                if (lot.getUserId() == user.getUserId()) {
-                    request.setAttribute(BET_ERROR, ResponseMessage.BET_ON_OWN_LOT);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
+                Lot lot = lotService.getAvailableLotById(lotId); //updating lot info
+                if (lot != null) {
+                    if (lot.getUserId() == user.getUserId()) {
+                        request.setAttribute(BET_ERROR, ResponseMessage.BET_ON_OWN_LOT);
+                        pageResponse.setResponseType(ResponseType.FORWARD);
+                        return pageResponse;
+                    }
+                    if (!BetValidator.checkPriceForValid(request.getParameter(PRICE_PARAM))) {
+                        request.setAttribute(BET_ERROR, ResponseMessage.INVALID_VALUE);
+                        pageResponse.setResponseType(ResponseType.FORWARD);
+                        return pageResponse;
+                    }
+                    BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
+                    if (!betService.checkBetValue(lot, newPrice)) {
+                        request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
+                        pageResponse.setResponseType(ResponseType.FORWARD);
+                        return pageResponse;
+                    }
+                    if (!bankService.checkIsEnoughBalance(userId, newPrice)) {
+                        request.setAttribute(BET_ERROR, ResponseMessage.BET_BANK_BALANCE_ERROR);
+                        pageResponse.setResponseType(ResponseType.FORWARD);
+                        return pageResponse;
+                    }
+                    if (!betService.addBet(userId, lotId, newPrice)) {
+                        request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
+                        pageResponse.setResponseType(ResponseType.FORWARD);
+                        return pageResponse;
+                    }
+                    user.setBets(betService.getUserBets(user));
+                    pageResponse.setResponseType(ResponseType.REDIRECT);
                     return pageResponse;
+                } else {
+                    pageResponse.setPage(definePathToAccessDeniedPage(request));
+                    pageResponse.setResponseType(ResponseType.REDIRECT);
                 }
-                if (!lotService.checkActuality(lot)) {
-                    request.setAttribute(BET_ERROR, ResponseMessage.BET_TIMEOUT);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
-                    return pageResponse;
-                }
-                if (!BetValidator.checkPriceForValid(request.getParameter(PRICE_PARAM))) {
-                    request.setAttribute(BET_ERROR, ResponseMessage.INVALID_VALUE);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
-                    return pageResponse;
-                }
-                BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
-                if (!betService.checkBetValue(lot, newPrice)) {
-                    request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
-                    return pageResponse;
-                }
-                if (!bankService.checkIsEnoughBalance(userId, newPrice)) {
-                    request.setAttribute(BET_ERROR, ResponseMessage.BET_BANK_BALANCE_ERROR);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
-                    return pageResponse;
-                }
-                betService.addBet(userId, lotId, newPrice);
-                user.setBets(betService.getUserBets(user));
-                pageResponse.setResponseType(ResponseType.REDIRECT);
-                return pageResponse;
             } else {
                 request.setAttribute(BET_ERROR, ResponseMessage.ACCESS_DENIED);
                 pageResponse.setResponseType(ResponseType.FORWARD);
+                session.setAttribute(SessionAttributes.USER, user);
             }
+
         } catch (ServiceException e) {
             request.setAttribute(BET_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);

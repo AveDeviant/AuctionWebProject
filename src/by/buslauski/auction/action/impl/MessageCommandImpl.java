@@ -32,7 +32,7 @@ public class MessageCommandImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * @param request
+     * @param request user's request
      * @return
      */
     @Override
@@ -57,12 +57,10 @@ public class MessageCommandImpl implements Command {
             if (Role.CUSTOMER == user.getRole()) {   // message from customer to admin.
                 User admin = userService.findAdmin();
                 messageService.addMessage(theme, text, user.getUserId(), admin.getUserId());
-//                pageResponse.setPage(PageNavigation.FAQ_PAGE);
             } else {                                // message from admin to customer.
                 long recipientId = Long.parseLong(request.getParameter(RECIPIENT_ID));
                 User customer = userService.findUserById(recipientId);
                 messageService.addMessage(theme, text, user.getUserId(), customer.getUserId());
-//                pageResponse.setPage(returnPageWithQuery(request));
             }
             pageResponse.setResponseType(ResponseType.REDIRECT);
             PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);

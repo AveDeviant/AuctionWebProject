@@ -11,6 +11,7 @@ import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.PageBrowser;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
+import by.buslauski.auction.validator.UserValidator;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class RegistrationCommandImpl implements Command {
     private static final String REGISTRATION_ERROR_ATTR = "registrationError";
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
+    private static final String USERNAME = "alias";
     private static final String REPEAT_PASSWORD = "password2";
     private static final String MAIL = "mail";
     private static UserService userService = new UserServiceImpl();
@@ -35,14 +37,21 @@ public class RegistrationCommandImpl implements Command {
         String password = request.getParameter(PASSWORD);
         String passwordRepeat = request.getParameter(REPEAT_PASSWORD);
         String email = request.getParameter(MAIL);
+        String alias = request.getParameter(USERNAME);
         if (!password.equals(passwordRepeat)) {
             request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.PASSWORD_NOT_EQUAL);
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
             return pageResponse;
         }
+        if (!UserValidator.checkLoginPasswordAlias(login, password, alias)) {
+            request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.INVALID_VALUE);
+            pageResponse.setResponseType(ResponseType.FORWARD);
+            pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
+            return pageResponse;
+        }
         try {
-            user = userService.registerUser(login, password, email);
+            user = userService.registerUser(login, password, alias, email);
             if (user == null) {
                 request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.NOT_UNIQUE_NAME_EMAIL);
                 pageResponse.setResponseType(ResponseType.FORWARD);

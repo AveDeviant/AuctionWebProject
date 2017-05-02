@@ -17,6 +17,7 @@
 <c:import url="/fragments/header.jsp"/>
 <body>
 <div class="container">
+    <div class="custom-opacity">
     <c:if test="${user eq null or user.getRole().getValue()!='admin'}">
         <c:redirect url="/Controller"/>
     </c:if>
@@ -40,7 +41,7 @@
         <c:forEach var="customer" items="${customers}">
             <tr>
                 <td><c:out value="${customer.getUserId()}"/></td>
-                <td><c:out value="${customer.getUserName()}"/></td>
+                <td><c:out value="${customer.getAlias()}"/></td>
                 <td>
                     <c:choose>
                         <c:when test="${customer.getAccess() eq true}">
@@ -81,6 +82,7 @@
         </c:forEach>
         </tbody>
     </table>
+    </div>
 </div>
 </body>
 </html>

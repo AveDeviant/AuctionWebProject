@@ -17,6 +17,7 @@
 <c:import url="/fragments/header.jsp"/>
 <body>
 <div class="container-fluid">
+    <div class="custom-opacity">
     <c:if test="${user eq null or user.getRole().getValue()!='admin'}">
         <c:redirect url="/Auction"/>
     </c:if>
@@ -129,6 +130,7 @@
         </c:forEach>
         </tbody>
     </table>
+    </div>
 </div>
 <script>
     function checkDate() {

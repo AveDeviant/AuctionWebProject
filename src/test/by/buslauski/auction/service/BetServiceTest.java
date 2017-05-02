@@ -23,7 +23,7 @@ public class BetServiceTest {
         testLot = new Lot(1, 1, "my lot", "description", "image",
                 1, new BigDecimal(100.00), true,
                 LocalDate.parse("2017-04-02"), new BigDecimal(302.10),
-                "test category");
+                "test category");   // current lot price is 302.10
     }
 
     @Test

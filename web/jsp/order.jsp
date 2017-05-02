@@ -53,14 +53,15 @@
                           enctype="multipart/form-data">
                         <label for="name"><fmt:message key="order.page.name"/></label><label
                             class="required">*</label>
-                        <input class="form-control" type="text" required pattern="[A-Za-z А-Яа-я ]{2,}" name="name"
+                        <input class="form-control" type="text" required pattern="[A-Za-z А-Яа-я-,. ]{2,}" name="name"
                                id="name">
                         <label for="city"><fmt:message key="order.page.city"/></label><label class="required">*</label>
                         <input class="form-control" type="text" required pattern="[\w,-.А-Яа-я ]{5,}" name="city"
                                id="city">
                         <label for="address"><fmt:message key="order.page.address"/></label><label
                             class="required">*</label>
-                        <input class="form-control" type="text" required pattern="[\w\d,-.А-Яа-я \\/]{5,}" name="address"
+                        <input class="form-control" type="text" required pattern="[\w\d,-.А-Яа-я \\/]{5,}"
+                               name="address"
                                id="address">
                         <label for="phone"><fmt:message key="order.page.phone"/></label><label
                             class="required">*</label>
@@ -84,7 +85,14 @@
                     <h4><fmt:message key="trader.ref"/></h4>
                     <h3>${trader.getUserName()}</h3>
                     <div class="alert alert-warning aler-dismissable fade in">
-                        <fmt:message key="order.trader.notification"/>
+                        <c:choose>
+                            <c:when test="${auctionOwner !=null}">
+                                <fmt:message key="${auctionOwner}"/>
+                            </c:when>
+                            <c:otherwise>
+                                <fmt:message key="order.trader.notification"/>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

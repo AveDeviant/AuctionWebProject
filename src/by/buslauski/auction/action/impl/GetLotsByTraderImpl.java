@@ -1,48 +1,53 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
+import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
-import by.buslauski.auction.constant.ResponseMessage;
+import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
+import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 /**
- * Created by Acer on 26.04.2017.
+ * Created by Acer on 02.05.2017.
  */
-public class TraderRatingImpl implements Command {
-    private static final String RATING = "rating";
+public class GetLotsByTraderImpl implements Command {
     private static final String TRADER_ID = "traderId";
-    private static final String ERROR = "error";
+    private static final String TRADER_LOTS = "traderLots";
+    private static LotService lotService = new LotServiceImpl();
     private static UserService userService = new UserServiceImpl();
 
+
     /**
-     * Updating trader rating by customer who confirm deal.
+     * Handling client request.
      *
-     * @param request user's request
+     * @param request user's request.
      * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * ResponseType - response type FORWARD.
+     * String page - page for response "/jsp/traderLots.jsp".
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        pageResponse.setPage(returnPageWithQuery(request));
-        int rating = Integer.parseInt(request.getParameter(RATING));
-        User customer = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        pageResponse.setResponseType(ResponseType.FORWARD);
+        pageResponse.setPage(PageNavigation.TRADER_LOTS);
         long traderId = Long.parseLong(request.getParameter(TRADER_ID));
         try {
-            userService.updateTraderRating(traderId, customer.getUserId(), rating);
-            pageResponse.setResponseType(ResponseType.REDIRECT);
+            ArrayList<Lot> traderLots = lotService.findTraderLots(traderId);
+            User trader = userService.findUserById(traderId);
+            userService.setTraderRating(trader);
+            request.setAttribute(SessionAttributes.TRADER, trader);
+            request.setAttribute(TRADER_LOTS, traderLots);
         } catch (ServiceException e) {
-            pageResponse.setResponseType(ResponseType.FORWARD);
-            request.setAttribute(ERROR, ResponseMessage.OPERATION_ERROR);
             LOGGER.log(Level.ERROR, e);
         }
         return pageResponse;

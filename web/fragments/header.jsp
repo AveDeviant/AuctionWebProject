@@ -29,11 +29,12 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand"
-               href="${pageContext.request.contextPath}/Auction?command=goTo&page=index">Auction</a>
+               href="${pageContext.request.contextPath}/Auction?command=goTo&page=index">Auction House</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=faq"><fmt:message key="header.menu.rules"/> </a></li>
+                <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=faq"><fmt:message
+                        key="header.menu.rules"/> </a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"><fmt:message key="header.menu.categories.title"/> <span
@@ -77,12 +78,12 @@
                         <c:choose>
                             <c:when test="${user.getRole().getValue() eq 'customer'}">
                                 <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=private">
-                                    <c:out value="${user.getUserName()}"/>
+                                    <c:out value="${user.getAlias()}"/>
                                 </a></li>
                             </c:when>
                             <c:otherwise>
                                 <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=admin">
-                                    <c:out value="${user.getUserName()}"/>
+                                    <c:out value="${user.getAlias()}"/>
                                 </a></li>
                             </c:otherwise>
                         </c:choose>

@@ -21,11 +21,11 @@ public class UserServiceTest {
 
     /**
      * Note that for successfully test passing the database must stores user
-     * with userName 'HeadAdmin'
+     * with userName (login) 'AuctionHouse'
      */
     @Test
     public void registerUserNotUniqueName() throws ServiceException {
-        User user = userService.registerUser("HeadAdmin", "InvalidInput", "buslauskima@gmail.com");
+        User user = userService.registerUser("AuctionHouse", "InvalidInput", "buslauskima@gmail.com","Checking");
         Assert.assertEquals(null, user);
     }
 
@@ -35,27 +35,27 @@ public class UserServiceTest {
      */
     @Test
     public void registerUserNotUniqueEmail() throws ServiceException {
-        User user = userService.registerUser("Customer88", "invalidinout", "buslauskima@gmail.com");
+        User user = userService.registerUser("Customer88", "invalid Input", "buslauskima@gmail.com","Checking");
         Assert.assertEquals(null, user);
     }
 
     /**
      * Note that for successfully test passing the database must stores user
-     * with username 'HeadAdmin' and password is "IamAdmin15' (password encrypted)
+     * with username (login) 'AuctionHouse' and password is "IamAdmin15' (password encrypted)
      */
     @Test
     public void authorizationCheckingInvalidPassword() throws ServiceException {
-    User user = userService.authorizationChecking("HeadAdmin", "IncorrectPassword99");
-    Assert.assertEquals(null,user);
+    User user = userService.authorizationChecking("AuctionHouse", "IncorrectPassword99");
+    Assert.assertNull(user);
     }
 
     /**
      * Note that for successfully test passing the database must stores user
-     * with username 'HeadAdmin' and password is "IamAdmin15' (password encrypted)
+     * with username (login) 'AuctionHouse' and password is "IamAdmin15' (password encrypted)
      */
     @Test
     public void authorizationCheckingValidData() throws ServiceException {
-        User user = userService.authorizationChecking("HeadAdmin", "IamAdmin95");
-        Assert.assertEquals("HeadAdmin",user.getUserName());
+        User user = userService.authorizationChecking("AuctionHouse", "IamAdmin95");
+        Assert.assertNotNull(user);
     }
 }

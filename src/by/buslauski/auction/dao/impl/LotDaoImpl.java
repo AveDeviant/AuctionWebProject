@@ -16,18 +16,21 @@ import java.util.ArrayList;
 /**
  * Created by Acer on 15.03.2017.
  */
-public class LotDaoImpl extends AbstractDao implements LotDao{
+public class LotDaoImpl extends AbstractDao implements LotDao {
     private static final String SQL_ADD_LOT = "INSERT INTO lot VALUES(NULL,?,?,?,?,?,?,?,DATE(?),?)";
     private static final String SQL_GET_AVAILABLE_LOTS = "SELECT id_lot, id_user, lot.id_category,name, title, photo, description, starting_price, date_available," +
-            "current_price FROM lot JOIN category ON lot.id_category=category.id_category WHERE available=1 AND NOW()<date_available ORDER BY id_lot";
+            "current_price FROM lot " +
+            "JOIN category ON lot.id_category=category.id_category WHERE available=TRUE AND NOW()<date_available ORDER BY id_lot";
     private static final String SQL_GET_LOT_BY_ID = "SELECT id_lot, id_user, lot.id_category, name, title, photo, description, starting_price, available, date_available, " +
-            "current_price FROM lot JOIN category ON lot.id_category=category.id_category WHERE id_lot=?";
+            "current_price FROM lot " +
+            "JOIN category ON lot.id_category=category.id_category WHERE id_lot=?";
     private static final String SQL_GET_LOTS_OVER_TIMING = "SELECT id_lot, id_user, lot.id_category, name, title, photo, description, starting_price,available, date_available," +
-            "current_price FROM lot JOIN category ON lot.id_category=category.id_category WHERE NOW()>date_available";
+            "current_price FROM lot " +
+            "JOIN category ON lot.id_category=category.id_category WHERE NOW()>date_available";
     private static final String SQL_GET_ALL_LOTS = "SELECT id_lot, id_user, lot.id_category, name, title, photo, description, starting_price,available, date_available," +
-            "current_price FROM lot JOIN category ON lot.id_category=category.id_category";
+            "current_price FROM lot " +
+            "JOIN category ON lot.id_category=category.id_category ORDER BY id_lot";
     private static final String SQL_EDIT_LOT = "UPDATE lot SET title=?, starting_price=?, available=?, photo=?, date_available=DATE(?), id_category=? WHERE id_lot=?";
-    private static final String SQL_WITHDRAW_LOT = "UPDATE lot SET available=false WHERE id_lot=?";
     private static final String SQL_UPDATE_CURRENT_PRICE = "UPDATE lot SET current_price=? WHERE id_lot=?";
     private static final String SQL_RETURN_LOT_TO_BIDS = "UPDATE lot SET available=true, date_available=DATE(?)," +
             "current_price=? WHERE id_lot=?";
@@ -172,17 +175,6 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
     }
 
     @Override
-    public void withdrawLot(long lotId) throws DAOException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_WITHDRAW_LOT)) {
-            preparedStatement.setLong(1, lotId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
     public void deleteLot(long lotId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_LOT)) {
             preparedStatement.setLong(1, lotId);
@@ -195,12 +187,12 @@ public class LotDaoImpl extends AbstractDao implements LotDao{
 
     @Override
     public void changeLotBiddingStatus(long lotId, boolean status) throws DAOException {
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_LOT_AVAILABILITY)) {
-            preparedStatement.setBoolean(1,status);
-            preparedStatement.setLong(2,lotId);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_LOT_AVAILABILITY)) {
+            preparedStatement.setBoolean(1, status);
+            preparedStatement.setLong(2, lotId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR,e);
+            LOGGER.log(Level.ERROR, e);
             throw new DAOException(e);
         }
     }

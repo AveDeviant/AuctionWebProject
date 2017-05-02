@@ -16,8 +16,10 @@ public class PageNavigation {
     public static final String USER_EDIT_PAGE = "/jsp/edit_user.jsp";
     public static final String ORDERS_SHOW_PAGE = "/jsp/orders.jsp";
     public static final String FAQ_PAGE = "/jsp/faq.jsp";
-    public static final String OFFER_LOT="/jsp/offer.jsp";
-    public static final String ADMIN_PAGE="/jsp/admin.jsp";
-    public static final String MESSAGE_PAGE="/jsp/messages.jsp";
-    public static final String SUCCESS_PAGE ="/jsp/success.jsp";
+    public static final String OFFER_LOT = "/jsp/offer.jsp";
+    public static final String ADMIN_PAGE = "/jsp/admin.jsp";
+    public static final String MESSAGE_PAGE = "/jsp/messages.jsp";
+    public static final String SUCCESS_PAGE = "/jsp/success.jsp";
+    public static final String ACCESS_DENIED_PAGE = "/jsp/denied.jsp";
+    public static final String TRADER_LOTS = "/jsp/traderLots.jsp";
 }

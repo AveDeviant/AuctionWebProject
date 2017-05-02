@@ -22,11 +22,12 @@ public class GetOrdersCommandImpl implements Command {
     private static OrderService orderService = new OrderServiceImpl();
 
     /**
-     * Get order list from database.
+     * Get orders (deals) from database.
      *
-     * @param request
-     * @return PageResponse object containing two fields:
-     * ResponseType - response type (forward or redirect)
+     * @param request user's request.
+     * @return <code>PageResponse</code> object containing two fields:
+     * ResponseType - FORWARD
+     * String page - page for response "/jsp/orders.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

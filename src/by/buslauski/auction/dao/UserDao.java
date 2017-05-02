@@ -12,7 +12,7 @@ public interface UserDao {
 
     User findUserById(long userId) throws DAOException;
 
-    void addUser(int id_role, String userName, String email, String password) throws DAOException;
+    void addUser(int id_role, String userName, String email, String password, String alias) throws DAOException;
 
     ArrayList<User> getAllCustomers() throws DAOException;
 
@@ -22,7 +22,7 @@ public interface UserDao {
 
     void changeAccess(long userId, boolean access) throws DAOException;
 
-    boolean findUserByEmail(String email) throws DAOException;
+    boolean findUserByEmailAlias(String email, String alias) throws DAOException;
 
     void updateUserInfo(long userId, String realName, String city,
                         String address, String phone) throws DAOException;

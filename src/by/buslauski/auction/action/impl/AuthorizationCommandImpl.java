@@ -53,20 +53,17 @@ public class AuthorizationCommandImpl implements Command {
                 return pageResponse;
             }
             HttpSession session = request.getSession();
-            session.setAttribute(SessionAttributes.USER, user);
-            session.setAttribute(SessionAttributes.PAGE_BROWSER, new PageBrowser());
-            pageResponse.setResponseType(ResponseType.FORWARD);
+            pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
             user.setBets(betService.getUserBets(user));
             user.setUserMessages(messageService.findMessages(user.getUserId()));
-            if (messageService.haveUnreadMessages(user.getUserId())) {
-                user.setUnreadMessages(true);
-            }
             if (user.getAccess()) {
                 userService.setWinner(user); //check for winning bets made by this customer
             } else {
                 session.setAttribute(USER_BANNED, ResponseMessage.USER_BANNED);
             }
+            session.setAttribute(SessionAttributes.USER, user);
+            session.setAttribute(SessionAttributes.PAGE_BROWSER, new PageBrowser());
         } catch (ServiceException e) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             request.setAttribute(AUTHORIZATION_ERROR, ResponseMessage.OPERATION_ERROR);

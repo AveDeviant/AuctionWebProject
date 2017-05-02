@@ -18,10 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by Acer on 25.03.2017.
  */
-public class RejectCommandImpl implements Command {
+public class RejectOrderImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
     private static LotService lotService = new LotServiceImpl();
 
+    /**
+     * Rejecting deal by customer.
+     * Reset auction results for lot (deleting all bets made on this lot).
+     * Return lot to bids.
+     *
+     * @param request user's request
+     * @return
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();

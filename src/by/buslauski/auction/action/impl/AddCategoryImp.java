@@ -20,9 +20,9 @@ public class AddCategoryImp implements Command {
     private static CategoryService categoryService = new CategoryServiceImpl();
 
     /**
-     * Insert a new category into database.
+     * Creating a new category and insert it into database.
      *
-     * @param request
+     * @param request user's request
      * @return An object containing two fields:
      * ResponseType - response type (forward or redirect)
      * String page - page for response

@@ -38,4 +38,6 @@ public interface LotService {
     boolean checkWaitingPeriod(Lot lot);
 
     void changeLotBiddingStatus(long lotId, boolean status) throws ServiceException;
+
+    ArrayList<Lot> findTraderLots(long traderId) throws ServiceException;
 }

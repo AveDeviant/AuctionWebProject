@@ -56,7 +56,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
      *
      * @param userId       user's ID
      * @param enteredPrice entered price
-     * @return true - user's balance equal to or greater than entered price.
+     * @return true - user's balance equals to or greater than entered price.
      * false - balance is less than entered price.
      */
     @Override
@@ -89,7 +89,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
             if (dealer.getRole() != Role.ADMIN) {      //if auction doesn't own the lot
                 messageService.createNotificationForTrader(dealer, bet);  // create notification for user, who offered lot
                 orderDao.addOrder(customerId, dealer.getUserId(), lotId, moneyAmount, true); // creating order with SUCCESS status
-                lotDao.withdrawLot(lotId);
+                lotDao.changeLotBiddingStatus(lotId, false);
                 daoHelper.commit();
                 return true;
             } else { // payment
@@ -100,7 +100,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
                 newBalanceRecipient = newBalanceRecipient.add(moneyAmount);          // calculate recipient's balance
                 boolean success = bankAccountDao.doPayment(customerId, dealer.getUserId(), newBalanceCustomer, newBalanceRecipient);
                 orderDao.addOrder(customerId, dealer.getUserId(), lotId, moneyAmount, true); // creating order
-                lotDao.withdrawLot(lotId);   //withdraw lot from bids - set available to false.
+                lotDao.changeLotBiddingStatus(lotId, false);   //withdraw lot from bids - set available to false.
                 daoHelper.commit();
                 return success;
             }

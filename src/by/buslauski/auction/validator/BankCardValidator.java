@@ -10,7 +10,7 @@ public class BankCardValidator {
     private static final String CARD_REGEXP = "\\d{4}-\\d{4}-\\d{4}-\\d{4}";
 
 
-    public boolean checkCardForValidNumber(String number) {
+    public static boolean checkCardForValidNumber(String number) {
         Pattern pattern = Pattern.compile(CARD_REGEXP);
         Matcher matcher = pattern.matcher(number);
         return matcher.matches();

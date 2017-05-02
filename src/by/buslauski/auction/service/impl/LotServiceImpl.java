@@ -32,7 +32,6 @@ public class LotServiceImpl extends AbstractService implements LotService {
     public void addLot(String title, long userId, String description,
                        String image, BigDecimal price, boolean availability,
                        String category, String availableDate) throws ServiceException {
-        LocalDate date = LocalDate.parse(availableDate);
         DaoHelper daoHelperCategory = new DaoHelper();
         DaoHelper daoHelperLot = new DaoHelper();
         try {
@@ -40,9 +39,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
             LotDaoImpl lotDao = new LotDaoImpl();
             daoHelperCategory.initDao(categoryDao);
             daoHelperLot.initDao(lotDao);
-                int categoryId = categoryDao.findCategoryIdByName(category);
-                lotDao.addLot(userId, categoryId, title, description, image, price, availableDate, availability, price);
-
+            int categoryId = categoryDao.findCategoryIdByName(category);
+            lotDao.addLot(userId, categoryId, title, description, image, price, availableDate, availability, price);
         } catch (DAOException e) {
             e.printStackTrace();
             throw new ServiceException(e);
@@ -120,6 +118,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
     /**
      * Find lot which has permission to bids using lot ID.
      * Set bets to this lot.
+     *
      * @param lotId lot ID.
      * @return Lot object.
      * @throws ServiceException
@@ -220,8 +219,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
             LotDao lotDao = new LotDaoImpl();
             daoHelperCategory.initDao(categoryDao);
             int categoryId = categoryDao.findCategoryIdByName(category);
-                daoHelperLot.initDao(lotDao);
-                lotDao.editLot(lotId, categoryId, title, price, image, availability, availableDate);
+            daoHelperLot.initDao(lotDao);
+            lotDao.editLot(lotId, categoryId, title, price, image, availability, availableDate);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
@@ -237,7 +236,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * @param lotId ID lot which should be deleted
      * @return
      * @throws ServiceException thrown in case lot have confirmed bets and/or
-     *                          orders where made for this lot.
+     *                          orders where made for this lot or SQLException has been thrown for an connection lost
+     *                          (or for an unknown reason).
      */
     @Override
     public void deleteLot(long lotId) throws ServiceException {
@@ -247,7 +247,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.initDao(lotDao);
             lotDao.deleteLot(lotId);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,e);
+            LOGGER.log(Level.ERROR, e);
             throw new ServiceException();
         } finally {
             daoHelper.release();
@@ -279,7 +279,6 @@ public class LotServiceImpl extends AbstractService implements LotService {
             orderDao.addOrder(customerId, lot.getUserId(), lot.getId(), currentPrice, false);
             daoHelper.commit();
             lot.getBets().clear(); // clear bet list
-
         } catch (DAOException e) {
             daoHelper.rollback();
             LOGGER.log(Level.ERROR, e);
@@ -325,6 +324,25 @@ public class LotServiceImpl extends AbstractService implements LotService {
             LOGGER.log(Level.ERROR, e);
             throw new ServiceException();
         }
+    }
+
+    /**
+     * Find lots that were exhibited by a concrete trader.
+     *
+     * @param traderId trader's ID.
+     * @return trader's lots
+     * @throws ServiceException
+     */
+    @Override
+    public ArrayList<Lot> findTraderLots(long traderId) throws ServiceException {
+        ArrayList<Lot> traderLots = new ArrayList<>();
+        ArrayList<Lot> allAvailableLots = getAvailableLots();
+        for (Lot lot : allAvailableLots) {
+            if (lot.getUserId() == traderId) {
+                traderLots.add(lot);
+            }
+        }
+        return traderLots;
     }
 
     /**

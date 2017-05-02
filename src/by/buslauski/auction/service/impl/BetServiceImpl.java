@@ -14,37 +14,44 @@ import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.service.BetService;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Acer on 21.03.2017.
  */
 public class BetServiceImpl extends AbstractService implements BetService {
+    private static ReentrantLock lock = new ReentrantLock();
 
 
     @Override
-    public void addBet(long userId, long lotId, BigDecimal price) throws ServiceException {
+    public boolean addBet(long userId, long lotId, BigDecimal price) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
+        boolean flag = false;
         try {
+            lock.lock();
             BetDao betDao = new BetDaoImpl();
             LotDao lotDao = new LotDaoImpl();
             daoHelper.beginTransaction(betDao, lotDao);
+            Lot lot = lotDao.findLotById(lotId);
+            if (price.compareTo(lot.getCurrentPrice()) <= 0) {
+                return flag;
+            }
             betDao.addBet(userId, lotId, price);
             lotDao.updateCurrentPrice(lotId, price);
             daoHelper.commit();
+            flag = true;
         } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e + " Exception during adding bet in database");
             daoHelper.rollback();
             throw new ServiceException(e);
         } finally {
             daoHelper.endTransaction();
-
+            lock.lock();
         }
-
+        return flag;
     }
 
     @Override

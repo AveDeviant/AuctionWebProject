@@ -1,6 +1,8 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
+import by.buslauski.auction.constant.ResponseMessage;
+import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
@@ -22,27 +24,30 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class OrderCommandImpl implements Command {
     private static final String LOT_ATTRIBUTE = "lot";
+    private static final String AUCTION_OWNER = "auctionOwner";
     private static UserService userService = new UserServiceImpl();
     private static LotService lotService = new LotServiceImpl();
 
     /**
      * Showing order page with first lot in customer's winning list.
      *
-     * @param request
+     * @param request user's request.
      * @return PageResponse - an object containing two fields:
-     * ResponseType - forward.
-     * String page - /jsp/order.jsp
+     * ResponseType - FORWARD.
+     * String page - "/jsp/order.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        System.out.println(user.getWinningBets().size());
         if (!user.getWinningBets().isEmpty()) {
             Bet bet = user.getWinningBets().get(0);
             try {
                 Lot lot = lotService.getLotById(bet.getLotId());
                 User trader = userService.findUserById(lot.getUserId());
+                if (Role.ADMIN == trader.getRole()) {    //show notification about payment
+                    request.setAttribute(AUCTION_OWNER, ResponseMessage.AUCTION_PROPERTY);
+                }
                 request.setAttribute(LOT_ATTRIBUTE, lot);
                 request.setAttribute(SessionAttributes.TRADER, trader);
             } catch (ServiceException e) {

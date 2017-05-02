@@ -36,6 +36,7 @@ public class CommandFactory {
     private static final String USER_OPERATIONS = "getOperations";
     private static final String TRADER_RATING = "updateRating";
     private static final String BACK_BUTTON = "back";
+    private static final String TRADER_LOTS = "traderLots";
 
     public Command getCurrentCommand(HttpServletRequest request) {
         String command = request.getParameter(COMMAND_PARAM);
@@ -66,7 +67,7 @@ public class CommandFactory {
             case ORDER_LOT_BUY:
                 return new BuyCommandImpl();
             case ORDER_LOT_REJECT:
-                return new RejectCommandImpl();
+                return new RejectOrderImpl();
             case EDIT_LOT:
                 return new LotEditImpl();
             case GET_USERS:
@@ -97,6 +98,8 @@ public class CommandFactory {
                 return new TraderRatingImpl();
             case BACK_BUTTON:
                 return new BackCommandImpl();
+            case TRADER_LOTS:
+                return new GetLotsByTraderImpl();
             default:
                 return new InitCommandImpl();
         }

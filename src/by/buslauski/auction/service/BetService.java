@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by Acer on 14.04.2017.
  */
 public interface BetService {
-    void addBet(long userId, long lotId, BigDecimal price) throws ServiceException;
+    boolean addBet(long userId, long lotId, BigDecimal price) throws ServiceException;
 
     User findUserByBet(Bet bet) throws ServiceException;
 

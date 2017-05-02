@@ -37,18 +37,41 @@ public class AddLotImpl implements Command {
     private static final String LOT_CATEGORY = "category";
     private static final String UPLOAD = "/LotImg";
     private static final String IMAGE_MIME_TYPE = "image/";
-    private static final String USER_SESSION = "user";
     private static final String AVAILABLE_TIMER = "availableTiming";
     private static final String IMAGE_ERROR = "imageErr";
     private static final String ADD_ERROR = "addErr";
     private static LotService lotService = new LotServiceImpl();
 
+    /**
+     * Add a new lot and insert it into database.
+     * Upload lot image on the server.
+     * The lot is put up for auction immediately if added by administrator
+     * or waiting for confirmation if added by customer.
+     * <p>
+     * Checked situations:
+     * User is unable to add a lot (user have been banned);
+     * Invalid lot image extension;
+     * Invalid lot title, description, price or date;
+     * Exception during operation;
+     *
+     * @param request user's request
+     * @return <code>PageResponse</code> object containing two fields:
+     * ResponseType - REDIRECT if operation passed successfully and FORWARD in other case;
+     * String page - page for response:
+     * "/jsp/success.jsp" if operation passed successfully and current page with appropriate message
+     * in other case.
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setPage(returnPageWithQuery(request));
         try {
-            User user = (User) request.getSession().getAttribute(USER_SESSION);
+            User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+            if (!user.getAccess()) {
+                pageResponse.setPage(definePathToAccessDeniedPage(request));
+                pageResponse.setResponseType(ResponseType.REDIRECT);
+                return pageResponse;
+            }
             long userId = user.getUserId();
             String lotTitle = request.getParameter(LOT_TITLE);
             String lotPrice = request.getParameter(LOT_PRICE);
@@ -56,8 +79,7 @@ public class AddLotImpl implements Command {
             String lotCategory = request.getParameter(LOT_CATEGORY);
             boolean availability = false;
             String lotTimer = request.getParameter(AVAILABLE_TIMER);
-            if (Role.ADMIN == user.getRole()) {
-                lotTimer = request.getParameter(AVAILABLE_TIMER);
+            if (Role.ADMIN == user.getRole()) {  // accept lot for bids immediately
                 availability = true;
             }
             Part lotImage = request.getPart(LOT_IMAGE);

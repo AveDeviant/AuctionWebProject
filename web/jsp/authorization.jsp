@@ -25,6 +25,7 @@
 </c:if>
 
 <div class="container">
+    <div class="custom-opacity">
     <div class="row">
         <div class="col-sm-12">
             <h1 class="text-center strong text-info"><fmt:message key="login.page.title"/></h1>
@@ -57,13 +58,15 @@
                     <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>
                 </form>
                 <br>
-                <label class="error">*</label><fmt:message key="login.notice.necessary"/><br/>
+                <label class="error">*</label><label><fmt:message key="login.notice.necessary"/></label><br/>
                 <fmt:message key="login.firsttime.title"/>
                 <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=registration"><fmt:message
                         key="login.button.register"/></a>
             </div>
         </div>
     </div>
+    </div>
 </div>
+<c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </body>
 </html>

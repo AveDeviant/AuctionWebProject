@@ -20,7 +20,6 @@ public interface LotDao {
 
     Lot findLotById(long id) throws DAOException;
 
-    void withdrawLot(long lotId) throws DAOException;
 
     ArrayList<Lot> findAvailableLots() throws DAOException;
 

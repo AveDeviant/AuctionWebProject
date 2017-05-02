@@ -32,10 +32,11 @@ public class ShowLotImpl implements Command {
      * Showing lot and trader info.
      * Showing notification to user in case auction is owner of this lot.
      *
-     * @param request
+     * @param request user's request.
      * @return PageResponse - an object containing two fields:
-     * ResponseType   Forward
-     * String page - /jsp/lot.jsp
+     * ResponseType   FORWARD
+     * String page - "/jsp/lot.jsp"  in case lot with entered id available for the auction;
+     * "/jsp/404.jsp" in other case.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -48,7 +49,7 @@ public class ShowLotImpl implements Command {
                 pageResponse.setPage(PageNavigation.PAGE_NOT_FOUND);
                 return pageResponse;
             }
-            User trader = userService.findUserById(lot.getUserId());
+            User trader = userService.findTrader(lot.getId());
             userService.setTraderRating(trader);
             if (Role.ADMIN == trader.getRole()) {
                 request.setAttribute(AUCTION_OWNER, ResponseMessage.AUCTION_PROPERTY);

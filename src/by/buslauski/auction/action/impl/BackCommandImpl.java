@@ -15,12 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 public class BackCommandImpl implements Command {
 
     /**
-     * Handling client request.
+     * Return to previous page.
      *
-     * @param request
-     * @return An object containing two fields:
-     * ResponseType - response type (forward or redirect).
+     * @param request user's request
+     * @return <code>PageResponse</code> object containing two fields:
+     * ResponseType - REDIRECT.
      * String page - page for response.
+     * @see PageBrowser
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -28,7 +29,6 @@ public class BackCommandImpl implements Command {
         PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
         pageResponse.setResponseType(ResponseType.REDIRECT);
         String page = browser.getPreviousPage();
-        System.out.println(page);
         pageResponse.setPage(page);
         return pageResponse;
     }

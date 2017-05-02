@@ -10,8 +10,10 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.MessageService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.UserService;
+import by.buslauski.auction.service.impl.MessageServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
 
@@ -25,16 +27,18 @@ public class InitCommandImpl implements Command {
     private static final String AVAILABLE_LOTS = "lots";
     private static final String EMPTY_LIST = "emptyList";
     private static final String USER_BANNED = "banned";
+    private static MessageService messageService = new MessageServiceImpl();
 
 
     /**
      * Init command. Get available lots for bids from database and
      * displays it to main page. Displaying appropriate message in case the list is empty.
+     * Displaying appropriate message in case user have been banned.
      *
-     * @param request
+     * @param request user's request.
      * @return An object PageResponse containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response /jsp/main.jsp
+     * ResponseType - FORWARD.
+     * String page - page for response "/jsp/main.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -46,8 +50,17 @@ public class InitCommandImpl implements Command {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
             ArrayList<Lot> availableLots = lotService.getAvailableLots();
+            if (user != null) {
+                user = userService.findUserById(user.getUserId());  //update user info
+                user.setUserMessages(messageService.findMessages(user.getUserId()));
+                if (messageService.haveUnreadMessages(user.getUserId())) {  // check  new messages for user
+                    user.setUnreadMessages(true);
+                }
+                request.getSession().setAttribute(SessionAttributes.USER, user);
+            }
             if (user != null && user.getAccess()) {
                 userService.setWinner(user);
+                request.getSession().removeAttribute(USER_BANNED);
             }
             if (user != null && !user.getAccess()) {
                 request.getSession().setAttribute(USER_BANNED, ResponseMessage.USER_BANNED);

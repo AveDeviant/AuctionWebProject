@@ -23,6 +23,7 @@ public class GoToCommandImpl implements Command {
     private static final String FAQ_PAGE = "faq";
     private static final String MESSAGE_PAGE = "message";
     private static final String SUCCESS_PAGE ="success";
+    private static final String ACCESS_DENIED = "accessDenied";
 
     /**
      * Page navigation.
@@ -70,6 +71,9 @@ public class GoToCommandImpl implements Command {
                 return pageResponse;
             case SUCCESS_PAGE:
                 pageResponse.setPage(PageNavigation.SUCCESS_PAGE);
+                return pageResponse;
+            case ACCESS_DENIED:
+                pageResponse.setPage(PageNavigation.ACCESS_DENIED_PAGE);
                 return pageResponse;
             default:
                 pageResponse.setPage(PageNavigation.INDEX_PAGE);

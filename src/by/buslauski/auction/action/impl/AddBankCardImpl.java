@@ -22,21 +22,21 @@ public class AddBankCardImpl implements Command {
     private static final String PAYMENT_SYSTEM = "system";
     private static final String CARD_NUMBER = "number";
     private static final String BANK_CARD_ERROR = "bankErr";
-    private static BankCardValidator validator = new BankCardValidator();
 
     /**
      * Add user's bank card info into database.
      * Set created bank account to user.
-     *
+     * <p>
      * Checked situations:
      * Invalid input;
      * Entered bank card has already been registered by another user;
      * Exception during adding data into database;
      *
-     * @param request
+     * @param request user's request
      * @return PageResponse object containing two fields:
      * ResponseType
-     * String page - page for response (/jsp/private.jsp)
+     * String page - page for response "/jsp/private.jsp"
+     * @see BankCardValidator
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -50,7 +50,7 @@ public class AddBankCardImpl implements Command {
         BankServiceImpl bankService = new BankServiceImpl();
         BankCard bankCard = null;
         try {
-            if (validator.checkCardForValidNumber(cardNumber)) {
+            if (BankCardValidator.checkCardForValidNumber(cardNumber)) {
                 bankCard = bankService.addAccount(userId, paymentSystem, cardNumber);
                 if (bankCard == null) {
                     request.setAttribute(BANK_CARD_ERROR, ResponseMessage.NOT_UNIQUE_BANK_CARD);

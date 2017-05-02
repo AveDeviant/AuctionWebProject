@@ -25,10 +25,12 @@ public class GetLotsByCategoryImpl implements Command {
 
 
     /**
-     * @param request
-     * @return Array of two strings:
-     * array[0] - response type (forward or redirect)
-     * array[1] - page for response
+     * Showing lots with selected category;
+     *
+     * @param request user's request
+     * @return <code>PageResponse</code> object containing two fields:
+     * ResponseType - FORWARD
+     * String page - "/jsp/main.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

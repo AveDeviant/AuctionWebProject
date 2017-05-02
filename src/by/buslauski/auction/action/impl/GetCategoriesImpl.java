@@ -22,10 +22,8 @@ public class GetCategoriesImpl implements Command {
     /**
      * Return all lot categories from database.
      *
-     * @param request
-     * @return PageResponse object containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * @param request user's request
+     * @return null
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

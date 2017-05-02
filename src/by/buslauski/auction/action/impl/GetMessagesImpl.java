@@ -20,10 +20,10 @@ public class GetMessagesImpl implements Command {
     private static MessageService messageService = new MessageServiceImpl();
 
     /**
-     * @param request
-     * @return Array of two strings:
-     * array[0] - response type (forward or redirect)
-     * array[1] - page for response
+     * Gets user's messages from database.
+     *
+     * @param request user's request.
+     * @return null.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

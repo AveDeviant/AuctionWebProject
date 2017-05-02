@@ -24,11 +24,11 @@ public class AccessEditImpl implements Command {
     /**
      * Changing customer's access to bidding
      *
-     * @param request
+     * @param request user's request
      * @return PageResponse - An object containing two fields:
-     * ResponseType - redirect in case successful operation.
-     * forward - in case operation failed (an exception has been thrown)
-     * String page - page for response.
+     * ResponseType - REDIRECT in case operation passed successfully and
+     * FORWARD  in case operation failed (an exception has been thrown)
+     * String page - page for response (current page)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

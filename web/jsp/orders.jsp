@@ -18,6 +18,7 @@
 <c:import url="/fragments/header.jsp"/>
 
 <div class="container">
+    <div class="custom-opacity">
     <c:if test="${err!=null}">
         <fmt:message key="${err}"/>
     </c:if>
@@ -53,6 +54,7 @@
         </c:forEach>
         </tbody>
     </table>
+    </div>
 </div>
 </body>
 </html>
