@@ -22,7 +22,7 @@ public class AddCategoryImp implements Command {
     /**
      * Creating a new category and insert it into database.
      *
-     * @param request user's request
+     * @param request user's request.
      * @return An object containing two fields:
      * ResponseType - response type (forward or redirect)
      * String page - page for response

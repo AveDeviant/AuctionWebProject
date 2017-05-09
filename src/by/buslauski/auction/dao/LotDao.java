@@ -35,4 +35,6 @@ public interface LotDao {
     void deleteLot(long lotId) throws DAOException;
 
     void changeLotBiddingStatus(long lotId, boolean status) throws DAOException;
+
+    void extendBiddingPeriod(long lotId, String newDate) throws DAOException;
 }

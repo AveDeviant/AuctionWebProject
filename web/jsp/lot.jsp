@@ -16,17 +16,31 @@
 <head>
     <title>${lot.getTitle()}</title>
 </head>
-<body>
-<div class="container">
-    <div class="custom-opacity">
+<body onload="timeRemaining()">
+<input type="hidden" id="remainingTime" value="${lot.getDateAvailable().toString()}">
+<div class="custom-opacity">
+    <div class="container">
         <c:if test="${banned ne null}">
             <div class=" alert alert-danger alert-dismissable fade in">
                 <fmt:message key="user.banned.title"/></div>
         </c:if>
+        <c:if test="${betErr ne null}">
+            <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="${betErr}"/></div>
+        </c:if>
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="text-center">${lot.getTitle()}</h1>
-                <h4 class="text-center">ID: ${lot.getId()}</h4>
+                <h6 class="text-center">ID: ${lot.getId()}</h6>
+                <div class="col-sm-6">
+                    <h6 class="text-right"><span
+                            class="glyphicon glyphicon-eye-open"
+                            title="<fmt:message key="lot.followers"/>"></span> ${lot.getFollowersCount()}
+                    </h6>
+                </div>
+                <div class="col-sm-6">
+                    <h6 class="text-left" id="remaining"></h6>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -53,11 +67,7 @@
                                    pattern="^[1-9][0-9]*.[0-9]{2}"
                                    required title="<fmt:message key="bet.restrict"/> "
                                    placeholder="<fmt:message key="bet.restrict"/>">
-                            <c:if test="${betErr ne null}">
-                                <div class=" alert alert-danger alert-dismissable fade in">
-                                    <fmt:message key="${betErr}"/>
-                                </div>
-                            </c:if> <br/>
+                            <br/>
                             <button class="button-auction" type="submit" name="command" value="makeBet"><fmt:message
                                     key="lot.bet.button"/></button>
                             <input type="hidden" name="lotId" value="${lot.getId()}">
@@ -72,7 +82,8 @@
             <div class="col-sm-3">
                 <h5><fmt:message key="trader.ref"/></h5>
                 <h6>${trader.getAlias()}</h6>
-                <a href="${pageContext.request.contextPath}/Auction?command=traderLots&traderId=${trader.getUserId()}">другие лоты продавца</a>
+                <a href="${pageContext.request.contextPath}/Auction?command=traderLots&traderId=${trader.getUserId()}">другие
+                    лоты продавца</a>
                 <h5><fmt:message key="trader.rating"/></h5>
                 <c:choose>
                     <c:when test="${trader.getUserRating() eq 0.0}">
@@ -109,8 +120,9 @@
             </div>
         </div>
     </div>
+    <c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </div>
-<script>
+<script async="async">
     function showBets() {
         var bets = document.getElementById("bets");
         if (bets.style.display === "none") {
@@ -119,6 +131,33 @@
         else {
             bets.style.display = "none";
         }
+    }
+    function timeRemaining() {
+        var remaining = document.getElementById("remaining");
+        var date = document.getElementById("remainingTime").value;
+        var dateAsArray = date.toString().split("-");
+        lotYear = dateAsArray[0];
+        lotMonth = dateAsArray[1];
+        lotDay = dateAsArray[2];
+        var lotDate = Date.parse(lotMonth + "/" + lotDay + "/" + lotYear);
+        var now = new Date();
+        var sec = (lotDate - now) / 1000;
+        if (sec > 0) {
+            var days = Math.floor(sec / (60 * 60 * 24));
+            days = (days < 10) ? "0" + days : days;
+            var hours = 24 - now.getHours() - 1;
+            hours = (hours < 10) ? "0" + hours : hours;
+            var minutes = 60 - now.getMinutes() - 1;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            var seconds = 60 - now.getSeconds() - 1;
+            seconds= (seconds < 10) ? "0" + seconds : seconds;
+            remaining.innerHTML = '<fmt:message key="timer.remaining"/>' + " " + '<fmt:message key="timer.days"/>' + " " + days
+                + " " + '<fmt:message key="timer.hours"/>' + " " + hours + " " + '<fmt:message key="timer.minutes"/>' + " "
+                + minutes + " " + '<fmt:message key="timer.seconds"/>' + " " + seconds;
+        } else {
+            remaining.innerHTML = '<fmt:message key="timer.over"/>';
+        }
+        window.setTimeout("timeRemaining()", 1000)
     }
 </script>
 </body>

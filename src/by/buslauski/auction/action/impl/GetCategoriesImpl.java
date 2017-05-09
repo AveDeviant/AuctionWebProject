@@ -33,7 +33,6 @@ public class GetCategoriesImpl implements Command {
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e + " Error during getting categories from database.");
         }
-        PageResponse pageResponse = null;
-        return pageResponse;
+        return null;
     }
 }

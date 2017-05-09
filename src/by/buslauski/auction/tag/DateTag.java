@@ -37,7 +37,6 @@ public class DateTag extends TagSupport {
             if (ENGLISH_LOCALIZATION.equalsIgnoreCase(locale)) {
                 dateFormat = new SimpleDateFormat(ENGLISH_FORMAT, Locale.ENGLISH);
             }
-
             Date date = java.sql.Date.valueOf(lot.getDateAvailable());
             String dateAsString = dateFormat.format(date);
             JspWriter writer = pageContext.getOut();

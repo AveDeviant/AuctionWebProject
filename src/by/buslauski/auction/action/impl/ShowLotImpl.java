@@ -33,8 +33,8 @@ public class ShowLotImpl implements Command {
      * Showing notification to user in case auction is owner of this lot.
      *
      * @param request user's request.
-     * @return PageResponse - an object containing two fields:
-     * ResponseType   FORWARD
+     * @return <code>PageResponse</code> - an object containing two fields:
+     * ResponseType  - FORWARD
      * String page - "/jsp/lot.jsp"  in case lot with entered id available for the auction;
      * "/jsp/404.jsp" in other case.
      */

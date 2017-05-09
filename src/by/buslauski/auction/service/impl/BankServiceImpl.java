@@ -18,8 +18,6 @@ import by.buslauski.auction.service.MessageService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.util.AmountGenerator;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
@@ -37,7 +35,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
         daoHelper.initDao(bankAccountDao);
         try {
             BankCard bankCard = null;
-            if (checkNumberForUnique(cardNumber)) {
+            if (checkNumberForUniqueness(cardNumber)) {
                 BigDecimal moneyAmount = AmountGenerator.generateMoneyAmount();
                 bankAccountDao.addCard(userId, system, cardNumber, moneyAmount);
                 bankCard = bankAccountDao.findCardByNumber(cardNumber);
@@ -87,7 +85,7 @@ public class BankServiceImpl extends AbstractService implements BankService {
             daoHelper.beginTransaction(bankAccountDao, lotDao, orderDao);
             User dealer = userService.findTrader(bet.getLotId());
             if (dealer.getRole() != Role.ADMIN) {      //if auction doesn't own the lot
-                messageService.createNotificationForTrader(dealer, bet);  // create notification for user, who offered lot
+                messageService.createMessageForTraderAboutPurchaser(dealer, bet);  // create notification for user, who offered lot
                 orderDao.addOrder(customerId, dealer.getUserId(), lotId, moneyAmount, true); // creating order with SUCCESS status
                 lotDao.changeLotBiddingStatus(lotId, false);
                 daoHelper.commit();
@@ -135,12 +133,10 @@ public class BankServiceImpl extends AbstractService implements BankService {
      * @return true - database doesn't store checking number
      * false - database store checking number
      */
-    private boolean checkNumberForUnique(String cardNumber) throws ServiceException {
+    private boolean checkNumberForUniqueness(String cardNumber) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
-
         BankAccountDao bankAccountDao = new BankAccountDaoImpl();
         daoHelper.initDao(bankAccountDao);
-
         try {
             return bankAccountDao.findCardByNumber(cardNumber) == null;
         } catch (DAOException e) {

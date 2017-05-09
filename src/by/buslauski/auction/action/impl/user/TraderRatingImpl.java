@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl;
+package by.buslauski.auction.action.impl.user;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
@@ -23,12 +23,13 @@ public class TraderRatingImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * Updating trader rating by customer who confirm deal.
+     * Updating trader rating by customer who confirm the deal.
      *
-     * @param request user's request
+     * @param request user's request.
+     *
      * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * ResponseType - REDIRECT in case operation passed successfully and FORWARD in other case;
+     * String page - page for response (current page).
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

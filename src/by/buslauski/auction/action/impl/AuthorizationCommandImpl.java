@@ -56,7 +56,7 @@ public class AuthorizationCommandImpl implements Command {
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
             user.setBets(betService.getUserBets(user));
-            user.setUserMessages(messageService.findMessages(user.getUserId()));
+            user.setUserMessages(messageService.findUserMessages(user.getUserId()));
             if (user.getAccess()) {
                 userService.setWinner(user); //check for winning bets made by this customer
             } else {

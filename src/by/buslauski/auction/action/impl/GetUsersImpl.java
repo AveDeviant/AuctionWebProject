@@ -21,12 +21,12 @@ public class GetUsersImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * Get customer list from database
+     * Get customer list from database.
      *
-     * @param request user's request
-     * @return An object PageResponse containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * @param request user's request.
+     * @return An object <code>PageResponse</code> containing two fields:
+     * ResponseType - response type FORWARD
+     * String page - page for response "/jsp/edit_user.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

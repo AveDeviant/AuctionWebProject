@@ -21,5 +21,6 @@ public class PageNavigation {
     public static final String MESSAGE_PAGE = "/jsp/messages.jsp";
     public static final String SUCCESS_PAGE = "/jsp/success.jsp";
     public static final String ACCESS_DENIED_PAGE = "/jsp/denied.jsp";
-    public static final String TRADER_LOTS = "/jsp/traderLots.jsp";
+    public static final String TRADER_LOTS = "/jsp/trader_lots.jsp";
+    public static final String USER_LOTS="/jsp/user_lots.jsp";
 }

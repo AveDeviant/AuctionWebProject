@@ -1,7 +1,8 @@
-package by.buslauski.auction.action.impl;
+package by.buslauski.auction.action.impl.user;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
+import by.buslauski.auction.exception.InvalidNumberValueException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -47,8 +48,12 @@ public class BetCommandImpl implements Command {
      * Insufficient funds to confirm bet;
      * Exception during operation;
      *
-     * @param request user's request
-     * @return
+     * @param request user's request.
+     * @return <code>PageResponse</code> object containing two fields:
+     * ResponseType - response type:
+     * REDIRECT - operation passed successfully.
+     * FORWARD - detecting errors during operations.
+     * String page - current page or "/jsp/denied.jsp" in case lot became unable for the auction.
      * @see BetValidator
      */
     @Override
@@ -58,16 +63,15 @@ public class BetCommandImpl implements Command {
         User user = (User) session.getAttribute(SessionAttributes.USER);
         long lotId = Long.valueOf(request.getParameter(LOT_ID_PARAM));
         pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setResponseType(ResponseType.FORWARD);
         if (user == null) {
             request.setAttribute(AUTHORIZATION_ERROR, ResponseMessage.BET_AUTHORIZATION_ERROR);
-            pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.AUTHORIZATION_PAGE);
             return pageResponse;
         }
         long userId = user.getUserId();
         if (user.getBankCard() == null) {
             request.setAttribute(BET_ERROR, ResponseMessage.BET_BANK_CARD_ERROR);
-            pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.PRIVATE_PAGE);
             return pageResponse;
         }
@@ -78,28 +82,23 @@ public class BetCommandImpl implements Command {
                 if (lot != null) {
                     if (lot.getUserId() == user.getUserId()) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_ON_OWN_LOT);
-                        pageResponse.setResponseType(ResponseType.FORWARD);
                         return pageResponse;
                     }
                     if (!BetValidator.checkPriceForValid(request.getParameter(PRICE_PARAM))) {
                         request.setAttribute(BET_ERROR, ResponseMessage.INVALID_VALUE);
-                        pageResponse.setResponseType(ResponseType.FORWARD);
                         return pageResponse;
                     }
                     BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
                     if (!betService.checkBetValue(lot, newPrice)) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
-                        pageResponse.setResponseType(ResponseType.FORWARD);
                         return pageResponse;
                     }
                     if (!bankService.checkIsEnoughBalance(userId, newPrice)) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_BANK_BALANCE_ERROR);
-                        pageResponse.setResponseType(ResponseType.FORWARD);
                         return pageResponse;
                     }
                     if (!betService.addBet(userId, lotId, newPrice)) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
-                        pageResponse.setResponseType(ResponseType.FORWARD);
                         return pageResponse;
                     }
                     user.setBets(betService.getUserBets(user));
@@ -117,6 +116,9 @@ public class BetCommandImpl implements Command {
 
         } catch (ServiceException e) {
             request.setAttribute(BET_ERROR, ResponseMessage.OPERATION_ERROR);
+            pageResponse.setResponseType(ResponseType.FORWARD);
+        } catch (InvalidNumberValueException e) {
+            request.setAttribute(BET_ERROR, ResponseMessage.INVALID_BET_VALUE);
             pageResponse.setResponseType(ResponseType.FORWARD);
         }
         return pageResponse;

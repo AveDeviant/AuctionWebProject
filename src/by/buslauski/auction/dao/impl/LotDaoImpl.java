@@ -36,6 +36,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao {
             "current_price=? WHERE id_lot=?";
     private static final String SQL_DELETE_LOT = "DELETE FROM lot WHERE id_lot=?";
     private static final String SQL_UPDATE_LOT_AVAILABILITY = "UPDATE lot SET available=? WHERE id_lot=?";
+    private static final String SQL_UPDATE_BIDDING_PERIOD = "UPDATE lot SET date_available=DATE(?) WHERE id_lot=?";
 
 
     @Override
@@ -192,7 +193,17 @@ public class LotDaoImpl extends AbstractDao implements LotDao {
             preparedStatement.setLong(2, lotId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void extendBiddingPeriod(long lotId, String newDate) throws DAOException {
+        try(PreparedStatement preparedStatement =connection.prepareStatement(SQL_UPDATE_BIDDING_PERIOD) ) {
+            preparedStatement.setString(1,newDate);
+            preparedStatement.setLong(2,lotId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
             throw new DAOException(e);
         }
     }

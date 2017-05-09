@@ -17,4 +17,5 @@ public interface MessageDao {
     long countUserUnreadMessages(long userId) throws DAOException;
 
     void changeMessageStatus(long userId) throws DAOException;
+
 }

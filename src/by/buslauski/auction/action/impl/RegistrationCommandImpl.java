@@ -38,24 +38,20 @@ public class RegistrationCommandImpl implements Command {
         String passwordRepeat = request.getParameter(REPEAT_PASSWORD);
         String email = request.getParameter(MAIL);
         String alias = request.getParameter(USERNAME);
+        pageResponse.setResponseType(ResponseType.FORWARD);
+        pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
         if (!password.equals(passwordRepeat)) {
             request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.PASSWORD_NOT_EQUAL);
-            pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
             return pageResponse;
         }
         if (!UserValidator.checkLoginPasswordAlias(login, password, alias)) {
             request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.INVALID_VALUE);
-            pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
             return pageResponse;
         }
         try {
             user = userService.registerUser(login, password, alias, email);
             if (user == null) {
                 request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.NOT_UNIQUE_NAME_EMAIL);
-                pageResponse.setResponseType(ResponseType.FORWARD);
-                pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
                 return pageResponse;
             }
             HttpSession session = request.getSession();

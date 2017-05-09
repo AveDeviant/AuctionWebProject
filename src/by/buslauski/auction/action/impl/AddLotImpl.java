@@ -2,6 +2,8 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.exception.InvalidInputValueException;
+import by.buslauski.auction.exception.InvalidNumberValueException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -46,7 +48,7 @@ public class AddLotImpl implements Command {
      * Add a new lot and insert it into database.
      * Upload lot image on the server.
      * The lot is put up for auction immediately if added by administrator
-     * or waiting for confirmation if added by customer.
+     * or waits for confirmation if added by customer.
      * <p>
      * Checked situations:
      * User is unable to add a lot (user have been banned);
@@ -58,8 +60,10 @@ public class AddLotImpl implements Command {
      * @return <code>PageResponse</code> object containing two fields:
      * ResponseType - REDIRECT if operation passed successfully and FORWARD in other case;
      * String page - page for response:
-     * "/jsp/success.jsp" if operation passed successfully and current page with appropriate message
+     * "/jsp/success.jsp" if operation passed successfully and current page with the appropriate message
      * in other case.
+     * @see LotValidator
+     * @see BetValidator
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -72,16 +76,12 @@ public class AddLotImpl implements Command {
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 return pageResponse;
             }
-            long userId = user.getUserId();
             String lotTitle = request.getParameter(LOT_TITLE);
             String lotPrice = request.getParameter(LOT_PRICE);
             String lotDescription = request.getParameter(LOT_DESCRIPTION);
             String lotCategory = request.getParameter(LOT_CATEGORY);
-            boolean availability = false;
             String lotTimer = request.getParameter(AVAILABLE_TIMER);
-            if (Role.ADMIN == user.getRole()) {  // accept lot for bids immediately
-                availability = true;
-            }
+            System.out.println(lotTimer);
             Part lotImage = request.getPart(LOT_IMAGE);
             String fileName = lotImage.getSubmittedFileName();
             if (!fileName.isEmpty()) {
@@ -92,11 +92,11 @@ public class AddLotImpl implements Command {
                     return pageResponse;
                 }
             }
-            String uploadPath = request.getServletContext().getRealPath(UPLOAD);
-            FileUploadingManager fileUploadingManager = new FileUploadingManager();
-            String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);
             if (LotValidator.checkLot(lotTitle, lotDescription, lotTimer) && BetValidator.checkPriceForValid(lotPrice)) {
-                lotService.addLot(lotTitle, userId, lotDescription, image, new BigDecimal(lotPrice), availability,
+                String uploadPath = request.getServletContext().getRealPath(UPLOAD);
+                FileUploadingManager fileUploadingManager = new FileUploadingManager();
+                String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);
+                lotService.addLot(user, lotTitle, lotDescription, image, new BigDecimal(lotPrice),
                         lotCategory, lotTimer);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
@@ -112,8 +112,13 @@ public class AddLotImpl implements Command {
             request.setAttribute(ADD_ERROR, ResponseMessage.OPERATION_ERROR);
         } catch (ServletException | IOException e) {
             LOGGER.log(Level.ERROR, e + " Exception during uploading file");
+        } catch (InvalidNumberValueException e) {
+            pageResponse.setResponseType(ResponseType.FORWARD);
+            request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_BET_VALUE);
+        } catch (InvalidInputValueException e) {
+            pageResponse.setResponseType(ResponseType.FORWARD);
+            request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_DATE_VALUE);
         }
         return pageResponse;
     }
-
 }

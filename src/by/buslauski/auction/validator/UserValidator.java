@@ -13,7 +13,7 @@ public class UserValidator {
     private static final String ALIAS_REGEXP = "[\\dA-Za-z А-Яа-я-,. ]{6,32}";
     private static final String NAME_REGEXP = "[A-Za-z А-Яа-я-,. ]{2,}";
     private static final String CITY_REGEXP = "[\\w,-.А-Яа-я ]{5,}";
-    private static final String ADDRESS_REGEXP = "[\\w\\d,-.А-Яа-я \\\\/]{5,}";
+    private static final String ADDRESS_REGEXP = "[\\w\\d,-.А-Яа-я№ \\\\/]{5,}";
     private static final String PHONE_REGEXP = "[\\d+()-]{3,18}";
 
     public static boolean checkLoginPasswordAlias(String login, String password, String alias) {

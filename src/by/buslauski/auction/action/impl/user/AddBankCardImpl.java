@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl;
+package by.buslauski.auction.action.impl.user;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -25,7 +25,7 @@ public class AddBankCardImpl implements Command {
 
     /**
      * Add user's bank card info into database.
-     * Set created bank account to user.
+     * Setting created bank account to current user.
      * <p>
      * Checked situations:
      * Invalid input;
@@ -34,8 +34,8 @@ public class AddBankCardImpl implements Command {
      *
      * @param request user's request
      * @return PageResponse object containing two fields:
-     * ResponseType
-     * String page - page for response "/jsp/private.jsp"
+     * ResponseType - REDIRECT if operation passed successfully and FORWARD in other case;
+     * String page - current page.
      * @see BankCardValidator
      */
     @Override

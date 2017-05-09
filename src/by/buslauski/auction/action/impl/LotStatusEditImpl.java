@@ -23,10 +23,11 @@ public class LotStatusEditImpl implements Command {
     /**
      * Changing lot bidding status. Withdraw or accept lot for bids.
      *
-     * @param request user's request
-     * @return A PageResponse object containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * @param request user's request.
+     * @return A <code>PageResponse</code> object containing two fields:
+     * ResponseType - response type:
+     * REDIRECT if operation passed successfully and FORWARD in case operation failed.
+     * String page - current page.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

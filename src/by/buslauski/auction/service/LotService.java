@@ -1,6 +1,7 @@
 package by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Lot;
+import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
 
 import java.math.BigDecimal;
@@ -10,8 +11,8 @@ import java.util.ArrayList;
  * Created by Acer on 14.04.2017.
  */
 public interface LotService {
-    void addLot(String title, long userId, String description,
-                String image, BigDecimal price, boolean availability,
+    void addLot(User user, String title, String description,
+                String image, BigDecimal price,
                 String category, String availableDate) throws ServiceException;
 
     ArrayList<Lot> getAllLots() throws ServiceException;
@@ -40,4 +41,8 @@ public interface LotService {
     void changeLotBiddingStatus(long lotId, boolean status) throws ServiceException;
 
     ArrayList<Lot> findTraderLots(long traderId) throws ServiceException;
+
+    ArrayList<Lot> findApprovedUserLots(long userId) throws ServiceException;
+
+    boolean extendBiddingPeriod(long lotId, int days) throws ServiceException;
 }

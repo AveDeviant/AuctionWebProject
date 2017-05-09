@@ -28,7 +28,13 @@ public class InitCommandImpl implements Command {
     private static final String EMPTY_LIST = "emptyList";
     private static final String USER_BANNED = "banned";
     private static MessageService messageService = new MessageServiceImpl();
-
+    private static UserService userService = new UserServiceImpl();
+    private static LotService lotService = new LotServiceImpl();
+/**
+ * TODO:
+ * проверить добавление\апдейт лотов.
+ * переименовать страницы лотов торговца\пользователя
+ */
 
     /**
      * Init command. Get available lots for bids from database and
@@ -42,8 +48,6 @@ public class InitCommandImpl implements Command {
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
-        LotService lotService = new LotServiceImpl();
-        UserService userService = new UserServiceImpl();
         PageResponse pageResponse = new PageResponse();
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.MAIN_PAGE);
@@ -52,7 +56,7 @@ public class InitCommandImpl implements Command {
             ArrayList<Lot> availableLots = lotService.getAvailableLots();
             if (user != null) {
                 user = userService.findUserById(user.getUserId());  //update user info
-                user.setUserMessages(messageService.findMessages(user.getUserId()));
+                user.setUserMessages(messageService.findUserMessages(user.getUserId()));
                 if (messageService.haveUnreadMessages(user.getUserId())) {  // check  new messages for user
                     user.setUnreadMessages(true);
                 }

@@ -20,12 +20,13 @@ public class DeleteLotImpl implements Command {
 
     /**
      * Delete lot from database.
-     * Displaying appropriate message in case any bet or order have already been made for this lot.
+     * Displaying appropriate message in case any bet or
+     * order have already been made for this lot.
      *
      * @param request user's request
      * @return <code>PageResponse</code> object containing two fields:
      * ResponseType - response type:
-     * REDIRECT - in case operation passed successfully;
+     * REDIRECT - operation passed successfully;
      * FORWARD - exception during operation.
      * String page - current page.
      */

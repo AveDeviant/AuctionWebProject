@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl;
+package by.buslauski.auction.action.impl.user;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
@@ -27,8 +27,12 @@ public class RejectOrderImpl implements Command {
      * Reset auction results for lot (deleting all bets made on this lot).
      * Return lot to bids.
      *
-     * @param request user's request
-     * @return
+     * @param request user's request.
+     * @return <code>PageResponse</code> object containing rwo fields:
+     * ResponseType - REDIRECT in case operation passed successfully and the auction results
+     * were cancelled and FORWARD in other case;
+     * String page - page for response - "index.jsp" if operation passed successfully and
+     * current page with appropriate message in other case.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

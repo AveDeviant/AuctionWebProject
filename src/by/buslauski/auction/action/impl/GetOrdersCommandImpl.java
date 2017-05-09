@@ -3,6 +3,9 @@ package by.buslauski.auction.action.impl;
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.ResponseMessage;
+import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.entity.Role;
+import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Order;
@@ -32,6 +35,12 @@ public class GetOrdersCommandImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
+        User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        if (currentUser == null || Role.ADMIN != currentUser.getRole()) {
+            pageResponse.setResponseType(ResponseType.FORWARD);
+            pageResponse.setPage(PageNavigation.PAGE_NOT_FOUND);
+            return pageResponse;
+        }
         try {
             ArrayList<Order> orders = orderService.getAllOrders();
             request.setAttribute(ORDERS, orders);

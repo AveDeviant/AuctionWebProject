@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl;
+package by.buslauski.auction.action.impl.user;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by Acer on 24.03.2017.
  */
-public class OrderCommandImpl implements Command {
+public class OrderPageImpl implements Command {
     private static final String LOT_ATTRIBUTE = "lot";
     private static final String AUCTION_OWNER = "auctionOwner";
     private static UserService userService = new UserServiceImpl();

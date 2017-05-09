@@ -33,7 +33,7 @@ public class GetLotsByTraderImpl implements Command {
      * @param request user's request.
      * @return <code>PageResponse</code> object containing two fields:
      * ResponseType - response type FORWARD.
-     * String page - page for response "/jsp/traderLots.jsp".
+     * String page - page for response "/jsp/trader_lots.jsp".
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -44,6 +44,10 @@ public class GetLotsByTraderImpl implements Command {
         try {
             ArrayList<Lot> traderLots = lotService.findTraderLots(traderId);
             User trader = userService.findUserById(traderId);
+            if (trader == null) {
+                pageResponse.setPage(PageNavigation.PAGE_NOT_FOUND);
+                return pageResponse;
+            }
             userService.setTraderRating(trader);
             request.setAttribute(SessionAttributes.TRADER, trader);
             request.setAttribute(TRADER_LOTS, traderLots);

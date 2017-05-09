@@ -18,4 +18,6 @@ public interface BetDao {
     ArrayList<Bet> getUserBets(long userId) throws DAOException;
 
     void resetBets(long lotId) throws DAOException;
+
+    int countLotFollowers(long lotId) throws DAOException;
 }

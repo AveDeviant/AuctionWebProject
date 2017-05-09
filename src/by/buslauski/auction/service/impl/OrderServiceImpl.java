@@ -21,12 +21,12 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
 
     @Override
     public ArrayList<Order> getAllOrders() throws ServiceException {
-        ArrayList<Order> orders = null;
+        ArrayList<Order> orders = new ArrayList<>();
         DaoHelper daoHelper = new DaoHelper();
         try {
             OrderDao orderDao = new OrderDaoImpl();
             daoHelper.initDao(orderDao);
-            orders = orderDao.getAllOrders();
+            orders.addAll(orderDao.getAllOrders());
         } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e);
             throw new ServiceException(e);

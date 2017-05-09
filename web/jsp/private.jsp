@@ -16,8 +16,8 @@
 </head>
 <body>
 <c:import url="${pageContext.request.contextPath}/fragments/header.jsp"/>
-<div class="container">
-    <div class="custom-opacity">
+<div class="custom-opacity">
+    <div class="container">
         <c:if test="${user eq null or user.getRole().getValue()!='customer'}">
             <c:redirect url="/Controller"/>
         </c:if>
@@ -29,12 +29,17 @@
                 <fmt:message key="${error}"/>
             </div>
         </c:if>
+        <c:if test="${bankErr !=null}">
+            <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="${bankErr}"/>
+            </div>
+        </c:if>
         <div class="row">
             <div class="col-sm-6">
                 <c:choose>
                     <c:when test="${!bets.isEmpty()}">
                         <div class="col-sm-12">
-                            <h3 class="text-center"><fmt:message key="private.page.bets.title"/></h3>
+                            <h4 class="text-center"><fmt:message key="private.page.bets.title"/></h4>
                         </div>
                         <div class="help-block"><fmt:message key="private.page.bets.notice"/></div>
                         <table class="table">
@@ -62,12 +67,13 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
-                <h3 class="text-center"><fmt:message key="private.page.orders"/></h3>
+                <h4 class="text-center"><fmt:message key="private.page.orders"/></h4>
                 <table class="table">
                     <thead>
                     <tr>
                         <th><fmt:message key="private.page.bets.table.bet"/></th>
                         <th><fmt:message key="private.page.bets.table.bet"/></th>
+                        <th><fmt:message key="purchaser.ref"/></th>
                         <th><fmt:message key="trader.ref"/></th>
                         <th><fmt:message key="private.page.bets.table.date"/></th>
                         <th><fmt:message key="trader.rating"/></th>
@@ -78,21 +84,25 @@
                         <tr>
                             <td><c:out value="${order.getLotTitle()}"/></td>
                             <td><c:out value="${order.getPayment()}"/></td>
+                            <td><c:out value="${order.getCostumerName()}"/></td>
                             <td><c:out value="${order.getTraderUsername()}"/></td>
                             <td><c:out value="${order.getDateTime()}"/></td>
                             <td>
-                                <form method="post" action="${pageContext.request.contextPath}/Auction">
-                                    <select name="rating">
-                                        <c:forEach var="mark" items="${rating}">
-                                            <option value=${mark}>${mark}</option>
-                                        </c:forEach>
-                                    </select>
-                                    <button type="submit" class="user-operations"><fmt:message key="faq.form.send"/></button>
-                                    <input type="hidden" name="command" value="updateRating">
-                                    <input type="hidden" name="traderId" value="${order.getTraderId()}">
-                                    <input type="hidden" name="jspPath"
-                                           value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-                                </form>
+                                <c:if test="${user.getUserId() != order.getTraderId()}">
+                                    <form method="post" action="${pageContext.request.contextPath}/Auction">
+                                        <select name="rating">
+                                            <c:forEach var="mark" items="${rating}">
+                                                <option value=${mark}>${mark}</option>
+                                            </c:forEach>
+                                        </select>
+                                        <button type="submit" class="user-operations"><fmt:message
+                                                key="faq.form.send"/></button>
+                                        <input type="hidden" name="command" value="updateRating">
+                                        <input type="hidden" name="traderId" value="${order.getTraderId()}">
+                                        <input type="hidden" name="jspPath"
+                                               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                                    </form>
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>
@@ -102,10 +112,10 @@
             <div class="col-sm-4">
                 <c:choose>
                     <c:when test="${user.getBankCard() eq null }">
-                        <h3><fmt:message key="bankaccount.registration.notice"/>
+                        <h4><fmt:message key="bankaccount.registration.notice"/>
                             <a href="#" onclick="showCardForm()"><fmt:message
                                     key="register.page.title"/></a>
-                        </h3>
+                        </h4>
                         <div id="cardForm" style="display: none;">
                             <form action="${pageContext.request.contextPath}/Auction" method="post">
                                 <input type="radio" name="system" value="Visa" checked><span>Visa</span>
@@ -121,11 +131,6 @@
                                        value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
 
                             </form>
-                            <label class="alert-danger">
-                                <c:if test="${bankErr !=null}">
-                                    <fmt:message key="${bankErr}"/>
-                                </c:if>
-                            </label>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -134,20 +139,30 @@
                     </c:otherwise>
                 </c:choose>
                 <div class="row">
-                    <h3 class="text-center"><a
+                    <h4 class="text-center"><a
+                            href="${pageContext.request.contextPath}/Auction?command=userLots"><fmt:message
+                            key="admin.lot.edit"/> </a>
+                    </h4>
+                </div>
+                <div class="row">
+                    <h4 class="text-center"><a
                             href="${pageContext.request.contextPath}/Auction?command=goTo&page=message"><fmt:message
                             key="messages.page.reference"/> </a>
-                    </h3>
+                    </h4>
                 </div>
             </div>
-            <div class="col-sm-2">
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
                 <div class="text-center">
-                    <form name="logout" action="${pageContext.request.contextPath}/Auction" method="post">
-                        <button id="logout" type="submit" name="button"><fmt:message
-                                key="private.button.logout"/></button>
-                        <input type="hidden" name="command" value="logout">
-                        <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>
-                    </form>
+                    <div class="text-center">
+                        <form name="logout" action="${pageContext.request.contextPath}/Auction" method="post">
+                            <button id="logout" type="submit" name="button"><fmt:message
+                                    key="private.button.logout"/></button>
+                            <input type="hidden" name="command" value="logout">
+                            <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

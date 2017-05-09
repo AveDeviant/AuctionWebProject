@@ -22,6 +22,7 @@ public class Lot {
     private LocalDate dateAvailable;
     private BigDecimal currentPrice;
     private ArrayList<Bet> bets;
+    private int followersCount;
 
     public Lot(long id, long userId, String title, String description, String image, int categoryId, BigDecimal price,
                boolean availability, LocalDate dateAvailable, BigDecimal currentPrice, String category) {
@@ -133,6 +134,14 @@ public class Lot {
 
     public String getCategory() {
         return category;
+    }
+
+    public void setFollowersCount(int followersCount) {
+        this.followersCount = followersCount;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
     }
 
     @Override

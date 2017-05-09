@@ -1,6 +1,7 @@
 package by.buslauski.auction.action;
 
 import by.buslauski.auction.action.impl.*;
+import by.buslauski.auction.action.impl.user.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,6 +38,8 @@ public class CommandFactory {
     private static final String TRADER_RATING = "updateRating";
     private static final String BACK_BUTTON = "back";
     private static final String TRADER_LOTS = "traderLots";
+    private static final String USER_LOTS = "userLots";
+    private static final String EXTEND_PERIOD = "extendPeriod";
 
     public Command getCurrentCommand(HttpServletRequest request) {
         String command = request.getParameter(COMMAND_PARAM);
@@ -63,9 +66,9 @@ public class CommandFactory {
             case MAKE_BET:
                 return new BetCommandImpl();
             case ORDER_LOT:
-                return new OrderCommandImpl();
+                return new OrderPageImpl();
             case ORDER_LOT_BUY:
-                return new BuyCommandImpl();
+                return new BuyLotImpl();
             case ORDER_LOT_REJECT:
                 return new RejectOrderImpl();
             case EDIT_LOT:
@@ -100,6 +103,10 @@ public class CommandFactory {
                 return new BackCommandImpl();
             case TRADER_LOTS:
                 return new GetLotsByTraderImpl();
+            case USER_LOTS:
+                return new GetUserLotsImpl();
+            case EXTEND_PERIOD:
+                return new ExtendBiddingPeriodImpl();
             default:
                 return new InitCommandImpl();
         }

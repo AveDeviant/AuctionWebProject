@@ -6,6 +6,8 @@ import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
+import by.buslauski.auction.exception.InvalidInputValueException;
+import by.buslauski.auction.exception.InvalidNumberValueException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Lot;
@@ -44,12 +46,14 @@ public class LotEditImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Editing lot title, starting price, image, availability for bids, timing, lot category.
+     * Editing lot title, starting price, image, availability for bids,
+     * timing, lot category.
      *
-     * @param request user's request
-     * @return A PageResponse object containing two fields:
-     * ResponseType - type of response (forward or redirect)
-     * String page - page for response
+     * @param request user's request.
+     * @return <code>PageResponse</code> object containing two fields:
+     * ResponseType - REDIRECT in case operation passed successfully and FORWARD
+     * in other case.
+     * String page - page for response (current page).
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -60,13 +64,13 @@ public class LotEditImpl implements Command {
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
             return pageResponse;
         }
+        pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
+        pageResponse.setResponseType(ResponseType.FORWARD);
         long id = Long.valueOf(request.getParameter(LOT_ID));
         try {
             Lot lot = lotService.getLotById(id);
             if (lot == null) {
                 request.setAttribute(EDIT_ERROR, ResponseMessage.LOT_ID_DOESNT_EXISTS);
-                pageResponse.setResponseType(ResponseType.FORWARD);
-                pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
                 return pageResponse;
             }
             Part lotImage = request.getPart(LOT_IMAGE);
@@ -75,7 +79,6 @@ public class LotEditImpl implements Command {
                 String type = request.getServletContext().getMimeType(fileName);
                 if (!type.startsWith(IMAGE_MIME_TYPE)) {
                     request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
                     pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
                     return pageResponse;
                 }
@@ -99,9 +102,14 @@ public class LotEditImpl implements Command {
         } catch (ServiceException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
         } catch (ServletException | IOException e) {
             LOGGER.log(Level.ERROR, e + "Exception during uploading image");
+        } catch (InvalidNumberValueException e) {
+            request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_VALUE);
+            pageResponse.setResponseType(ResponseType.FORWARD);
+        } catch (InvalidInputValueException e) {
+            request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_DATE_VALUE);
+            pageResponse.setResponseType(ResponseType.FORWARD);
         }
         return pageResponse;
     }

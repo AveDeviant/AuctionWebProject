@@ -23,7 +23,7 @@ public class GetLotsImpl implements Command {
     /**
      * Get all lots from database.
      *
-     * @param request user's request
+     * @param request user's request.
      * @return null.
      */
     @Override
@@ -38,7 +38,6 @@ public class GetLotsImpl implements Command {
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e + " Error during getting lots from database");
         }
-        PageResponse pageResponse = null;
-        return pageResponse;
+        return null;
     }
 }

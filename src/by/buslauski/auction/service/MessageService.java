@@ -13,11 +13,11 @@ import java.util.ArrayList;
 public interface MessageService {
     void addMessage(String theme, String text, long senderId, long recipientId) throws ServiceException;
 
-    ArrayList<UserMessage> findMessages(long userId) throws ServiceException;
+    ArrayList<UserMessage> findUserMessages(long userId) throws ServiceException;
 
     boolean haveUnreadMessages(long userId) throws ServiceException;
 
     void changeMessageStatus(long userId) throws ServiceException;
 
-    void createNotificationForTrader(User dealer, Bet bet) throws ServiceException;
+    void createMessageForTraderAboutPurchaser(User dealer, Bet bet) throws ServiceException;
 }

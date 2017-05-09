@@ -24,12 +24,15 @@ public class ResponseMessage {
     public static final String INCORRECT_USER_INFORMATION = "user.info.incorrect";
     public static final String NOT_UNIQUE_BANK_CARD = "bank.card.not.unique";
     public static final String PASSWORD_NOT_EQUAL = "registration.passwords.not.equals";
-    public static final String OPERATION_ERROR="operation.error";
-    public static final String DELETE_LOT_ERROR="admin.edit.lot.delete.error";
-    public static final String INVALID_CARD_NUMBER="bank.card.error";
-    public static final String ADDING_CATEGORY_ERROR="category.add.error";
+    public static final String OPERATION_ERROR = "operation.error";
+    public static final String DELETE_LOT_ERROR = "admin.edit.lot.delete.error";
+    public static final String INVALID_CARD_NUMBER = "bank.card.error";
+    public static final String ADDING_CATEGORY_ERROR = "category.add.error";
     public static final String INVALID_VALUE = "invalid.value";
     public static final String BET_ON_OWN_LOT = "bet.owner.error";
     public static final String AUCTION_PROPERTY = "lot.property.auction";
+    public static final String EXTENDING_PERIOD_ERROR = "extend.period.error";
+    public static final String INVALID_BET_VALUE = "price.exception";
+    public static final String INVALID_DATE_VALUE = "date.exception";
 
 }

@@ -18,11 +18,12 @@ import java.util.ArrayList;
 public class BetDaoImpl extends AbstractDao implements BetDao {
     private static final String SQL_ADD_BET = "INSERT INTO bet VALUES (NULL,?,?,?,NOW())";
     private static final String SQL_SELECT_BETS_BY_LOT = "SELECT id_bet, bet.id_lot, title, bet.id_user, bet, date FROM bet" +
-            " JOIN lot ON bet.id_lot=lot.id_lot WHERE lot.id_lot=?";
+            " JOIN lot ON bet.id_lot=lot.id_lot WHERE lot.id_lot=? ORDER BY id_bet";
     private static final String SQL_SELECT_USER_BETS = "SELECT id_bet, bet.id_lot, bet.id_user, title, bet, date" +
             " FROM bet" +
-            " JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=?";
+            " JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=? ORDER BY id_bet";
     private static final String SQL_RESET_LOT_BETS = "DELETE FROM bet WHERE id_lot=?";
+    private static final String SQL_SELECT_COUNT_LOT_FOLLOWERS = "SELECT COUNT(DISTINCT id_user) AS followers_count FROM bet WHERE id_lot=?";
 
 
     @Override
@@ -82,6 +83,22 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
             LOGGER.log(Level.ERROR, e);
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public int countLotFollowers(long lotId) throws DAOException {
+        int count = 0;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COUNT_LOT_FOLLOWERS)) {
+            preparedStatement.setLong(1, lotId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                count = resultSet.getInt("followers_count");
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new DAOException(e);
+        }
+        return count;
     }
 
     private Bet initBet(ResultSet resultSet) throws SQLException {

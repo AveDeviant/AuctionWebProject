@@ -52,8 +52,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
     /**
      * Check lots which unable for bids but already have confirmed bets.
      * Last bet is a winning bet - the last consumer who made a bet is a winner of auction.
+     * Add winning bets in consumer's ArrayList for further ordering.
      *
-     * @param user add winning bets in consumer's ArrayList for further ordering.
+     * @param user auction customer.
      */
     @Override
     public void setWinner(User user) throws ServiceException {
@@ -63,11 +64,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             if (!lot.getBets().isEmpty() && lot.getAvailability()) {   // if lot has confirmed bets
                 Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
                 if (lastBet.getUserId() == user.getUserId()) {
-                    if (lotService.checkWaitingPeriod(lot)) {
-                        winningBets.add(lastBet);
-                    } else {                            // if the winnings are not processed within 10 days.
-                        lotService.resetBids(lot);
-                    }
+                    winningBets.add(lastBet);
                 }
             }
             user.setWinningBets(winningBets);
@@ -76,12 +73,12 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     @Override
     public ArrayList<User> getAllCustomers() throws ServiceException {
-        ArrayList<User> users = null;
+        ArrayList<User> users = new ArrayList<>();
         DaoHelper daoHelper = new DaoHelper();
         try {
             UserDao userDao = new UserDaoImpl();
             daoHelper.initDao(userDao);
-            users = userDao.getAllCustomers();
+            users.addAll(userDao.getAllCustomers());
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
@@ -138,7 +135,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 UserDao userDao = new UserDaoImpl();
                 daoHelper.initDao(userDao);
                 String pwdMd5 = Md5Converter.convertToMd5(password);
-                userDao.addUser(ROLE_ID_CUSTOMER, userName, email, pwdMd5,alias);
+                userDao.addUser(ROLE_ID_CUSTOMER, userName, email, pwdMd5, alias);
                 user = userDao.findUserByUsername(userName);
             }
         } catch (DAOException e) {
@@ -240,7 +237,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     /**
-     * Checking user's login, email and alias for uniqueness
+     * Checking user's login, email and alias for uniqueness.
      *
      * @param login entered login
      * @param email entered email
@@ -254,7 +251,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
             UserDao userDao = new UserDaoImpl();
             daoHelper.initDao(userDao);
             if (!userDao.findPasswordByLogin(login).equals("") || userDao.findUserByEmailAlias(email, alias)) {
-                System.out.println("wtf?");
                 return false;
             }
         } catch (DAOException e) {

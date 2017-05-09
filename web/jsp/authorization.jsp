@@ -23,9 +23,8 @@
 <c:if test="${user!=null}">
     <c:redirect url="/jsp/private.jsp"/>
 </c:if>
-
+<div class="custom-opacity">
 <div class="container">
-    <div class="custom-opacity">
     <div class="row">
         <div class="col-sm-12">
             <h1 class="text-center strong text-info"><fmt:message key="login.page.title"/></h1>
@@ -67,6 +66,5 @@
     </div>
     </div>
 </div>
-<c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </body>
 </html>

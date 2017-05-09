@@ -29,7 +29,7 @@ public class GetMessagesImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
-            ArrayList<UserMessage> messages = messageService.findMessages(user.getUserId());
+            ArrayList<UserMessage> messages = messageService.findUserMessages(user.getUserId());
             user.setUserMessages(messages);
             messageService.changeMessageStatus(user.getUserId());
             user.setUnreadMessages(false);

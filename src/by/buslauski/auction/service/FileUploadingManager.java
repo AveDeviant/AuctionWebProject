@@ -52,7 +52,7 @@ public class FileUploadingManager {
                 StringBuilder stringBuilder = new StringBuilder();
                 LocalDateTime now = LocalDateTime.now();
                 String timeAsString = now.toString();
-                // Detected problems with filename if i save milliseconds so i decided remove it.
+                // Detected problems with filename if I save milliseconds so I decided remove it.
                 stringBuilder.append(timeAsString.substring((0), timeAsString.lastIndexOf('.')));
                 if (st.length() <= INCONVENIENT_FILENAME_LENGTH) {
                     stringBuilder.append(st.substring(st.lastIndexOf("=") + 2, st.length() - 1));

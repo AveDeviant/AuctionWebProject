@@ -1,16 +1,19 @@
-package by.buslauski.auction.action.impl;
+package by.buslauski.auction.action.impl.user;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.Bet;
+import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.BetService;
+import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.OrderService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.BetServiceImpl;
+import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.OrderServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -30,7 +33,7 @@ public class GetUserOperationsImpl implements Command {
     private static BetService betService = new BetServiceImpl();
 
     /**
-     * Get customer bets and accepted deals from database.
+     * Get customer bets, accepted deals and lots from database for displaying to current user.
      *
      * @param request user's request.
      * @return null.

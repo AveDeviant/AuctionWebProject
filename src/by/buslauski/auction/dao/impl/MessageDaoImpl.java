@@ -85,6 +85,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
         }
     }
 
+
     private UserMessage initMessage(ResultSet resultSet) throws SQLException {
         UserMessage userMessage = new UserMessage();
         userMessage.setMessageId(resultSet.getLong("id_message"));
