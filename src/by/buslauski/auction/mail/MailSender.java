@@ -10,16 +10,17 @@ import java.util.Properties;
  * Created by Acer on 08.05.2017.
  */
 public class MailSender {
-    private static final String AUCTION_MAIL = "buslauskima@gmail.com";
-    private static final String PASSWORD = "cadillacescalade";
+    private static final String AUCTION_MAIL = "auctionhouse.webproject@gmail.com";
+    private static final String PASSWORD = "AuctionHouse95";
     private static final Properties MAIL_PROPERTIES;
 
     static {
         MAIL_PROPERTIES = new Properties();
-        MAIL_PROPERTIES.put("mail.smtp.auth", "true");
         MAIL_PROPERTIES.put("mail.smtp.host", "smtp.gmail.com");
-        MAIL_PROPERTIES.put("mail.smtp.port", "465");
+        MAIL_PROPERTIES.put("mail.smtp.socketFactory.port", "465");
         MAIL_PROPERTIES.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        MAIL_PROPERTIES.put("mail.smtp.auth", "true");
+        MAIL_PROPERTIES.put("mail.smtp.port", "465");
     }
 
     public static void sendMessage(String subject, String content, String recipientEmail) {

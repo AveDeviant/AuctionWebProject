@@ -1,13 +1,12 @@
 package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.dao.DaoHelper;
-import by.buslauski.auction.dao.MessageDao;
 import by.buslauski.auction.dao.NotificationDao;
-import by.buslauski.auction.dao.impl.MessageDaoImpl;
 import by.buslauski.auction.dao.impl.NotificationDaoImpl;
 import by.buslauski.auction.entity.AuctionNotification;
 import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.MessageService;
 import by.buslauski.auction.service.NotificationService;
 import org.apache.logging.log4j.Level;
 
@@ -21,23 +20,21 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
     @Override
     public void createNotificationForTraderAuctionResult(long lotId, long customerId, long traderId) throws ServiceException {
         NotificationDao notificationDao = new NotificationDaoImpl();
-        MessageDao messageDao = new MessageDaoImpl();
+        MessageService messageService= new MessageServiceImpl();
         DaoHelper daoHelper = new DaoHelper();
-        daoHelper.beginTransaction(notificationDao, messageDao);
         try {
+            daoHelper.initDao(notificationDao);
             if (notificationDao.countAuctionNotificationsAboutLot(lotId, customerId) == 0) {
                 notificationDao.createAuctionNotification(lotId, traderId, customerId);
                 AuctionNotification notification = notificationDao.findNotificationByLot(lotId);
                 String content = initNotificationContent(notification);
-                messageDao.addMessage(NOTIFICATION, content, customerId, traderId);
-                daoHelper.commit();
+                messageService.addMessage(NOTIFICATION, content, customerId, traderId);
             }
         } catch (DAOException e) {
-            daoHelper.rollback();
             LOGGER.log(Level.ERROR, e);
             throw new ServiceException(e);
         } finally {
-            daoHelper.endTransaction();
+            daoHelper.release();
         }
     }
 
