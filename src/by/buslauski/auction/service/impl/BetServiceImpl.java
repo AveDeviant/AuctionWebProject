@@ -27,7 +27,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
 
 
     /**
-     * Adding bet and updating lot price.
+     * Adding bet and updating lot current price.
      * <p>
      * <code>ReentrantLock</code> reduces performance
      * but also reduces the rick of incorrect logic behavior.
@@ -37,7 +37,8 @@ public class BetServiceImpl extends AbstractService implements BetService {
      * @param price  new lot price.
      * @return true in case operation passed successfully and the price has been updated.
      * false in other case.
-     * @throws ServiceException if a database access error occurs.
+     * @throws ServiceException if a database access error occurs
+     *                          (DAOException has been thrown).
      */
     @Override
     public boolean addBet(long userId, long lotId, BigDecimal price) throws ServiceException {

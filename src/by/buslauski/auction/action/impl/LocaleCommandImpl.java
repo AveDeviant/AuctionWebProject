@@ -20,9 +20,9 @@ public class LocaleCommandImpl implements Command {
     /**
      * Change application localization.
      *
-     * @param request HttpServletRequest user's request.
-     * @return A PageResponse object containing two fields:
-     * ResponseType - FORWARD
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * {@link ResponseType} - response type:  {@link ResponseType#FORWARD}
      * String page - page for response (current page).
      */
     @Override

@@ -110,34 +110,6 @@
                 </table>
             </div>
             <div class="col-sm-4">
-                <c:choose>
-                    <c:when test="${user.getBankCard() eq null }">
-                        <h4><fmt:message key="bankaccount.registration.notice"/>
-                            <a href="#" onclick="showCardForm()"><fmt:message
-                                    key="register.page.title"/></a>
-                        </h4>
-                        <div id="cardForm" style="display: none;">
-                            <form action="${pageContext.request.contextPath}/Auction" method="post">
-                                <input type="radio" name="system" value="Visa" checked><span>Visa</span>
-                                <input type="radio" name="system" value="MasterCard"><span>MasterCard</span>
-                                <br/>
-                                <input class="form-control" name="number" required pattern="\d{4}-\d{4}-\d{4}-\d{4}"
-                                       title="<fmt:message key="bankaccount.registration.card"/>"
-                                       placeholder="XXXX-XXXX-XXXX-XXXX">
-                                <br>
-                                <button class="button-auction" type="submit" name="command" value="addBankAccount">
-                                    <fmt:message key="card.register.button"/></button>
-                                <input type="hidden" name="jspPath"
-                                       value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-
-                            </form>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <h3><fmt:message key="bankaccount.userinfo"/></h3><br/>
-                        <h5><c:out value="${user.getBankCard().toString()}"/></h5>
-                    </c:otherwise>
-                </c:choose>
                 <div class="row">
                     <h4 class="text-center"><a
                             href="${pageContext.request.contextPath}/Auction?command=userLots"><fmt:message

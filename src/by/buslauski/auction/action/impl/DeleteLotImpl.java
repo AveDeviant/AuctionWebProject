@@ -23,11 +23,10 @@ public class DeleteLotImpl implements Command {
      * Displaying appropriate message in case any bet or
      * order have already been made for this lot.
      *
-     * @param request user's request
-     * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - response type:
-     * REDIRECT - operation passed successfully;
-     * FORWARD - exception during operation.
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - response type: {@link ResponseType#REDIRECT} - operation passed successfully or
+     * {@link ResponseType#FORWARD} - exception during operation.
      * String page - current page.
      */
     @Override

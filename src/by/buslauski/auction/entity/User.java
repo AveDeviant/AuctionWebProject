@@ -18,7 +18,6 @@ public class User {
     private boolean access;
     private String name;
     private Role role;
-    private BankCard bankCard;
     private ArrayList<Bet> bets;
     private ArrayList<Bet> winningBets;
     private ArrayList<UserMessage> userMessages;
@@ -82,13 +81,6 @@ public class User {
         return role;
     }
 
-    public void setBankCard(BankCard bankCard) {
-        this.bankCard = bankCard;
-    }
-
-    public BankCard getBankCard() {
-        return bankCard;
-    }
 
     public void setWinningBets(ArrayList<Bet> winningBets) {
         this.winningBets = winningBets;
@@ -188,7 +180,6 @@ public class User {
         if (!phoneNumber.equals(user.phoneNumber)) return false;
         if (!name.equals(user.name)) return false;
         if (role != user.role) return false;
-        if (!bankCard.equals(user.bankCard)) return false;
         if (!bets.equals(user.bets)) return false;
         if (!winningBets.equals(user.winningBets)) return false;
         return userMessages.equals(user.userMessages);
@@ -206,7 +197,6 @@ public class User {
         result = 31 * result + (access ? 1 : 0);
         result = 31 * result + name.hashCode();
         result = 31 * result + role.hashCode();
-        result = 31 * result + bankCard.hashCode();
         result = 31 * result + bets.hashCode();
         result = 31 * result + winningBets.hashCode();
         result = 31 * result + userMessages.hashCode();

@@ -18,7 +18,7 @@ public interface UserDao {
 
     String findPasswordByLogin(String username) throws DAOException;
 
-    User findUserByUsername(String username) throws DAOException;
+    User findUserByLogin(String username) throws DAOException;
 
     void changeAccess(long userId, boolean access) throws DAOException;
 

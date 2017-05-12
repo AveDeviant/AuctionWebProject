@@ -9,9 +9,8 @@ import java.util.ArrayList;
  * Created by Acer on 14.04.2017.
  */
 public interface UserService {
-    User authorizationChecking(String username, String password) throws ServiceException;
 
-    void setWinner(User user) throws ServiceException;
+    User authorizationChecking(String username, String password) throws ServiceException;
 
     ArrayList<User> getAllCustomers() throws ServiceException;
 
@@ -21,7 +20,7 @@ public interface UserService {
 
     void changeAccess(long userId, boolean access) throws ServiceException;
 
-    User registerUser(String userName, String password,String alias, String email) throws ServiceException;
+    User registerUser(String userName, String password, String alias, String email) throws ServiceException;
 
     User findAdmin() throws ServiceException;
 

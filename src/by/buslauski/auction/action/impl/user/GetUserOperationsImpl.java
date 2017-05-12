@@ -33,9 +33,10 @@ public class GetUserOperationsImpl implements Command {
     private static BetService betService = new BetServiceImpl();
 
     /**
-     * Get customer bets, accepted deals and lots from database for displaying to current user.
+     * Get customer bets, accepted deals and lots from database
+     * and displaying it to current user.
      *
-     * @param request user's request.
+     * @param request client request to get parameters to work with.
      * @return null.
      */
     @Override

@@ -45,6 +45,7 @@
                             <label for="title"><fmt:message key="admin.lot.title"/> </label>
                             <input class="form-control" type="text" name="title" id="title"
                                    title="<fmt:message key="admin.lot.title.restrict"/>" required>
+
                             <span class="err" id="errTitle" style="display: none"><fmt:message
                                     key="admin.lot.title.restrict"/> </span>
                             <br/>

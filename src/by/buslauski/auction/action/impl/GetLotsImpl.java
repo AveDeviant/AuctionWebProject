@@ -23,7 +23,7 @@ public class GetLotsImpl implements Command {
     /**
      * Get all lots from database.
      *
-     * @param request user's request.
+     * @param request client request to get parameters to work with.
      * @return null.
      */
     @Override

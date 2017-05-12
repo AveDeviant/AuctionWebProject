@@ -27,9 +27,9 @@ public class GetLotsByCategoryImpl implements Command {
     /**
      * Showing lots with selected category;
      *
-     * @param request user's request
-     * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - FORWARD
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - response type: {@link ResponseType#FORWARD}
      * String page - "/jsp/main.jsp"
      */
     @Override

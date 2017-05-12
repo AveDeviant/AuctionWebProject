@@ -24,7 +24,8 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
             " customer.real_name, customer.city, customer.address, customer.phone_number FROM auction.order" +
             " JOIN user AS customer ON order.id_user=customer.id_user" +
             " JOIN user AS trader ON id_trader=trader.id_user" +
-            " JOIN lot ON order.id_lot=lot.id_lot WHERE (order.id_user=? OR order.id_trader=?) AND accept=TRUE ORDER BY id_order";
+            " JOIN lot ON order.id_lot=lot.id_lot" +
+            " WHERE (order.id_user=? OR order.id_trader=?) AND accept=TRUE ORDER BY id_order";
 
 
     @Override

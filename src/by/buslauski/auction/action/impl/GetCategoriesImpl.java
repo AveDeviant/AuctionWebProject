@@ -22,7 +22,7 @@ public class GetCategoriesImpl implements Command {
     /**
      * Return all lot categories from database.
      *
-     * @param request user's request
+     * @param request client request to get parameters to work with.
      * @return null
      */
     @Override

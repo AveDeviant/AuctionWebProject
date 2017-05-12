@@ -1,6 +1,5 @@
 package by.buslauski.auction.mail.exception;
 
-import java.security.PublicKey;
 
 /**
  * Created by Acer on 08.05.2017.

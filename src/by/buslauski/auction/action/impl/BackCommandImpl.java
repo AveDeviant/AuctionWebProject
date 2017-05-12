@@ -17,9 +17,9 @@ public class BackCommandImpl implements Command {
     /**
      * Return to previous page.
      *
-     * @param request user's request.
-     * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - REDIRECT.
+     * @param request client request to get parameters to work with.
+     * @return  {@link PageResponse} object containing two fields:
+     * ResponseType - response type: {@link ResponseType#REDIRECT}.
      * String page - page for response.
      * @see PageBrowser
      */

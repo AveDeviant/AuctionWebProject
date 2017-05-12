@@ -23,7 +23,7 @@ public interface LotService {
 
     Lot getAvailableLotById(long lotId) throws ServiceException;
 
-    boolean checkActuality(Lot lot);
+//    boolean checkActuality(Lot lot);
 
     ArrayList<Lot> getLotsWithOverTiming() throws ServiceException;
 
@@ -44,5 +44,5 @@ public interface LotService {
 
     ArrayList<Lot> findApprovedUserLots(long userId) throws ServiceException;
 
-    boolean extendBiddingPeriod(long lotId, int days) throws ServiceException;
+    boolean extendBiddingPeriod(long lotId, int days, long userId) throws ServiceException;
 }

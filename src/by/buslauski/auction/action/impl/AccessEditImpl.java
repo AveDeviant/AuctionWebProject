@@ -22,12 +22,12 @@ public class AccessEditImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * Changing customer's access to bidding
+     * Changing customer's access to bidding.
      *
-     * @param request user's request
-     * @return PageResponse - An object containing two fields:
-     * ResponseType - REDIRECT in case operation passed successfully and
-     * FORWARD  in case operation failed (an exception has been thrown)
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully and
+     * {@link ResponseType#FORWARD} in case operation failed (an exception has been thrown)
      * String page - page for response (current page)
      */
     @Override

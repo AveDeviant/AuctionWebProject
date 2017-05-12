@@ -20,12 +20,14 @@ public class AddCategoryImp implements Command {
     private static CategoryService categoryService = new CategoryServiceImpl();
 
     /**
-     * Creating a new category and insert it into database.
+     * Creating a new lot category and insert it into database.
      *
-     * @param request user's request.
-     * @return An object containing two fields:
-     * ResponseType - response type (forward or redirect)
-     * String page - page for response
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - response type:
+     * {@link ResponseType#REDIRECT} if operation passed successfully.
+     * {@link ResponseType#FORWARD} in other case.
+     * String page - page for response (current page).
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

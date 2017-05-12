@@ -12,6 +12,7 @@ import by.buslauski.auction.entity.UserMessage;
 import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.mail.MailSender;
+import by.buslauski.auction.mail.exception.MailException;
 import by.buslauski.auction.service.MessageService;
 import by.buslauski.auction.service.UserService;
 import org.apache.logging.log4j.Level;
@@ -28,13 +29,13 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
 
 
     @Override
-    public void addMessage(String theme, String text, long senderId, long recipientId) throws ServiceException {
+    public void addMessage(String theme, String text, long senderId, User recipient) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
         try {
             MessageDao messageDao = new MessageDaoImpl();
             daoHelper.initDao(messageDao);
-            messageDao.addMessage(theme, text, senderId, recipientId);
-            sendMessageOnMailBox(theme, text, recipientId);
+            messageDao.addMessage(theme, text, senderId, recipient.getUserId());
+            sendMessageOnMailBox(theme, text, recipient);
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
@@ -78,7 +79,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
     }
 
     @Override
-    public void createMessageForTraderAboutPurchaser(User dealer, Bet bet) throws ServiceException {
+    public void createMessageForTraderAboutPurchaser(User trader, Bet bet) throws ServiceException {
         StringBuilder messageContent = new StringBuilder();
         User customer = userService.findUserById(bet.getUserId());
         messageContent.append("Title: ").append(bet.getLotTitle());
@@ -92,22 +93,14 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
         messageContent.append("E-mail: ").append(customer.getEmail());
         messageContent.append("\n");
         messageContent.append("Phone number: ").append(customer.getPhoneNumber());
-        addMessage(AUCTION_NOTIFICATION, messageContent.toString(), customer.getUserId(), dealer.getUserId());
+        addMessage(AUCTION_NOTIFICATION, messageContent.toString(), customer.getUserId(), trader);
     }
 
-    private void sendMessageOnMailBox(String theme, String content, long recipientId) {
-        UserDao userDao = new UserDaoImpl();
-        DaoHelper daoHelper = new DaoHelper();
+    private void sendMessageOnMailBox(String theme, String content, User recipient) {
         try {
-            daoHelper.initDao(userDao);
-            User recipient = userDao.findUserById(recipientId);
-            if (recipient.getRole() != Role.ADMIN) {
-                MailSender.sendMessage(theme, content, recipient.getEmail());
-            }
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e + " Excepting during getting entity from database");
-        } finally {
-            daoHelper.release();
+            MailSender.sendMessage(theme, content, recipient.getEmail());
+        } catch (MailException e) {
+            LOGGER.log(Level.ERROR, e);
         }
     }
 

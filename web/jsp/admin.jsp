@@ -82,7 +82,7 @@
             <form method="get" action="${pageContext.request.contextPath}/Auction">
                 <label for="name"><fmt:message key="admin.new.category"/></label>
                 <input class="form-control" type="text" name="name" id="name" required
-                       pattern="[A-Za-z А-Яа-я-;,. ]{2,}"><br/>
+                       pattern="[A-Za-z А-Яа-я-;,. ]{2,45}"><br/>
                 <button type="submit" class="button-auction"><fmt:message key="button.add"/></button>
                 <input type="hidden" name="command" value="addCategory">
                 <input type="hidden" name="jspPath"

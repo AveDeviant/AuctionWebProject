@@ -18,7 +18,6 @@ public class CommandFactory {
     private static final String GET_LOTS = "getLots";
     private static final String SHOW_LOT = "showLot";
     private static final String MAKE_BET = "makeBet";
-    private static final String CREATE_USER_FUND = "addBankAccount";
     private static final String ORDER_LOT = "order";
     private static final String ORDER_LOT_BUY = "buy";
     private static final String ORDER_LOT_REJECT = "reject";
@@ -61,8 +60,6 @@ public class CommandFactory {
                 return new GetLotsImpl();
             case SHOW_LOT:
                 return new ShowLotImpl();
-            case CREATE_USER_FUND:
-                return new AddBankCardImpl();
             case MAKE_BET:
                 return new BetCommandImpl();
             case ORDER_LOT:

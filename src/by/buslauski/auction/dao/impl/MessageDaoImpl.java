@@ -74,6 +74,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
         return count;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void changeMessageStatus(long userId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_RESET_UNREAD_STATUS)) {

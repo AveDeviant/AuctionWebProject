@@ -1,6 +1,8 @@
 package by.buslauski.auction.mail;
 
 
+import by.buslauski.auction.mail.exception.MailException;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -23,7 +25,7 @@ public class MailSender {
         MAIL_PROPERTIES.put("mail.smtp.port", "465");
     }
 
-    public static void sendMessage(String subject, String content, String recipientEmail) {
+    public static void sendMessage(String subject, String content, String recipientEmail) throws MailException {
         Session session = Session.getInstance(MAIL_PROPERTIES, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -37,8 +39,7 @@ public class MailSender {
             message.setText(content);
             Transport.send(message);
         } catch (MessagingException e) {
-            System.out.println("Lol");
-            e.printStackTrace();
+            throw new MailException(e);
         }
     }
 

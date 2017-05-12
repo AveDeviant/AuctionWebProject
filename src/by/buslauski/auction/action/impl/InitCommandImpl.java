@@ -9,8 +9,10 @@ import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
+import by.buslauski.auction.service.AuctionService;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.MessageService;
+import by.buslauski.auction.service.impl.AuctionServiceImpl;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.MessageServiceImpl;
@@ -30,20 +32,16 @@ public class InitCommandImpl implements Command {
     private static MessageService messageService = new MessageServiceImpl();
     private static UserService userService = new UserServiceImpl();
     private static LotService lotService = new LotServiceImpl();
-/**
- * TODO:
- * проверить добавление\апдейт лотов.
- * переименовать страницы лотов торговца\пользователя
- */
+    private static AuctionService auctionService = new AuctionServiceImpl();
 
     /**
      * Init command. Get available lots for bids from database and
      * displays it to main page. Displaying appropriate message in case the list is empty.
      * Displaying appropriate message in case user have been banned.
      *
-     * @param request user's request.
-     * @return An object PageResponse containing two fields:
-     * ResponseType - FORWARD.
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * {@link ResponseType} - response type: {@link ResponseType#FORWARD}
      * String page - page for response "/jsp/main.jsp"
      */
     @Override
@@ -63,7 +61,7 @@ public class InitCommandImpl implements Command {
                 request.getSession().setAttribute(SessionAttributes.USER, user);
             }
             if (user != null && user.getAccess()) {
-                userService.setWinner(user);
+                auctionService.setWinner(user);
                 request.getSession().removeAttribute(USER_BANNED);
             }
             if (user != null && !user.getAccess()) {

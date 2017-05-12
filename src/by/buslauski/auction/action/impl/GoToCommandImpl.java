@@ -22,16 +22,16 @@ public class GoToCommandImpl implements Command {
     private static final String ADMIN_PAGE = "admin";
     private static final String FAQ_PAGE = "faq";
     private static final String MESSAGE_PAGE = "message";
-    private static final String SUCCESS_PAGE ="success";
+    private static final String SUCCESS_PAGE = "success";
     private static final String ACCESS_DENIED = "accessDenied";
 
     /**
      * Page navigation.
      *
-     * @param request user's request.
-     * @return An object containing two fields:
-     * ResponseType- forward or redirect
-     * page - page for response
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * {@link ResponseType} - response type {@link ResponseType#FORWARD}
+     * page - page for response.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

@@ -32,8 +32,15 @@ public class MessageCommandImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * @param request user's request
-     * @return
+     * Conversation implementation between customers and auction administrator.
+     *
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - response type:
+     * REDIRECT - operation passed successfully and message was sent;
+     * FORWARD - in other case;
+     * String page - "/jsp/success.jsp" if operation passed successfully and
+     * current page with appropriate message in other case.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -56,11 +63,11 @@ public class MessageCommandImpl implements Command {
         try {
             if (Role.CUSTOMER == user.getRole()) {   // message from customer to admin.
                 User admin = userService.findAdmin();
-                messageService.addMessage(theme, text, user.getUserId(), admin.getUserId());
+                messageService.addMessage(theme, text, user.getUserId(), admin);
             } else {                                // message from admin to customer.
                 long recipientId = Long.parseLong(request.getParameter(RECIPIENT_ID));
                 User customer = userService.findUserById(recipientId);
-                messageService.addMessage(theme, text, user.getUserId(), customer.getUserId());
+                messageService.addMessage(theme, text, user.getUserId(), customer);
             }
             pageResponse.setResponseType(ResponseType.REDIRECT);
             PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);

@@ -23,12 +23,12 @@ public class GetUserLotsImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Handling client request.
+     * Get approved lot which exposed by current user.
      *
-     * @param request user's request
-     * @return An object containing two fields:
-     * ResponseType - response type (forward or redirect).
-     * String page - page for response.
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - response type: {@link ResponseType#FORWARD}
+     * String page - page for response "/jsp/user_lots.jsp".
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -36,7 +36,7 @@ public class GetUserLotsImpl implements Command {
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.USER_LOTS);
         User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        if (currentUser==null){
+        if (currentUser == null) {
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(definePathToAccessDeniedPage(request));
             return pageResponse;

@@ -11,7 +11,6 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.*;
-import by.buslauski.auction.service.impl.BankServiceImpl;
 import by.buslauski.auction.service.impl.BetServiceImpl;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
@@ -24,6 +23,10 @@ import java.math.BigDecimal;
 /**
  * Created by Acer on 19.03.2017.
  */
+
+/**
+ * @author Buslauski Mikita
+ */
 public class BetCommandImpl implements Command {
     private static final String PRICE_PARAM = "price";
     private static final String LOT_ID_PARAM = "lotId";
@@ -31,7 +34,6 @@ public class BetCommandImpl implements Command {
     private static final String AUTHORIZATION_ERROR = "authorizationError";
     private static LotService lotService = new LotServiceImpl();
     private static BetService betService = new BetServiceImpl();
-    private static BankService bankService = new BankServiceImpl();
     private static UserService userService = new UserServiceImpl();
 
     /**
@@ -39,20 +41,18 @@ public class BetCommandImpl implements Command {
      * <p>
      * Checked situations:
      * The user isn't authorized on the site;
-     * The user hasn't registered his bank card;
      * The user have been banned during his session on the site;
      * The lot was withdrawn from the auction during user's session;
      * The user tries to bet on his own lot;
      * Invalid price entered;
      * The entered price is less than or equals to current lot price;
-     * Insufficient funds to confirm bet;
      * Exception during operation;
      *
-     * @param request user's request.
-     * @return <code>PageResponse</code> object containing two fields:
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
      * ResponseType - response type:
-     * REDIRECT - operation passed successfully.
-     * FORWARD - detecting errors during operations.
+     * {@link ResponseType#REDIRECT} - operation passed successfully.
+     * {@link ResponseType#FORWARD} - detecting errors during operations.
      * String page - current page or "/jsp/denied.jsp" in case lot became unable for the auction.
      * @see BetValidator
      */
@@ -70,11 +70,6 @@ public class BetCommandImpl implements Command {
             return pageResponse;
         }
         long userId = user.getUserId();
-        if (user.getBankCard() == null) {
-            request.setAttribute(BET_ERROR, ResponseMessage.BET_BANK_CARD_ERROR);
-            pageResponse.setPage(PageNavigation.PRIVATE_PAGE);
-            return pageResponse;
-        }
         try {
             user = userService.findUserById(user.getUserId()); // updating user info
             if (user.getAccess()) {
@@ -85,19 +80,11 @@ public class BetCommandImpl implements Command {
                         return pageResponse;
                     }
                     if (!BetValidator.checkPriceForValid(request.getParameter(PRICE_PARAM))) {
-                        request.setAttribute(BET_ERROR, ResponseMessage.INVALID_VALUE);
+                        request.setAttribute(BET_ERROR, ResponseMessage.INVALID_BET_VALUE);
                         return pageResponse;
                     }
-                    BigDecimal newPrice = new BigDecimal(request.getParameter(PRICE_PARAM));
-                    if (!betService.checkBetValue(lot, newPrice)) {
-                        request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
-                        return pageResponse;
-                    }
-                    if (!bankService.checkIsEnoughBalance(userId, newPrice)) {
-                        request.setAttribute(BET_ERROR, ResponseMessage.BET_BANK_BALANCE_ERROR);
-                        return pageResponse;
-                    }
-                    if (!betService.addBet(userId, lotId, newPrice)) {
+                    BigDecimal newPrice = BetValidator.initPrice(request.getParameter(PRICE_PARAM));
+                    if (!betService.checkBetValue(lot, newPrice) || !betService.addBet(userId,lotId,newPrice)) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
                         return pageResponse;
                     }

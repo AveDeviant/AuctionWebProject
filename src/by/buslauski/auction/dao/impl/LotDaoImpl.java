@@ -60,6 +60,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public ArrayList<Lot> findAllLots() throws DAOException {
         ArrayList<Lot> lots = new ArrayList<>();
@@ -130,6 +131,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao {
     }
 
     @Override
+    @SuppressWarnings("Duplicates")
     public ArrayList<Lot> findLotsWithOverTiming() throws DAOException {
         ArrayList<Lot> lots = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_LOTS_OVER_TIMING)) {

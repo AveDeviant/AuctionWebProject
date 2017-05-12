@@ -87,14 +87,7 @@
                         <h4><fmt:message key="trader.ref"/></h4>
                         <h3>${trader.getAlias()}</h3>
                         <div class="alert alert-warning aler-dismissable fade in">
-                            <c:choose>
-                                <c:when test="${auctionOwner !=null}">
-                                    <fmt:message key="${auctionOwner}"/>
-                                </c:when>
-                                <c:otherwise>
                                     <fmt:message key="order.trader.notification"/>
-                                </c:otherwise>
-                            </c:choose>
                         </div>
                     </div>
                 </div>

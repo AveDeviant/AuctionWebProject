@@ -24,16 +24,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class OrderPageImpl implements Command {
     private static final String LOT_ATTRIBUTE = "lot";
-    private static final String AUCTION_OWNER = "auctionOwner";
     private static UserService userService = new UserServiceImpl();
     private static LotService lotService = new LotServiceImpl();
 
     /**
      * Showing order page with first lot in customer's winning list.
      *
-     * @param request user's request.
-     * @return PageResponse - an object containing two fields:
-     * ResponseType - FORWARD.
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - {@link ResponseType#FORWARD}.
      * String page - "/jsp/order.jsp"
      */
     @Override
@@ -45,9 +44,6 @@ public class OrderPageImpl implements Command {
             try {
                 Lot lot = lotService.getLotById(bet.getLotId());
                 User trader = userService.findUserById(lot.getUserId());
-                if (Role.ADMIN == trader.getRole()) {    //show notification about payment
-                    request.setAttribute(AUCTION_OWNER, ResponseMessage.AUCTION_PROPERTY);
-                }
                 request.setAttribute(LOT_ATTRIBUTE, lot);
                 request.setAttribute(SessionAttributes.TRADER, trader);
             } catch (ServiceException e) {

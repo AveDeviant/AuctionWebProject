@@ -8,11 +8,11 @@ import java.util.ArrayDeque;
 public class PageBrowser {
     private ArrayDeque<String> history = new ArrayDeque<>();
 
-    public void addPageToHistory(String page){
+    public void addPageToHistory(String page) {
         history.addLast(page);
     }
 
-    public String getPreviousPage(){
+    public String getPreviousPage() {
         return history.pollLast();
 
     }

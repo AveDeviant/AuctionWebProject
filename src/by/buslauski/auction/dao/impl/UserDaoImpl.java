@@ -1,7 +1,6 @@
 package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.UserDao;
-import by.buslauski.auction.entity.BankCard;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.DAOException;
@@ -16,18 +15,17 @@ import java.util.ArrayList;
  * Created by Acer on 28.02.2017.
  */
 public class UserDaoImpl extends AbstractDao implements UserDao {
-    private static final String SQL_SELECT_USER_AND_BANK = "SELECT user.id_user, user.id_role, name, username, email, password, city, address," +
-            "phone_number, access, real_name, alias, id_account, system, card_number, money_amount FROM user " +
-            "LEFT JOIN account ON user.id_user=account.id_user " +
+    private static final String SQL_SELECT_USER = "SELECT user.id_user, user.id_role, name, username, email, password, city, address," +
+            "phone_number, access, real_name, alias FROM user " +
             "JOIN role ON user.id_role=role.id_role WHERE username=?";
     private static final String SQL_SEARCH_EMAIl_ALIAS = "SELECT id_user from user WHERE email=? OR alias=?";
     private static final String SQL_INSERT_USER = "INSERT INTO user VALUES (NULL,?,?,?,?,NULL,NULL ,NULL,TRUE,NULL,?)";
     private static final String SQL_SELECT_ALL_USERS = "SELECT id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name, alias " +
             "FROM user JOIN role ON user.id_role=role.id_role WHERE name='customer' ORDER BY id_user";
-    private static final String SQL_SELECT_USER_BY_ID = "SELECT user.id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name, alias, " +
-            "id_account, system, card_number, money_amount FROM user " +
+    private static final String SQL_SELECT_USER_BY_ID = "SELECT user.id_user, user.id_role, name, username, email, password, city, address, phone_number, access, real_name, alias " +
+            "FROM user " +
             "JOIN role ON user.id_role=role.id_role " +
-            "LEFT JOIN account ON user.id_user=account.id_user WHERE user.id_user=?";
+            "WHERE user.id_user=?";
     private static final String SQL_UPDATE_INFO = "UPDATE user SET real_name=?, city=?, address=?, phone_number=? WHERE id_user=?";
     private static final String SQL_CHANGE_USER_ACCESS = "UPDATE user SET access=? WHERE id_user=?";
     private static final String SQL_SELECT_ADMIN = "SELECT * FROM user JOIN role ON user.id_role=role.id_role " +
@@ -58,7 +56,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     @Override
     public String findPasswordByLogin(String username) throws DAOException {
         String password = "";
-        try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USER_AND_BANK)) {
+        try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USER)) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
@@ -74,18 +72,15 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     }
 
     @Override
-    public User findUserByUsername(String username) throws DAOException {
+    public User findUserByLogin(String username) throws DAOException {
         User user = null;
-        try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USER_AND_BANK)) {
+        try (PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USER)) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
                 return user;
             } else {
                 user = initUser(resultSet);
-                if (resultSet.getString("id_account") != null) {
-                    user.setBankCard(initUserBankCard(resultSet));
-                }
                 return user;
             }
         } catch (SQLException e) {
@@ -94,6 +89,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public User findUserById(long userId) throws DAOException {
         User user = null;
@@ -102,9 +98,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = initUser(resultSet);
-                if (resultSet.getString("id_account") != null) {
-                    user.setBankCard(initUserBankCard(resultSet));
-                }
             }
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e);
@@ -185,6 +178,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         return user;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public User findTrader(long lotId) throws DAOException {
         User user = null;
@@ -228,16 +222,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             throw new DAOException(e);
         }
         return rating;
-    }
-
-    private BankCard initUserBankCard(ResultSet resultSet) throws SQLException {
-        BankCard bankCard = new BankCard();
-        bankCard.setCardId(resultSet.getLong("id_account"));
-        bankCard.setUserId(resultSet.getLong("id_user"));
-        bankCard.setCardSystem(resultSet.getString("system"));
-        bankCard.setCardNumber(resultSet.getString("card_number"));
-        bankCard.setMoneyAmount(resultSet.getBigDecimal("money_amount"));
-        return bankCard;
     }
 
     private User initUser(ResultSet resultSet) throws SQLException {

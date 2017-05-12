@@ -6,6 +6,6 @@ package by.buslauski.auction.validator;
 public class MessageValidator {
 
     public static boolean checkMessage(String text) {
-        return (text != null) && (!text.isEmpty());
+        return (text != null) && (!text.trim().isEmpty());
     }
 }

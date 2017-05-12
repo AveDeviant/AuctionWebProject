@@ -25,10 +25,10 @@ public class TraderRatingImpl implements Command {
     /**
      * Updating trader rating by customer who confirm the deal.
      *
-     * @param request user's request.
-     *
-     * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - REDIRECT in case operation passed successfully and FORWARD in other case;
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully
+     * and {@link ResponseType#FORWARD} in other case;
      * String page - page for response (current page).
      */
     @Override

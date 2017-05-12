@@ -23,8 +23,9 @@ public class BetValidator {
         return true;
     }
 
-    private static BigDecimal initPrice(String bet) throws InvalidNumberValueException {
+    public static BigDecimal initPrice(String bet) throws InvalidNumberValueException {
         BigDecimal price;
+        bet = bet.replaceAll(",",".");
         try {
             price = new BigDecimal(bet);
         } catch (NumberFormatException e) {

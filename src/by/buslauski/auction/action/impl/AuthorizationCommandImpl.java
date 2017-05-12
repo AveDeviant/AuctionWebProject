@@ -8,12 +8,9 @@ import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
-import by.buslauski.auction.service.BetService;
-import by.buslauski.auction.service.MessageService;
-import by.buslauski.auction.service.PageBrowser;
-import by.buslauski.auction.service.impl.BetServiceImpl;
+import by.buslauski.auction.service.*;
+import by.buslauski.auction.service.impl.AuctionServiceImpl;
 import by.buslauski.auction.service.impl.MessageServiceImpl;
-import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import by.buslauski.auction.validator.UserValidator;
 
@@ -25,8 +22,8 @@ import javax.servlet.http.HttpSession;
  */
 public class AuthorizationCommandImpl implements Command {
     private static UserService userService = new UserServiceImpl();
-    private static BetService betService = new BetServiceImpl();
     private static MessageService messageService = new MessageServiceImpl();
+    private static AuctionService auctionService = new AuctionServiceImpl();
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String AUTHORIZATION_ERROR = "authorizationError";
@@ -55,10 +52,9 @@ public class AuthorizationCommandImpl implements Command {
             HttpSession session = request.getSession();
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
-            user.setBets(betService.getUserBets(user));
             user.setUserMessages(messageService.findUserMessages(user.getUserId()));
             if (user.getAccess()) {
-                userService.setWinner(user); //check for winning bets made by this customer
+                auctionService.setWinner(user); //check for winning bets made by this customer
             } else {
                 session.setAttribute(USER_BANNED, ResponseMessage.USER_BANNED);
             }

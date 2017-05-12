@@ -16,8 +16,8 @@ public interface Command {
     /**
      * Handling client request.
      *
-     * @param request user's request
-     * @return An object containing two fields:
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
      * ResponseType - response type (forward or redirect).
      * String page - page for response.
      */
@@ -26,8 +26,8 @@ public interface Command {
     /**
      * Get query string from URI.
      *
-     * @param request user's request
-     * @return current page
+     * @param request client request to get parameters to work with.
+     * @return current page.
      */
     default String returnPageWithQuery(HttpServletRequest request) {
         String controller = request.getRequestURI();

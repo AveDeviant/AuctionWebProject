@@ -22,7 +22,7 @@ public class GetMessagesImpl implements Command {
     /**
      * Gets user's messages from database.
      *
-     * @param request user's request.
+     * @param request client request to get parameters to work with.
      * @return null.
      */
     @Override

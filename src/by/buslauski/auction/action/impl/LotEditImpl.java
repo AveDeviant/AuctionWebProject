@@ -6,7 +6,7 @@ import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.InvalidInputValueException;
+import by.buslauski.auction.exception.InvalidDateValueException;
 import by.buslauski.auction.exception.InvalidNumberValueException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
  * Created by Acer on 27.03.2017.
@@ -42,15 +41,14 @@ public class LotEditImpl implements Command {
     private static final String IMAGE_MIME_TYPE = "image/";
     private static final String LOT_IMAGE = "image";
     private static final String CATEGORY = "category";
-    private static final Logger LOGGER = LogManager.getLogger();
     private static LotService lotService = new LotServiceImpl();
 
     /**
      * Editing lot title, starting price, image, availability for bids,
      * timing, lot category.
      *
-     * @param request user's request.
-     * @return <code>PageResponse</code> object containing two fields:
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
      * ResponseType - REDIRECT in case operation passed successfully and FORWARD
      * in other case.
      * String page - page for response (current page).
@@ -92,7 +90,7 @@ public class LotEditImpl implements Command {
             String availableDate = request.getParameter(AVAILABLE_TIMING);
             String category = request.getParameter(CATEGORY);
             if (LotValidator.checkLot(lotTitle, availableDate) && BetValidator.checkPriceForValid(startingPrice)) {
-                lotService.editLot(id, category, lotTitle, image, new BigDecimal(startingPrice), availability, availableDate);
+                lotService.editLot(id, category, lotTitle, image, BetValidator.initPrice(startingPrice), availability, availableDate);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
             } else {
                 pageResponse.setResponseType(ResponseType.FORWARD);
@@ -107,7 +105,7 @@ public class LotEditImpl implements Command {
         } catch (InvalidNumberValueException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_VALUE);
             pageResponse.setResponseType(ResponseType.FORWARD);
-        } catch (InvalidInputValueException e) {
+        } catch (InvalidDateValueException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_DATE_VALUE);
             pageResponse.setResponseType(ResponseType.FORWARD);
         }

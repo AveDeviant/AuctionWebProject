@@ -28,6 +28,21 @@ public class LotServiceImpl extends AbstractService implements LotService {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
+    /**
+     * Insert a new lot into database.
+     * Lot put up for the auction immediately if added by auction administrator and
+     * waits for confirmation if added by customer.
+     *
+     * @param user          user who add a lot.
+     * @param title         lot tittle.
+     * @param description   lot description.
+     * @param image         path to lot image.
+     * @param price         lot price.
+     * @param category      lot category.
+     * @param availableDate bidding date.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs).
+     */
     @Override
     public void addLot(User user, String title, String description,
                        String image, BigDecimal price,
@@ -149,23 +164,24 @@ public class LotServiceImpl extends AbstractService implements LotService {
         return lot;
     }
 
-    /**
-     * Method checks if the lot are still available for bidding.
-     * Lot bidding time ends at 00:00:00.
-     *
-     * @param lot checked lot.
-     * @return true -  lot available for bidding
-     * false - lot bidding time is over or lot was withdrawn from the auction
-     */
-    @Override
-    public boolean checkActuality(Lot lot) {
-        LocalDate lotDate = lot.getDateAvailable();
-        LocalDateTime now = LocalDateTime.now();
-        return now.isBefore(lotDate.atTime(0, 0, 0)) && lot.getAvailability();
-    }
+//    /**
+//     * Method checks if the lot are still available for bidding.
+//     * Lot bidding time ends at 00:00:00.
+//     *
+//     * @param lot checked lot.
+//     * @return true -  lot available for bidding
+//     * false - lot bidding time is over or lot was withdrawn from the auction
+//     */
+//    @Override
+//    public boolean checkActuality(Lot lot) {
+//        LocalDate lotDate = lot.getDateAvailable();
+//        LocalDateTime now = LocalDateTime.now();
+//        return now.isBefore(lotDate.atTime(0, 0, 0)) && lot.getAvailability();
+//    }
 
     /**
-     * Get lots from database which bidding time has ended.
+     * Get lots from database which bidding time is over.
+     * Lot bidding time ends at 00:00 of day that specified in the field {@link Lot#dateAvailable}.
      * If lot have access to the auction find bets by lot for determine the winner of the auction.
      *
      * @return lots for which the auction is ended.
@@ -380,22 +396,24 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
-     * Extending lot bidding period by customer which expose the lot for the auction.
+     * Extending lot bidding period by customer which expose the lot for the auction
+     * in case lot bidding time is over and lot have empty bet list.
+     * Check that operation invokes by real lot owner.
      *
      * @param lotId lot ID.
      * @param days  days count (7 or 15 days).
      * @return true - operation passed successfully;
      * false - lot have confirmed bets or lot auction period is not over
-     * (in these cases customer cannot extend the bidding period)
+     * (in these cases customer cannot extend the bidding period).
      * @throws ServiceException in case DAOException has been thrown
      *                          (database error occurs)
      */
     @Override
-    public boolean extendBiddingPeriod(long lotId, int days) throws ServiceException {
+    public boolean extendBiddingPeriod(long lotId, int days, long userId) throws ServiceException {
         boolean flag = false;
         Lot lot = getLotById(lotId);
         LocalDate currentDate = LocalDate.now();
-        if (!lot.getBets().isEmpty() || lot.getDateAvailable().isAfter(currentDate)) {
+        if (!lot.getBets().isEmpty() || lot.getDateAvailable().isAfter(currentDate) || lot.getUserId() != userId) {
             return flag;
         }
         LocalDate extendedDate = currentDate.plusDays(days);

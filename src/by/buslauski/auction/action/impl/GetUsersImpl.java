@@ -23,10 +23,10 @@ public class GetUsersImpl implements Command {
     /**
      * Get customer list from database.
      *
-     * @param request user's request.
-     * @return An object <code>PageResponse</code> containing two fields:
-     * ResponseType - response type FORWARD
-     * String page - page for response "/jsp/edit_user.jsp"
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * {@link ResponseType} - response type {@link ResponseType#FORWARD}
+     *  String page - page for response "/jsp/edit_user.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

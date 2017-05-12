@@ -7,7 +7,6 @@ import by.buslauski.auction.exception.ServiceException;
  */
 public interface NotificationService {
 
-
     void createNotificationForTraderAuctionResult(long lotId, long traderId, long customerId) throws ServiceException;
 
 }

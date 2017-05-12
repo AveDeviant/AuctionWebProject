@@ -10,7 +10,7 @@ import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.*;
-import by.buslauski.auction.service.impl.BankServiceImpl;
+import by.buslauski.auction.service.impl.AuctionServiceImpl;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import by.buslauski.auction.validator.UserValidator;
@@ -27,25 +27,24 @@ public class BuyLotImpl implements Command {
     private static final String CITY_PARAM = "city";
     private static final String ADDRESS_PARAM = "address";
     private static final String PHONE_PARAM = "phone";
-    private static BankServiceImpl bankService = new BankServiceImpl();
+    private static AuctionService auctionService = new AuctionServiceImpl();
     private static UserService userService = new UserServiceImpl();
     private static LotService lotService = new LotServiceImpl();
 
     /**
      * Updating customer's personal information.
-     * Payment transaction from customer to auction or creation notification for trader about auction results.
+     * Creating notification for trader about auction results.
      * Deleting first winning bet from customer's bet list.
      * Withdraw lot from bids.
      * <p>
      * Checked situations:
      * Customer unable to register his order;
-     * Customer's current balance is less than lot price;
      * Customer exceeded auction waiting period (10 days) or lot was blocked;
      * Invalid customer's personal information;
      * Exception during payment transaction.
      *
-     * @param request user's request
-     * @return A <code>PageResponse</code> object containing two fields:
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
      * ResponseType - response type:
      * REDIRECT - operation passed successfully;
      * FORWARD - operation failed.
@@ -78,15 +77,9 @@ public class BuyLotImpl implements Command {
                 pageResponse.setPage(definePathToAccessDeniedPage(request));
                 return pageResponse;
             }
-            // Current customer's balance less that lot price.
-            if (!bankService.checkIsEnoughBalance(user.getUserId(), winningBet.getBet())) {
-                pageResponse.setResponseType(ResponseType.FORWARD);
-                request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.ORDER_BANK_BALANCE_ERROR);
-                return pageResponse;
-            }
             if (UserValidator.checkUserInfo(realName, city, address, phone)) {
                 userService.updateUserInfo(user.getUserId(), realName, city, address, phone);
-                if (!bankService.doPayment(winningBet)) {
+                if (!auctionService.notifyTrader(winningBet)) {
                     pageResponse.setResponseType(ResponseType.FORWARD);
                     request.setAttribute(ORDER_ERROR_ATTR, ResponseMessage.ORDER_TRANSACTION_EXCEPTION);
                     return pageResponse;

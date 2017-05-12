@@ -19,11 +19,11 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
     @Override
     public ArrayList<Category> getAllCategories() throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
-        ArrayList<Category> categories = null;
+        ArrayList<Category> categories = new ArrayList<>();
         try {
             CategoryDao categoryDao = new CategoryDaoImpl();
             daoHelper.initDao(categoryDao);
-            categories = categoryDao.getAllCategories();
+            categories.addAll(categoryDao.getAllCategories());
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {

@@ -23,7 +23,8 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
             " FROM bet" +
             " JOIN lot ON bet.id_lot=lot.id_lot WHERE bet.id_user=? ORDER BY id_bet";
     private static final String SQL_RESET_LOT_BETS = "DELETE FROM bet WHERE id_lot=?";
-    private static final String SQL_SELECT_COUNT_LOT_FOLLOWERS = "SELECT COUNT(DISTINCT id_user) AS followers_count FROM bet WHERE id_lot=?";
+    private static final String SQL_SELECT_COUNT_LOT_FOLLOWERS = "SELECT COUNT(DISTINCT id_user) AS followers_count" +
+            " FROM bet WHERE id_lot=?";
 
 
     @Override
@@ -74,6 +75,7 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
         return userBets;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void resetBets(long lotId) throws DAOException {
         try (PreparedStatement preparedStatementBet = connection.prepareStatement(SQL_RESET_LOT_BETS)) {

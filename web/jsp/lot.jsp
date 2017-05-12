@@ -97,15 +97,10 @@
                     <h5><fmt:message key="trader.ref.city"/></h5>
                     <p>${trader.getCity()}</p>
                 </c:if>
-                <c:if test="${auctionOwner ne null}">
-                    <div class="alert alert-warning aler-dismissable fade in">
-                        <fmt:message key="${auctionOwner}"/>
-                    </div>
-                </c:if>
                 <button class="button-auction" type="button" onclick="showBets()"><fmt:message
                         key="lot.page.button.showBets"/></button>
                 <br/>
-                <div id="bets" style="display: none;">
+                <div id="bets" class="bets" style="display: none;">
                     <c:forEach var="bet" items="${lot.getBets()}">
                         <div class="row">
                             <div class="col-sm-6" align="center">

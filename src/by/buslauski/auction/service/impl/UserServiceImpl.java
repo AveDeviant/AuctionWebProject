@@ -23,25 +23,25 @@ import java.util.ArrayList;
 public class UserServiceImpl extends AbstractService implements UserService {
     private static final String PASSWORD_NOT_FOUND = "";
     private static final int ROLE_ID_CUSTOMER = 2;
-    private static LotService lotService = new LotServiceImpl();
 
 
     @Override
-    public User authorizationChecking(String username, String password) throws ServiceException {
+    public User authorizationChecking(String login, String password) throws ServiceException {
         User user = null;
         DaoHelper daoHelper = new DaoHelper();
         try {
             UserDao userDao = new UserDaoImpl();
             daoHelper.initDao(userDao);
             String passwordMD5 = Md5Converter.convertToMd5(password);
-            String returnedPwd = userDao.findPasswordByLogin(username);
+            String returnedPwd = userDao.findPasswordByLogin(login);
             if (PASSWORD_NOT_FOUND.equals(returnedPwd)) {
                 return user;
             }
             if (passwordMD5.equals(returnedPwd)) {
-                user = userDao.findUserByUsername(username);
+                user = userDao.findUserByLogin(login);
             }
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -49,27 +49,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return user;
     }
 
-    /**
-     * Check lots which unable for bids but already have confirmed bets.
-     * Last bet is a winning bet - the last consumer who made a bet is a winner of auction.
-     * Add winning bets in consumer's ArrayList for further ordering.
-     *
-     * @param user auction customer.
-     */
-    @Override
-    public void setWinner(User user) throws ServiceException {
-        ArrayList<Lot> lots = lotService.getLotsWithOverTiming();
-        ArrayList<Bet> winningBets = new ArrayList<>();
-        for (Lot lot : lots) {
-            if (!lot.getBets().isEmpty() && lot.getAvailability()) {   // if lot has confirmed bets
-                Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
-                if (lastBet.getUserId() == user.getUserId()) {
-                    winningBets.add(lastBet);
-                }
-            }
-            user.setWinningBets(winningBets);
-        }
-    }
 
     @Override
     public ArrayList<User> getAllCustomers() throws ServiceException {
@@ -80,6 +59,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             users.addAll(userDao.getAllCustomers());
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -105,7 +85,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     /**
      * Ban or unban costumer using customer ID.
      *
-     * @param userId User ID whose status should be updated.
+     * @param userId User ID whose access should be updated.
      * @param access true - unban costumer
      *               false - ban costumer
      */
@@ -136,7 +116,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 daoHelper.initDao(userDao);
                 String pwdMd5 = Md5Converter.convertToMd5(password);
                 userDao.addUser(ROLE_ID_CUSTOMER, userName, email, pwdMd5, alias);
-                user = userDao.findUserByUsername(userName);
+                user = userDao.findUserByLogin(userName);
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -172,7 +152,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             user = userDao.findUserById(userId);
         } catch (DAOException e) {
-
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -189,6 +169,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             user = userDao.findTrader(lotId);
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();

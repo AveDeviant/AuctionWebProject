@@ -20,7 +20,8 @@ public class FileUploadingManager {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PART_HEADER = "content-disposition";
     private static final String PART_FILENAME_HEADER = "filename";
-    private static final int INCONVENIENT_FILENAME_LENGTH = 70;
+    private static final int TOO_LONG_FILENAME_LENGTH = 70;
+    private static final int LENGTH_TO_DELETE = 60;
 
     public String uploadFile(String absolutePath, Part filePart) {
         try {
@@ -54,10 +55,10 @@ public class FileUploadingManager {
                 String timeAsString = now.toString();
                 // Detected problems with filename if I save milliseconds so I decided remove it.
                 stringBuilder.append(timeAsString.substring((0), timeAsString.lastIndexOf('.')));
-                if (st.length() <= INCONVENIENT_FILENAME_LENGTH) {
+                if (st.length() <= TOO_LONG_FILENAME_LENGTH) {
                     stringBuilder.append(st.substring(st.lastIndexOf("=") + 2, st.length() - 1));
                 } else {
-                    stringBuilder.append(st.substring(st.lastIndexOf("=") + 60, st.length() - 1));
+                    stringBuilder.append(st.substring(st.lastIndexOf("=") + LENGTH_TO_DELETE, st.length() - 1));
                 }
                 String fileName = stringBuilder.toString();
                 fileName = fileName.replaceAll(Character.toString(':'), "").trim();

@@ -2,12 +2,11 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
-import by.buslauski.auction.exception.InvalidInputValueException;
+import by.buslauski.auction.exception.InvalidDateValueException;
 import by.buslauski.auction.exception.InvalidNumberValueException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
  * Created by Acer on 16.03.2017.
@@ -47,8 +45,6 @@ public class AddLotImpl implements Command {
     /**
      * Add a new lot and insert it into database.
      * Upload lot image on the server.
-     * The lot is put up for auction immediately if added by administrator
-     * or waits for confirmation if added by customer.
      * <p>
      * Checked situations:
      * User is unable to add a lot (user have been banned);
@@ -56,9 +52,10 @@ public class AddLotImpl implements Command {
      * Invalid lot title, description, price or date;
      * Exception during operation;
      *
-     * @param request user's request
-     * @return <code>PageResponse</code> object containing two fields:
-     * ResponseType - REDIRECT if operation passed successfully and FORWARD in other case;
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
+     * ResponseType - {@link ResponseType#REDIRECT} if operation passed successfully and
+     * {@link ResponseType#FORWARD} in other case;
      * String page - page for response:
      * "/jsp/success.jsp" if operation passed successfully and current page with the appropriate message
      * in other case.
@@ -81,10 +78,9 @@ public class AddLotImpl implements Command {
             String lotDescription = request.getParameter(LOT_DESCRIPTION);
             String lotCategory = request.getParameter(LOT_CATEGORY);
             String lotTimer = request.getParameter(AVAILABLE_TIMER);
-            System.out.println(lotTimer);
             Part lotImage = request.getPart(LOT_IMAGE);
             String fileName = lotImage.getSubmittedFileName();
-            if (!fileName.isEmpty()) {
+            if (!fileName.trim().isEmpty()) {
                 String type = request.getServletContext().getMimeType(fileName);
                 if (!type.startsWith(IMAGE_MIME_TYPE)) {
                     request.setAttribute(IMAGE_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
@@ -96,7 +92,7 @@ public class AddLotImpl implements Command {
                 String uploadPath = request.getServletContext().getRealPath(UPLOAD);
                 FileUploadingManager fileUploadingManager = new FileUploadingManager();
                 String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);
-                lotService.addLot(user, lotTitle, lotDescription, image, new BigDecimal(lotPrice),
+                lotService.addLot(user, lotTitle, lotDescription, image,  BetValidator.initPrice(lotPrice),
                         lotCategory, lotTimer);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
@@ -115,7 +111,7 @@ public class AddLotImpl implements Command {
         } catch (InvalidNumberValueException e) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_BET_VALUE);
-        } catch (InvalidInputValueException e) {
+        } catch (InvalidDateValueException e) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_DATE_VALUE);
         }

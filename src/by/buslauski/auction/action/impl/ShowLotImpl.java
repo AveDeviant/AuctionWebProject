@@ -24,16 +24,14 @@ import javax.servlet.http.HttpServletRequest;
 public class ShowLotImpl implements Command {
     private static final String LOT_ID = "id";
     private static final String LOT = "lot";
-    private static final String AUCTION_OWNER = "auctionOwner";
     private static LotService lotService = new LotServiceImpl();
     private static UserService userService = new UserServiceImpl();
 
     /**
      * Showing lot and trader info.
-     * Showing notification to user in case auction is owner of this lot.
      *
-     * @param request user's request.
-     * @return <code>PageResponse</code> - an object containing two fields:
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing two fields:
      * ResponseType  - FORWARD
      * String page - "/jsp/lot.jsp"  in case lot with entered id available for the auction;
      * "/jsp/404.jsp" in other case.
@@ -51,9 +49,6 @@ public class ShowLotImpl implements Command {
             }
             User trader = userService.findTrader(lot.getId());
             userService.setTraderRating(trader);
-            if (Role.ADMIN == trader.getRole()) {
-                request.setAttribute(AUCTION_OWNER, ResponseMessage.AUCTION_PROPERTY);
-            }
             request.setAttribute(SessionAttributes.TRADER, trader);
             request.setAttribute(LOT, lot);
             pageResponse.setResponseType(ResponseType.FORWARD);
