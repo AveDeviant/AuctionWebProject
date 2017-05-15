@@ -12,6 +12,7 @@ import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
+import by.buslauski.auction.util.NumberParser;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class GetLotsByTraderImpl implements Command {
 
 
     /**
-     * Get lot which exposed for the auction by specified trader.
+     * Get lot which exposed for the auction by concrete trader.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
@@ -40,7 +41,7 @@ public class GetLotsByTraderImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.TRADER_LOTS);
-        long traderId = Long.parseLong(request.getParameter(TRADER_ID));
+        long traderId = NumberParser.parse(request.getParameter(TRADER_ID));
         try {
             ArrayList<Lot> traderLots = lotService.findTraderLots(traderId);
             User trader = userService.findUserById(traderId);

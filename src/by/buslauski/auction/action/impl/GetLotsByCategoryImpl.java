@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 29.03.2017.
+ * @author Mikita Buslauski
  */
 public class GetLotsByCategoryImpl implements Command {
     private static final String CATEGORY = "categoryValue";
@@ -30,7 +30,7 @@ public class GetLotsByCategoryImpl implements Command {
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
      * ResponseType - response type: {@link ResponseType#FORWARD}
-     * String page - "/jsp/main.jsp"
+     * String page - page for response "/jsp/main.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

@@ -2,6 +2,8 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
+import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
@@ -12,7 +14,7 @@ import org.apache.logging.log4j.Level;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 15.04.2017.
+ * @author Mikita Buslauski
  */
 public class LotStatusEditImpl implements Command {
     private static final String LOT_ID = "id";
@@ -25,19 +27,20 @@ public class LotStatusEditImpl implements Command {
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * {@link ResponseType} - response type:
-     * {@link ResponseType#REDIRECT} if operation passed successfully and
+     * ResponseType - response type:
+     * {@link ResponseType#REDIRECT} if operation passed successfully or
      * {@link ResponseType#FORWARD} in case operation failed.
      * String page - current page.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
+        User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
         pageResponse.setPage(returnPageWithQuery(request));
         long lotId = Long.parseLong(request.getParameter(LOT_ID));
         boolean status = Boolean.valueOf(request.getParameter(STATUS));
         try {
-            lotService.changeLotBiddingStatus(lotId, status);
+            lotService.changeLotBiddingStatus(lotId, status, currentUser);
             pageResponse.setResponseType(ResponseType.REDIRECT);
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e);

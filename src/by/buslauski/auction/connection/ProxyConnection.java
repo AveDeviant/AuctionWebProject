@@ -6,7 +6,7 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * Created by Acer on 28.02.2017.
+ * @author Mikita Buslauski
  */
 public class ProxyConnection implements Connection,AutoCloseable {
     private Connection connection;
@@ -1146,9 +1146,9 @@ public class ProxyConnection implements Connection,AutoCloseable {
      * <ul>
      * <li>ApplicationName  -       The name of the application currently utilizing
      * the connection</li>
-     * <li>ClientUser               -       The name of the user that the application using
+     * <li>ClientUser               -       The name of the customer that the application using
      * the connection is performing work for.  This may
-     * not be the same as the user name that was used
+     * not be the same as the customer name that was used
      * in establishing the connection.</li>
      * <li>ClientHostname   -       The hostname of the computer the application
      * using the connection is running on.</li>
@@ -1270,7 +1270,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      * thrown or the driver supports the resulting conversion.
      *
      * @param typeName the SQL name of the type the elements of the array map to. The typeName is a
-     *                 database-specific name which may be the name of a built-in type, a user-defined type or a standard  SQL type supported by this database. This
+     *                 database-specific name which may be the name of a built-in type, a customer-defined type or a standard  SQL type supported by this database. This
      *                 is the value returned by <code>Array.getBaseTypeName</code>
      * @param elements the elements that populate the returned object
      * @return an Array object whose elements map to the specified SQL type
@@ -1288,7 +1288,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      * Factory method for creating Struct objects.
      *
      * @param typeName   the SQL type name of the SQL structured type that this <code>Struct</code>
-     *                   object maps to. The typeName is the name of  a user-defined type that
+     *                   object maps to. The typeName is the name of  a customer-defined type that
      *                   has been defined for this database. It is the value returned by
      *                   <code>Struct.getSQLTypeName</code>.
      * @param attributes the attributes that populate the returned object

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 28.02.2017.
+ * @author Mikita Buslauski
  */
 public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String SQL_SELECT_USER = "SELECT user.id_user, user.id_role, name, username, email, password, city, address," +

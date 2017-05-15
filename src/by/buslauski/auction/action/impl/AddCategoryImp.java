@@ -12,7 +12,7 @@ import by.buslauski.auction.validator.CategoryValidator;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 10.04.2017.
+ * @author Mikita Buslauski
  */
 public class AddCategoryImp implements Command {
     private static final String CATEGORY_NAME = "name";

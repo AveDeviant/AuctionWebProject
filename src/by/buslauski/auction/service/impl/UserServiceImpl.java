@@ -86,8 +86,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
      * Ban or unban costumer using customer ID.
      *
      * @param userId User ID whose access should be updated.
-     * @param access true - unban costumer
-     *               false - ban costumer
+     * @param access true - unban costumer.
+     *               false - ban costumer.
      */
     @Override
     public void changeAccess(long userId, boolean access) throws ServiceException {
@@ -186,6 +186,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return rating;
     }
 
+    /**
+     * Insert a new trader rating value into database.
+     *
+     * @param traderId   ID of trader whose rating should be updated.
+     * @param customerId ID of customer who update trader rating.
+     * @param rating     rating value.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs).
+     */
     @Override
     public void updateTraderRating(long traderId, long customerId, int rating) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
@@ -199,6 +208,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
         }
     }
 
+    /**
+     * Calculate trader rating.
+     * Get average value fom database and round it using <code>BigDecimal</code>
+     * Set calculated rating to trader. {@link User#userRating}
+     *
+     * @param trader Trader whose rating should be calculated.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs).
+     */
     @Override
     public void setTraderRating(User trader) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
@@ -218,7 +236,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     /**
-     * Checking user's login, email and alias for uniqueness.
+     * Checking customer's login, email and alias for uniqueness.
      *
      * @param login entered login
      * @param email entered email

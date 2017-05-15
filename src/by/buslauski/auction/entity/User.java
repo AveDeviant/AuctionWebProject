@@ -4,7 +4,7 @@ package by.buslauski.auction.entity;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 28.02.2017.
+ * @author Mikita Buslauski
  */
 public class User {
     private long userId;

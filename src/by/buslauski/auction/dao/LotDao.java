@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Mikita Buslauski
  */
 public interface LotDao {
 

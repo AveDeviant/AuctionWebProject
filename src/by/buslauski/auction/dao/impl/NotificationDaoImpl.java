@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Acer on 08.05.2017.
+ * @author Mikita Buslauski
  */
 public class NotificationDaoImpl extends AbstractDao implements NotificationDao {
     private static final String SQL_CREATE_AUCTION_NOTIFICATION = "INSERT INTO result_notification " +

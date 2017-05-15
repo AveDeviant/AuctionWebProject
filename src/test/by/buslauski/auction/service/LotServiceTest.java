@@ -55,7 +55,7 @@ public class LotServiceTest {
         Lot addedLot = lots.get(lots.size() - 1);
         long addedLotId = addedLot.getId();
         System.out.println("Deleting lot...");
-        lotService.deleteLot(addedLotId);
+        lotService.deleteLot(addedLotId,admin);
         System.out.println("Lot has been deleted.");
         Lot deletedLot = lotService.getLotById(addedLotId);
         Assert.assertEquals(null, deletedLot);
@@ -69,8 +69,9 @@ public class LotServiceTest {
     public void deleteLotTestHavingBetsOrders() throws ServiceException {
         System.out.println("Getting lot with ID=16");
         Lot lot = lotService.getLotById(16);
+        User admin = userService.findAdmin();
         System.out.println("Trying to delete lot...");
-        lotService.deleteLot(lot.getId());
+        lotService.deleteLot(lot.getId(),admin);
     }
 
     /**
@@ -78,12 +79,13 @@ public class LotServiceTest {
      */
     @Test
     public void changeLotBiddingStatusTest() throws ServiceException {
+        User admin = userService.findAdmin();
         System.out.println("Removing lot from auction list...");
-        lotService.changeLotBiddingStatus(16, false);
+        lotService.changeLotBiddingStatus(16, false,admin);
         Lot lotAfterFirstOperation = lotService.getLotById(16);
         Assert.assertEquals(false, lotAfterFirstOperation.getAvailability());
         System.out.println("Returning lot to auction list...");
-        lotService.changeLotBiddingStatus(16, true);
+        lotService.changeLotBiddingStatus(16, true,admin);
         Lot lotAfterSecondOperation = lotService.getLotById(16);
         Assert.assertEquals(true, lotAfterSecondOperation.getAvailability());
     }
@@ -95,7 +97,7 @@ public class LotServiceTest {
     }
 
     /**
-     * Note that user with ID=1 is an administrator of the auction and all lots that
+     * Note that customer with ID=1 is an administrator of the auction and all lots that
      * he exposes are available (approved) for bidding.
      *
      * @throws ServiceException in case DAOException has been thrown

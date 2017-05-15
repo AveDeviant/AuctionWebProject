@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by Acer on 13.03.2017.
+ * @author Buslauski Mikita
  */
 public class Md5Converter {
     private static final String ALGORITHM = "MD5";

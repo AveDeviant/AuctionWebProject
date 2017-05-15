@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 31.03.2017.
+ * @author Mikita Buslauski
  */
 public class MessageDaoImpl extends AbstractDao implements MessageDao {
     private static final String SQL_ADD_MESSAGE = "INSERT INTO message VALUES(NULL,?,?,?,?,NOW(),FALSE)";

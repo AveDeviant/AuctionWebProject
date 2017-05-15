@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 21.03.2017.
+ * @author Mikita Buslauski
  */
 public class BetDaoImpl extends AbstractDao implements BetDao {
     private static final String SQL_ADD_BET = "INSERT INTO bet VALUES (NULL,?,?,?,NOW())";

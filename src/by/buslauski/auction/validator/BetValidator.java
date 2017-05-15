@@ -5,7 +5,7 @@ import by.buslauski.auction.exception.InvalidNumberValueException;
 import java.math.BigDecimal;
 
 /**
- * Created by Acer on 11.04.2017.
+ * @author Buslauski Mikita
  */
 public class BetValidator {
     private static final String PRICE_REGEXP = "^[1-9][0-9]*.[0-9]{2}";

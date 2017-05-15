@@ -39,4 +39,10 @@ public class BetServiceTest {
         boolean actual = betService.checkBetValue(testLot, bet);
         Assert.assertEquals(true, actual);
     }
+
+    @Test
+    public void checkBetValueTestInvalidBetStep() {
+        BigDecimal bet = new BigDecimal(310.00);
+        Assert.assertTrue(betService.checkBetValue(testLot, bet));
+    }
 }

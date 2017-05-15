@@ -63,7 +63,7 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
         stringBuilder.append(notification.getLotTitle());
         stringBuilder.append(" is over. The winner is ");
         stringBuilder.append(notification.getCustomerAlias());
-        stringBuilder.append(". This user must to confirm the transaction within 10 days, in other case all" +
+        stringBuilder.append(". This customer must to confirm the transaction within 10 days, in other case all" +
                 " result of the auction will be reset./");
         stringBuilder.append(" Торги по лоту ");
         stringBuilder.append(notification.getLotTitle());

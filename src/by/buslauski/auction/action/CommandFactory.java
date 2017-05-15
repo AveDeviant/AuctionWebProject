@@ -1,12 +1,15 @@
 package by.buslauski.auction.action;
 
 import by.buslauski.auction.action.impl.*;
-import by.buslauski.auction.action.impl.user.*;
+import by.buslauski.auction.action.impl.customer.*;
+import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.entity.Role;
+import by.buslauski.auction.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 21.02.2017.
+ * @author Mikita Buslauski
  */
 public class CommandFactory {
     private static final String COMMAND_PARAM = "command";
@@ -57,55 +60,65 @@ public class CommandFactory {
             case ADD_LOT:
                 return new AddLotImpl();
             case GET_LOTS:
-                return new GetLotsImpl();
+                return manageAccessAdmin(request, new GetLotsImpl());
             case SHOW_LOT:
                 return new ShowLotImpl();
             case MAKE_BET:
                 return new BetCommandImpl();
             case ORDER_LOT:
-                return new OrderPageImpl();
+                return manageAccessAuthorizedUser(request, new OrderPageImpl());
             case ORDER_LOT_BUY:
-                return new BuyLotImpl();
+                return manageAccessAuthorizedUser(request, new BuyLotImpl());
             case ORDER_LOT_REJECT:
-                return new RejectOrderImpl();
+                return manageAccessAuthorizedUser(request, new RejectOrderImpl());
             case EDIT_LOT:
-                return new LotEditImpl();
+                return manageAccessAdmin(request, new LotEditImpl());
             case GET_USERS:
-                return new GetUsersImpl();
+                return manageAccessAdmin(request, new GetUsersImpl());
             case EDIT_ACCESS:
-                return new AccessEditImpl();
+                return manageAccessAdmin(request, new AccessEditImpl());
             case LOTS_BY_CATEGORY:
                 return new GetLotsByCategoryImpl();
             case GO_TO_PAGE:
                 return new GoToCommandImpl();
             case GET_ORDERS:
-                return new GetOrdersCommandImpl();
+                return manageAccessAdmin(request, new GetOrdersCommandImpl());
             case MESSAGE:
                 return new MessageCommandImpl();
             case GET_CATEGORIES:
                 return new GetCategoriesImpl();
             case DELETE_LOT:
-                return new DeleteLotImpl();
+                return manageAccessAdmin(request, new DeleteLotImpl());
             case GET_MESSAGES:
-                return new GetMessagesImpl();
+                return manageAccessAuthorizedUser(request, new GetMessagesImpl());
             case ADD_CATEGORY:
-                return new AddCategoryImp();
+                return manageAccessAdmin(request, new AddCategoryImp());
             case LOT_STATUS:
-                return new LotStatusEditImpl();
+                return manageAccessAuthorizedUser(request, new LotStatusEditImpl());
             case USER_OPERATIONS:
-                return new GetUserOperationsImpl();
+                return manageAccessAuthorizedUser(request, new GetUserOperationsImpl());
             case TRADER_RATING:
-                return new TraderRatingImpl();
+                return manageAccessAuthorizedUser(request, new TraderRatingImpl());
             case BACK_BUTTON:
                 return new BackCommandImpl();
             case TRADER_LOTS:
                 return new GetLotsByTraderImpl();
             case USER_LOTS:
-                return new GetUserLotsImpl();
+                return manageAccessAuthorizedUser(request, new GetUserLotsImpl());
             case EXTEND_PERIOD:
-                return new ExtendBiddingPeriodImpl();
+                return manageAccessAuthorizedUser(request, new ExtendBiddingPeriodImpl());
             default:
                 return new InitCommandImpl();
         }
+    }
+
+    private Command manageAccessAuthorizedUser(HttpServletRequest request, Command potentialCommand) {
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        return user == null ? new InitCommandImpl() : potentialCommand;
+    }
+
+    private Command manageAccessAdmin(HttpServletRequest request, Command potentialCommand) {
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        return user == null || user.getRole() != Role.ADMIN ? new InitCommandImpl() : potentialCommand;
     }
 }

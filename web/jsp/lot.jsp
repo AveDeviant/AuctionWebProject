@@ -1,13 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="avail-date" uri="availdate" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Acer
-  Date: 18.03.2017
-  Time: 23:33
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:import url="/fragments/header.jsp"/>
 <fmt:setLocale value="${locale}"/>
@@ -24,22 +18,33 @@
             <div class=" alert alert-danger alert-dismissable fade in">
                 <fmt:message key="user.banned.title"/></div>
         </c:if>
+        <c:set var="step" scope="page" value="${lot.getPrice()/100*5}"/>
         <c:if test="${betErr ne null}">
             <div class=" alert alert-danger alert-dismissable fade in">
-                <fmt:message key="${betErr}"/></div>
+                <fmt:message key="${betErr}"/><c:out value="${lot.getCurrentPrice()+step}"/></div>
         </c:if>
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-center">${lot.getTitle()}</h1>
-                <h6 class="text-center">ID: ${lot.getId()}</h6>
                 <div class="col-sm-6">
-                    <h6 class="text-right"><span
-                            class="glyphicon glyphicon-eye-open"
-                            title="<fmt:message key="lot.followers"/>"></span> ${lot.getFollowersCount()}
-                    </h6>
+                    <h2 class="text-center">${lot.getTitle()}</h2>
                 </div>
-                <div class="col-sm-6">
-                    <h6 class="text-left" id="remaining"></h6>
+                <div class="col-sm-3">
+                    <div class="lot-stat">
+                        <div class="row">
+                            <h6 class="text-center">ID: ${lot.getId()}</h6>
+                            <div class="row">
+                                <h6 class="text-center"><span
+                                        class="glyphicon glyphicon-eye-open"
+                                        title="<fmt:message key="lot.followers"/>"></span> ${lot.getFollowersCount()}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row">
+                        <h6 class="text-center" id="remaining"></h6>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,9 +55,9 @@
             </div>
             <div class="col-sm-3">
                 <h5><fmt:message key="lot.page.startingPrice"/></h5>
-                <h2>${lot.getPrice()}</h2>
+                <h2 id="start-price">${lot.getPrice()}</h2>
                 <h5><fmt:message key="lot.page.currentPrice"/></h5>
-                <h2>${lot.getCurrentPrice()}</h2>
+                <h2 id="current-price">${lot.getCurrentPrice()}</h2>
                 <h5><fmt:message key="lot.timing"/></h5>
                 <h4><avail-date:avail-date/></h4>
                 <c:choose>
@@ -66,12 +71,12 @@
                             <input class="form-control" type="text" name="price" id="price"
                                    pattern="^[1-9][0-9]*.[0-9]{2}"
                                    required title="<fmt:message key="bet.restrict"/> "
-                                   placeholder="<fmt:message key="bet.restrict"/>">
+                                   placeholder="${lot.getCurrentPrice()+step}">
                             <br/>
-                            <button class="button-auction" type="submit" name="command" value="makeBet"><fmt:message
+                            <button class="button-auction" type="submit" name="command"
+                                    value="makeBet"><fmt:message
                                     key="lot.bet.button"/></button>
                             <input type="hidden" name="lotId" value="${lot.getId()}">
-                            <input type="hidden" name="userId" value="${user.getUserId()}">
                             <input type="hidden" name="jspPath"
                                    value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
 
@@ -82,8 +87,9 @@
             <div class="col-sm-3">
                 <h5><fmt:message key="trader.ref"/></h5>
                 <h6>${trader.getAlias()}</h6>
-                <a href="${pageContext.request.contextPath}/Auction?command=traderLots&traderId=${trader.getUserId()}">другие
-                    лоты продавца</a>
+                <a href="${pageContext.request.contextPath}/Auction?command=traderLots&traderId=${trader.getUserId()}"><fmt:message
+                        key="trader.lot.ref"/>
+                </a>
                 <h5><fmt:message key="trader.rating"/></h5>
                 <c:choose>
                     <c:when test="${trader.getUserRating() eq 0.0}">
@@ -145,7 +151,7 @@
             var minutes = 60 - now.getMinutes() - 1;
             minutes = (minutes < 10) ? "0" + minutes : minutes;
             var seconds = 60 - now.getSeconds() - 1;
-            seconds= (seconds < 10) ? "0" + seconds : seconds;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
             remaining.innerHTML = '<fmt:message key="timer.remaining"/>' + " " + '<fmt:message key="timer.days"/>' + " " + days
                 + " " + '<fmt:message key="timer.hours"/>' + " " + hours + " " + '<fmt:message key="timer.minutes"/>' + " "
                 + minutes + " " + '<fmt:message key="timer.seconds"/>' + " " + seconds;

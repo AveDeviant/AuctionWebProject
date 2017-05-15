@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 /**
- * Created by Acer on 17.03.2017.
+ * @author Buslauski Mikita
  */
 public class LotValidator {
     private static final int MAX_DESCRIPTION_LENGTH = 1000;

@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Acer on 27.03.2017.
+ * @author Mikita Buslauski
  */
 public class LotEditImpl implements Command {
     private static final String LOT_ID = "id";
@@ -46,23 +46,28 @@ public class LotEditImpl implements Command {
     /**
      * Editing lot title, starting price, image, availability for bids,
      * timing, lot category.
+     * <p>
+     * Checked situations:
+     * Invalid lot image extension;
+     * Invalid lot title, description, price or date;
+     * Exception during operation;
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * ResponseType - REDIRECT in case operation passed successfully and FORWARD
-     * in other case.
+     * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully and
+     * {@link ResponseType#FORWARD} in other case.
      * String page - page for response (current page).
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        if (user == null || !Role.ADMIN.getValue().equals(user.getRole().getValue())) {
+        if (user == null || !(Role.ADMIN == user.getRole())) {
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
             return pageResponse;
         }
-        pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
+        pageResponse.setPage(returnPageWithQuery(request));
         pageResponse.setResponseType(ResponseType.FORWARD);
         long id = Long.valueOf(request.getParameter(LOT_ID));
         try {

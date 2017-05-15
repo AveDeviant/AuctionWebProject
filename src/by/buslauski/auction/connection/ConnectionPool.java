@@ -11,12 +11,11 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by Acer on 28.02.2017.
+ * @author Mikita Buslauski
  */
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger();

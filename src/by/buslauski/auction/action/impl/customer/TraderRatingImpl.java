@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
@@ -9,12 +9,13 @@ import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
+import by.buslauski.auction.util.NumberParser;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 26.04.2017.
+ * @author Mikita Buslauski
  */
 public class TraderRatingImpl implements Command {
     private static final String RATING = "rating";
@@ -35,9 +36,9 @@ public class TraderRatingImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setPage(returnPageWithQuery(request));
-        int rating = Integer.parseInt(request.getParameter(RATING));
+        int rating = (int) NumberParser.parse(request.getParameter(RATING));
         User customer = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        long traderId = Long.parseLong(request.getParameter(TRADER_ID));
+        long traderId = NumberParser.parse(request.getParameter(TRADER_ID));
         try {
             userService.updateTraderRating(traderId, customer.getUserId(), rating);
             pageResponse.setResponseType(ResponseType.REDIRECT);

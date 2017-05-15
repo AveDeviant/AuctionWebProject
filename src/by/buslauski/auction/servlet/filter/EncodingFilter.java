@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
 /**
- * Created by Acer on 29.03.2017.
+ * @author Buslauski Mikita
  */
 @WebFilter(urlPatterns = {"/*"}, initParams = {@WebInitParam(name = "encoding", value = "UTF-8",
         description = "encoding parameter")})

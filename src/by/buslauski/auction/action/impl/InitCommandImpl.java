@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 01.04.2017.
+ * @author Mikita Buslauski
  */
 public class InitCommandImpl implements Command {
     private static final String AVAILABLE_LOTS = "lots";
@@ -37,11 +37,11 @@ public class InitCommandImpl implements Command {
     /**
      * Init command. Get available lots for bids from database and
      * displays it to main page. Displaying appropriate message in case the list is empty.
-     * Displaying appropriate message in case user have been banned.
+     * Displaying appropriate message in case customer have been banned.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * {@link ResponseType} - response type: {@link ResponseType#FORWARD}
+     * ResponseType - response type: {@link ResponseType#FORWARD}
      * String page - page for response "/jsp/main.jsp"
      */
     @Override
@@ -53,9 +53,9 @@ public class InitCommandImpl implements Command {
         try {
             ArrayList<Lot> availableLots = lotService.getAvailableLots();
             if (user != null) {
-                user = userService.findUserById(user.getUserId());  //update user info
+                user = userService.findUserById(user.getUserId());  //update customer info
                 user.setUserMessages(messageService.findUserMessages(user.getUserId()));
-                if (messageService.haveUnreadMessages(user.getUserId())) {  // check  new messages for user
+                if (messageService.haveUnreadMessages(user.getUserId())) {  // check  new messages for customer
                     user.setUnreadMessages(true);
                 }
                 request.getSession().setAttribute(SessionAttributes.USER, user);

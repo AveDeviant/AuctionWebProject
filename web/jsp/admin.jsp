@@ -1,12 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Acer
-  Date: 15.03.2017
-  Time: 0:31
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <fmt:setLocale value="${locale}"/>
@@ -16,8 +10,8 @@
 </head>
 <body>
 <c:import url="/fragments/header.jsp"/>
+<div class="custom-opacity">
 <div class="container">
-    <div class="custom-opacity">
     <c:if test="${user eq null or user.getRole().getValue()!='admin'}">
         <c:redirect url="/Controller"/>
     </c:if>

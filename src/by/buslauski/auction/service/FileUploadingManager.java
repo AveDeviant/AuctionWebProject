@@ -14,7 +14,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 
 /**
- * Created by Acer on 16.03.2017.
+ * @author Buslauski Mikita
  */
 public class FileUploadingManager {
     private static final Logger LOGGER = LogManager.getLogger();

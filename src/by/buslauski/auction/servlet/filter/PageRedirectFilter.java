@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Acer on 29.03.2017.
+ * @author Buslauski Mikita
  */
 @WebFilter(urlPatterns = {"/jsp/*"}, initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp")})
 public class PageRedirectFilter implements Filter {

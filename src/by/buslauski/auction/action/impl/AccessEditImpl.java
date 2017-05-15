@@ -8,11 +8,12 @@ import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
+import by.buslauski.auction.util.NumberParser;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 28.03.2017.
+ * @author Mikita Buslauski
  */
 public class AccessEditImpl implements Command {
     private static final String CUSTOMER_ID = "id";
@@ -34,7 +35,7 @@ public class AccessEditImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setPage(returnPageWithQuery(request));
-        long customerId = Long.parseLong(request.getParameter(CUSTOMER_ID));
+        long customerId = NumberParser.parse(request.getParameter(CUSTOMER_ID));
         String state = request.getParameter(STATE);
         boolean access = UNBANNED.equals(state);
         try {

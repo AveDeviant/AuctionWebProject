@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 
 /**
- * Created by Acer on 28.02.2017.
+ * @author Mikita Buslauski
  */
 public abstract class AbstractDao {
     protected static final Logger LOGGER = LogManager.getLogger();

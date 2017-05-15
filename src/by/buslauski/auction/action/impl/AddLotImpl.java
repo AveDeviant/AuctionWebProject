@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Acer on 16.03.2017.
+ * @author Mikita Buslauski
  */
 public class AddLotImpl implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -43,11 +43,14 @@ public class AddLotImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
+     * TODO ЗАЩИТА ОТ ХИДДЕН ПОЛЕЙ
+     */
+    /**
      * Add a new lot and insert it into database.
      * Upload lot image on the server.
      * <p>
      * Checked situations:
-     * User is unable to add a lot (user have been banned);
+     * User is unable to add a lot (customer have been banned);
      * Invalid lot image extension;
      * Invalid lot title, description, price or date;
      * Exception during operation;

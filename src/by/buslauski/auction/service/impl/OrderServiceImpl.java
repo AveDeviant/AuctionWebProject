@@ -8,14 +8,11 @@ import by.buslauski.auction.exception.DAOException;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.service.OrderService;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 30.03.2017.
+ * @author Mikita Buslauski
  */
 public class OrderServiceImpl extends AbstractService implements OrderService {
 

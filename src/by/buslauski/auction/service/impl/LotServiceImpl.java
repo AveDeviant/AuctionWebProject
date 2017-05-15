@@ -33,7 +33,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * Lot put up for the auction immediately if added by auction administrator and
      * waits for confirmation if added by customer.
      *
-     * @param user          user who add a lot.
+     * @param user          customer who add a lot.
      * @param title         lot tittle.
      * @param description   lot description.
      * @param image         path to lot image.
@@ -164,21 +164,6 @@ public class LotServiceImpl extends AbstractService implements LotService {
         return lot;
     }
 
-//    /**
-//     * Method checks if the lot are still available for bidding.
-//     * Lot bidding time ends at 00:00:00.
-//     *
-//     * @param lot checked lot.
-//     * @return true -  lot available for bidding
-//     * false - lot bidding time is over or lot was withdrawn from the auction
-//     */
-//    @Override
-//    public boolean checkActuality(Lot lot) {
-//        LocalDate lotDate = lot.getDateAvailable();
-//        LocalDateTime now = LocalDateTime.now();
-//        return now.isBefore(lotDate.atTime(0, 0, 0)) && lot.getAvailability();
-//    }
-
     /**
      * Get lots from database which bidding time is over.
      * Lot bidding time ends at 00:00 of day that specified in the field {@link Lot#dateAvailable}.
@@ -260,6 +245,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Deleting lot from database using lot ID.
+     * Check that user who invokes this operation has a permission for this operation: {@link Role#ADMIN}.
      *
      * @param lotId ID lot which should be deleted.
      * @throws ServiceException thrown in case lot have confirmed bets and/or
@@ -267,8 +253,11 @@ public class LotServiceImpl extends AbstractService implements LotService {
      *                          (or for an another reason).
      */
     @Override
-    public void deleteLot(long lotId) throws ServiceException {
+    public void deleteLot(long lotId, User user) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
+        if (user.getRole() != Role.ADMIN) {
+            return;
+        }
         try {
             LotDao lotDao = new LotDaoImpl();
             daoHelper.initDao(lotDao);
@@ -336,18 +325,24 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Withdraw the lot or put the lot up for bids.
+     * Check that this operation invokes by real lot owner or auction administrator.
      *
      * @param lotId  lot which status should be changed.
      * @param status true - put up lot for auction;
      *               false - withdraw lot
+     * @param user   user who invokes this operation.
      * @throws ServiceException if a database access error occurs.
      */
     @Override
-    public void changeLotBiddingStatus(long lotId, boolean status) throws ServiceException {
+    public void changeLotBiddingStatus(long lotId, boolean status, User user) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
         try {
             LotDao lotDao = new LotDaoImpl();
             daoHelper.initDao(lotDao);
+            Lot lot = lotDao.findLotById(lotId);
+            if ((user == null) || (user.getRole() != Role.ADMIN && user.getUserId() != lot.getUserId())) {
+                return;
+            }
             lotDao.changeLotBiddingStatus(lotId, status);
         } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e);

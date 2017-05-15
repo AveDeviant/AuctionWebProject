@@ -26,4 +26,18 @@ public class OrderServiceTest {
         ArrayList<Order> orders = orderService.getAllOrders();
         Assert.assertTrue(orders.size() > 0);
     }
+
+    /**
+     * Note that database already stores order where one of the contract side
+     * was user with ID=1.
+     *
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs)
+     */
+    @Test
+    public void getUserConfirmedOrders() throws ServiceException {
+        OrderService orderService = new OrderServiceImpl();
+        ArrayList<Order> orders = orderService.getUserConfirmedOrders(1);
+        Assert.assertTrue(orders.size() > 0);
+    }
 }

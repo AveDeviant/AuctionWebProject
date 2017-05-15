@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Buslauski Mikita
  */
 public interface LotService {
     void addLot(User user, String title, String description,
@@ -23,8 +23,6 @@ public interface LotService {
 
     Lot getAvailableLotById(long lotId) throws ServiceException;
 
-//    boolean checkActuality(Lot lot);
-
     ArrayList<Lot> getLotsWithOverTiming() throws ServiceException;
 
     ArrayList<Lot> findLotsByCategory(String category) throws ServiceException;
@@ -32,13 +30,13 @@ public interface LotService {
     void editLot(long lotId, String category, String title, String image, BigDecimal price,
                  boolean availability, String availableDate) throws ServiceException;
 
-    void deleteLot(long lotId) throws ServiceException;
+    void deleteLot(long lotId, User user) throws ServiceException;
 
     void resetBids(Lot lot) throws ServiceException;
 
     boolean checkWaitingPeriod(Lot lot);
 
-    void changeLotBiddingStatus(long lotId, boolean status) throws ServiceException;
+    void changeLotBiddingStatus(long lotId, boolean status, User user) throws ServiceException;
 
     ArrayList<Lot> findTraderLots(long traderId) throws ServiceException;
 

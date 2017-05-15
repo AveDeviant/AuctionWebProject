@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
@@ -14,15 +14,13 @@ import by.buslauski.auction.service.*;
 import by.buslauski.auction.service.impl.BetServiceImpl;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
+import by.buslauski.auction.util.NumberParser;
 import by.buslauski.auction.validator.BetValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 
-/**
- * Created by Acer on 19.03.2017.
- */
 
 /**
  * @author Buslauski Mikita
@@ -40,10 +38,10 @@ public class BetCommandImpl implements Command {
      * Bet operation. Updating lot current price and insert the bet into database.
      * <p>
      * Checked situations:
-     * The user isn't authorized on the site;
-     * The user have been banned during his session on the site;
-     * The lot was withdrawn from the auction during user's session;
-     * The user tries to bet on his own lot;
+     * The customer isn't authorized on the site;
+     * The customer have been banned during his session on the site;
+     * The lot was withdrawn from the auction during customer's session;
+     * The customer tries to bet on his own lot;
      * Invalid price entered;
      * The entered price is less than or equals to current lot price;
      * Exception during operation;
@@ -61,7 +59,7 @@ public class BetCommandImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SessionAttributes.USER);
-        long lotId = Long.valueOf(request.getParameter(LOT_ID_PARAM));
+        long lotId = NumberParser.parse(request.getParameter(LOT_ID_PARAM));
         pageResponse.setPage(returnPageWithQuery(request));
         pageResponse.setResponseType(ResponseType.FORWARD);
         if (user == null) {
@@ -84,7 +82,7 @@ public class BetCommandImpl implements Command {
                         return pageResponse;
                     }
                     BigDecimal newPrice = BetValidator.initPrice(request.getParameter(PRICE_PARAM));
-                    if (!betService.checkBetValue(lot, newPrice) || !betService.addBet(userId,lotId,newPrice)) {
+                    if (!betService.checkBetValue(lot, newPrice) || !betService.addBet(userId, lotId, newPrice)) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
                         return pageResponse;
                     }

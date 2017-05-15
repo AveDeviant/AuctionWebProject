@@ -3,7 +3,7 @@ package by.buslauski.auction.entity;
 import java.time.LocalDateTime;
 
 /**
- * Created by Acer on 31.03.2017.
+ * @author Mikita Buslauski
  */
 public class UserMessage {
     private long messageId;

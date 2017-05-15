@@ -4,7 +4,7 @@ import by.buslauski.auction.entity.AuctionNotification;
 import by.buslauski.auction.exception.DAOException;
 
 /**
- * Created by Acer on 08.05.2017.
+ * @author Mikita Buslauski
  */
 public interface NotificationDao {
 

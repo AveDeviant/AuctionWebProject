@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 10.05.2017.
+ * @author Mikita Buslauski
  */
 public class AuctionServiceImpl extends AbstractService implements AuctionService {
     private static MessageService messageService = new MessageServiceImpl();
@@ -28,7 +28,7 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
     /**
      * Check lots which bidding time is over but already have confirmed bets.
      * Last bet is a winning bet - the last customer who made this bet is a winner of auction.
-     * Add winning bets in consumer's ArrayList for further ordering.
+     * Set winning bets to customer for further ordering {@link User#winningBets}.
      *
      * @param user auction customer.
      */
@@ -76,11 +76,10 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
             // creating order with SUCCESS status
             orderDao.addOrder(customerId, trader.getUserId(), lotId, moneyAmount, true);
             lotDao.changeLotBiddingStatus(lotId, false);
-            // create notification for user, who offered lot
+            // create notification for customer, who offered lot
             messageService.createMessageForTraderAboutPurchaser(trader, bet);
             daoHelper.commit();
             status = true;
-
         } catch (DAOException e) {
             daoHelper.rollback();
             LOGGER.log(Level.ERROR, e + " Exception during paying.");

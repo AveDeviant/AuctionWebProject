@@ -1,19 +1,18 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
+import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.Bet;
-import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
+import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.BetService;
-import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.OrderService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.BetServiceImpl;
-import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.OrderServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 26.04.2017.
+ * @author Mikita Buslauski
  */
 public class GetUserOperationsImpl implements Command {
     private static final String USER_ORDERS = "orders";
@@ -34,7 +33,7 @@ public class GetUserOperationsImpl implements Command {
 
     /**
      * Get customer bets, accepted deals and lots from database
-     * and displaying it to current user.
+     * and displaying it to current customer.
      *
      * @param request client request to get parameters to work with.
      * @return null.
@@ -42,6 +41,12 @@ public class GetUserOperationsImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
+//        if (currentUser == null) {
+//            PageResponse pageResponse = new PageResponse();
+//            pageResponse.setPage(PageNavigation.INDEX_PAGE);
+//            pageResponse.setResponseType(ResponseType.REDIRECT);
+//            return pageResponse;
+//        }
         try {
             ArrayList<Order> orders = orderService.getUserConfirmedOrders(currentUser.getUserId());
             ArrayList<Integer> rating = userService.defineRating();

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 30.03.2017.
+ * @author Mikita Buslauski
  */
 public class OrderDaoImpl extends AbstractDao implements OrderDao {
     private static final String SQL_SELECT_ALL_ORDERS = "SELECT id_order, order.id_user,id_trader, id_lot, payment, date, accept," +

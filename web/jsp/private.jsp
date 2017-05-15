@@ -1,12 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Acer
-  Date: 13.03.2017
-  Time: 23:50
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <fmt:setLocale value="${locale}"/>
@@ -140,15 +134,5 @@
         </div>
     </div>
 </div>
-<script>
-    function showCardForm() {
-        var form = document.getElementById("cardForm");
-        if (form.style.display === "none") {
-            form.style.display = "inline";
-        } else {
-            form.style.display = "none";
-        }
-    }
-</script>
 </body>
 </html>

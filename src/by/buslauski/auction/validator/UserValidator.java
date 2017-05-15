@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Acer on 28.02.2017.
+ * @author Buslauski Mikita
  */
 public class UserValidator {
     private static final String PASSWORD_REGEXP = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d])[\\w_-]{8,}$";

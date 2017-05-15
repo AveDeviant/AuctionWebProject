@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Mikita Buslauski
  */
 public interface BetDao {
 

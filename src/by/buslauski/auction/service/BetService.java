@@ -9,12 +9,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Buslauski Mikita
  */
 public interface BetService {
-    boolean addBet(long userId, long lotId, BigDecimal price) throws ServiceException;
+    int AUCTION_STEP_PERCENT = 5;
 
-    User findUserByBet(Bet bet) throws ServiceException;
+    boolean addBet(long userId, long lotId, BigDecimal price) throws ServiceException;
 
     boolean checkBetValue(Lot lot, BigDecimal bet);
 

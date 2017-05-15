@@ -3,7 +3,7 @@ package by.buslauski.auction.service;
 import by.buslauski.auction.exception.ServiceException;
 
 /**
- * Created by Acer on 08.05.2017.
+ * @author Buslauski Mikita
  */
 public interface NotificationService {
 

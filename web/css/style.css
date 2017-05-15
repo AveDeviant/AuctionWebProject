@@ -1,10 +1,8 @@
 body {
-    /*background-color: #ffffff;*/
     background-attachment: fixed;
     background-image: url("/css/icons/slide_1.jpg");
 }
 .custom-opacity {
-    /*background-color: rgba(204, 204, 204, 0.7);*/
     background-color: rgba(0,0,0,0.7);
     filter: alpha(opacity=70);
     margin-bottom: 10px;
@@ -49,7 +47,11 @@ body {
     transition-property: background-color;
     color: #ffffff;
 }
-.user-operations:hover .button-auction:hover{
+.user-operations:hover{
+    transition-duration: 0.5s;
+    background-color: goldenrod;
+}
+.button-auction:hover {
     transition-duration: 0.5s;
     background-color: goldenrod;
 }
@@ -145,5 +147,8 @@ span {
 }
 
 .bets {
+    margin-top: 10px;
+}
+.lot-stat {
     margin-top: 10px;
 }

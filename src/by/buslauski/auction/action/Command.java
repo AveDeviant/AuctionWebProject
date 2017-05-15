@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 04.03.2017.
+ * @author Mikita Buslauski
  */
 public interface Command {
     Logger LOGGER = LogManager.getLogger();

@@ -59,7 +59,7 @@
                             src="${pageContext.request.contextPath}/css/icons/mail.png"></a>
                     </li>
                 </c:if>
-                <c:if test="${user !=null && (!user.getWinningBets().isEmpty())}">
+                <c:if test="${user != null && (!user.getWinningBets().isEmpty())}">
                     <li><a class="event-winner"
                            href="${pageContext.request.contextPath}/Auction?command=order">
                             ${user.getWinningBets().size()}</a>
@@ -68,7 +68,7 @@
                 <li><a href="${pageContext.request.contextPath}/Auction?command=goTo&page=offer"><fmt:message
                         key="header.offer"/> </a></li>
                 <c:choose>
-                    <c:when test="${user.getUserName() eq null}">
+                    <c:when test="${user == null}">
                         <li>
                             <a href="${pageContext.request.contextPath}/Auction?command=goTo&page=authorization"><fmt:message
                                     key="header.login"/></a>

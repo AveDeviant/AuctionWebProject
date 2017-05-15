@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Created by Acer on 24.03.2017.
+ * @author Mikita Buslauski
  */
 public class Order {
     private long orderId;

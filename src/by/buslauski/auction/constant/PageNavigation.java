@@ -1,7 +1,7 @@
 package by.buslauski.auction.constant;
 
 /**
- * Created by Acer on 16.03.2017.
+ * @author Mikita Buslauski
  */
 public class PageNavigation {
     public static final String MAIN_PAGE = "/jsp/main.jsp";

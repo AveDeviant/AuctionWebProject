@@ -10,7 +10,7 @@ import by.buslauski.auction.service.PageBrowser;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 28.04.2017.
+ * @author Mikita Buslauski
  */
 public class BackCommandImpl implements Command {
 

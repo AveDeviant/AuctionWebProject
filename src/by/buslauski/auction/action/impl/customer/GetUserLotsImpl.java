@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 04.05.2017.
+ * @author Mikita Buslauski
  */
 public class GetUserLotsImpl implements Command {
     private static final String USER_LOTS = "lots";
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Get approved lot which exposed by current user.
+     * Get approved lot which exposed by current customer.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
@@ -36,11 +36,6 @@ public class GetUserLotsImpl implements Command {
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.USER_LOTS);
         User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        if (currentUser == null) {
-            pageResponse.setResponseType(ResponseType.REDIRECT);
-            pageResponse.setPage(definePathToAccessDeniedPage(request));
-            return pageResponse;
-        }
         try {
             ArrayList<Lot> lots = lotService.findApprovedUserLots(currentUser.getUserId());
             request.setAttribute(USER_LOTS, lots);

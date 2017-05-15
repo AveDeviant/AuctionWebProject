@@ -1,7 +1,7 @@
 package by.buslauski.auction.exception;
 
 /**
- * Created by Acer on 06.05.2017.
+ * @author Mikita Buslauski
  */
 public class InvalidNumberValueException extends Exception {
 

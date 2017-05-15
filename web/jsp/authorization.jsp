@@ -1,13 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Acer
-  Date: 27.02.2017
-  Time: 19:38
-  To change this template use File | Settings | File Templates.
---%>
+
 <html>
 <head>
     <fmt:setLocale value="${locale}" scope="session"/>
@@ -58,7 +52,7 @@
                 </form>
                 <br>
                 <label class="error">*</label><label><fmt:message key="login.notice.necessary"/></label><br/>
-                <fmt:message key="login.firsttime.title"/>
+                <span><fmt:message key="login.firsttime.title"/></span>
                 <a href="${pageContext.request.contextPath}/Controller?command=goTo&page=registration"><fmt:message
                         key="login.button.register"/></a>
             </div>

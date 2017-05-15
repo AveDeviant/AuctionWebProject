@@ -1,7 +1,7 @@
 package by.buslauski.auction.entity;
 
 /**
- * Created by Acer on 17.03.2017.
+ * @author Mikita Buslauski
  */
 public enum Role {
     CUSTOMER("customer"), ADMIN("admin");

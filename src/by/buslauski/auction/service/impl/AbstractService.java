@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Acer on 21.04.2017.
+ * @author Mikita Buslauski
  */
  class AbstractService {
      static final Logger LOGGER = LogManager.getLogger();

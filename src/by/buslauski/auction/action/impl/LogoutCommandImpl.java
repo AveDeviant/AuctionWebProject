@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 14.03.2017.
+ * @author Mikita Buslauski
  */
 public class LogoutCommandImpl implements Command {
 

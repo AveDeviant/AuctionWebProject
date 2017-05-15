@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 13.03.2017.
+ * @author Mikita Buslauski
  */
 public class RegistrationCommandImpl implements Command {
     private static final String REGISTRATION_ERROR_ATTR = "registrationError";

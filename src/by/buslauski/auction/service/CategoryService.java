@@ -6,7 +6,7 @@ import by.buslauski.auction.exception.ServiceException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Buslauski Mikita
  */
 public interface CategoryService {
     ArrayList<Category> getAllCategories() throws ServiceException;

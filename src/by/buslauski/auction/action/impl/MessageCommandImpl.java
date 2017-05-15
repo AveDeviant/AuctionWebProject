@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Level;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 31.03.2017.
+ * @author Mikita Buslauski
  */
 public class MessageCommandImpl implements Command {
     private static final String AUTHORIZATION_ERROR = "authorizationError";
@@ -37,8 +37,8 @@ public class MessageCommandImpl implements Command {
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
      * ResponseType - response type:
-     * REDIRECT - operation passed successfully and message was sent;
-     * FORWARD - in other case;
+     * {@link ResponseType#REDIRECT} - operation passed successfully and message was sent and
+     * {@link ResponseType#FORWARD} - in other case;
      * String page - "/jsp/success.jsp" if operation passed successfully and
      * current page with appropriate message in other case.
      */
@@ -54,7 +54,7 @@ public class MessageCommandImpl implements Command {
         }
         String theme = request.getParameter(MESSAGE_THEME);
         String text = request.getParameter(MESSAGE_TEXT);
-        if (!MessageValidator.checkMessage(text)) {
+        if (!MessageValidator.checkMessage(theme,text)) {
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(returnPageWithQuery(request));
             request.setAttribute(MESSAGE_ERROR, ResponseMessage.MESSAGE_ERROR_INVALID);

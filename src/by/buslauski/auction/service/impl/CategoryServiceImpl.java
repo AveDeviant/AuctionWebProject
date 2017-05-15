@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 
 /**
- * Created by Acer on 28.03.2017.
+ * @author Mikita Buslauski
  */
 public class CategoryServiceImpl extends AbstractService implements CategoryService {
 

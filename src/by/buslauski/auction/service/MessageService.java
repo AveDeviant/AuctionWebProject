@@ -8,7 +8,7 @@ import by.buslauski.auction.exception.ServiceException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Buslauski Mikita
  */
 public interface MessageService {
     void addMessage(String theme, String text, long senderId, User recipient) throws ServiceException;

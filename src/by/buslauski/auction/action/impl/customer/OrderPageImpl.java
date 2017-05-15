@@ -1,8 +1,6 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
@@ -20,7 +18,7 @@ import org.apache.logging.log4j.Level;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 24.03.2017.
+ * @author Mikita Buslauski
  */
 public class OrderPageImpl implements Command {
     private static final String LOT_ATTRIBUTE = "lot";

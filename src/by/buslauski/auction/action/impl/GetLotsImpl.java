@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 18.03.2017.
+ * @author Mikita Buslauski
  */
 public class GetLotsImpl implements Command {
     private static final String ALL_LOTS = "allLots";

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 22.02.2017.
+ * @author Mikita Buslauski
  */
 public class LocaleCommandImpl implements Command {
     private static final String JSP_PATH = "jspPath";
@@ -22,7 +22,7 @@ public class LocaleCommandImpl implements Command {
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * {@link ResponseType} - response type:  {@link ResponseType#FORWARD}
+     * ResponseType - response type:  {@link ResponseType#FORWARD}
      * String page - page for response (current page).
      */
     @Override

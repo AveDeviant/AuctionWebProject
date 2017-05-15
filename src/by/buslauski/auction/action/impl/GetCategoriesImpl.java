@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 02.04.2017.
+ * @author Mikita Buslauski
  */
 public class GetCategoriesImpl implements Command {
     private static final String CATEGORIES = "categories";

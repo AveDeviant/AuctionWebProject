@@ -2,7 +2,7 @@ package by.buslauski.auction.exception;
 
 
 /**
- * Created by Acer on 03.04.2017.
+ * @author Mikita Buslauski
  */
 public class ServiceException extends Exception {
 

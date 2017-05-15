@@ -1,12 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Acer
-  Date: 25.03.2017
-  Time: 19:14
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <fmt:setLocale value="${locale}"/>
@@ -27,7 +21,8 @@
         <c:choose>
             <c:when test="${user eq null}">
                 <div class="text-center">
-                    <fmt:message key="offer.lot.page.notice"/>
+                    <span>
+                        <fmt:message key="offer.lot.page.notice"/></span>
                     <a href="${pageContext.request.contextPath}/Auction?command=goTo&page=authorization"><fmt:message
                             key="offer.lot.reference.authorization"/></a>
                 </div>
@@ -58,7 +53,8 @@
                             <label for="image"><fmt:message key="admin.lot.image"/> </label>
                             <input class="form-control" type="file" name="image" id="image" required><br/>
                             <c:if test="${imageErr!=null}">
-                                <label class="error"><fmt:message key="${imageErr}"/></label>
+                            <div class=" alert alert-danger alert-dismissable fade in">
+                                <fmt:message key="${imageErr}"/></div>
                             </c:if>
                             <label for="price"><fmt:message key="admin.lot.startingprice"/> </label>
                             <input class="form-control" type="text" name="price" id="price"

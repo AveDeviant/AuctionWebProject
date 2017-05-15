@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Created by Acer on 14.03.2017.
+ * @author Mikita Buslauski
  */
 public class Bet {
     private long betId;

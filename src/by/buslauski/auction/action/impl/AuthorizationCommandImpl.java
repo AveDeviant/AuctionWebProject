@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 27.02.2017.
+ * @author Mikita Buslauski
  */
 public class AuthorizationCommandImpl implements Command {
     private static UserService userService = new UserServiceImpl();

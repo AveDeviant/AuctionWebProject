@@ -1,7 +1,7 @@
 package by.buslauski.auction.constant;
 
 /**
- * Created by Acer on 19.03.2017.
+ * @author Mikita Buslauski
  */
 public class SessionAttributes {
     public static final String USER = "user";

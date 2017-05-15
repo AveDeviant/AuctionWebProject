@@ -21,7 +21,7 @@ public class UserServiceTest {
     }
 
     /**
-     * Note that for successfully test passing the database must stores user
+     * Note that for successfully test passing the database must stores customer
      * with userName (login) 'AuctionHouse'
      */
     @Test
@@ -31,7 +31,7 @@ public class UserServiceTest {
     }
 
     /**
-     * Note that for successfully test passing the database must stores user
+     * Note that for successfully test passing the database must stores customer
      * with email 'buslauskima@gmail.com'
      */
     @Test
@@ -41,7 +41,7 @@ public class UserServiceTest {
     }
 
     /**
-     * Note that for successfully test passing the database must stores user
+     * Note that for successfully test passing the database must stores customer
      * with username (login) 'AuctionHouse' and password is "IamAdmin95' (password encrypted)
      */
     @Test
@@ -51,7 +51,7 @@ public class UserServiceTest {
     }
 
     /**
-     * Note that for successfully test passing the database must stores user
+     * Note that for successfully test passing the database must stores customer
      * with username (login) 'AuctionHouse' and password is "IamAdmin95' (password encrypted)
      */
     @Test

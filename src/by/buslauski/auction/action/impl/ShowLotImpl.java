@@ -14,12 +14,13 @@ import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
+import by.buslauski.auction.util.NumberParser;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 19.03.2017.
+ * @author Mikita Buslauski
  */
 public class ShowLotImpl implements Command {
     private static final String LOT_ID = "id";
@@ -32,14 +33,14 @@ public class ShowLotImpl implements Command {
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * ResponseType  - FORWARD
-     * String page - "/jsp/lot.jsp"  in case lot with entered id available for the auction;
+     * ResponseType  - response type {@link ResponseType#FORWARD}
+     * String page - "/jsp/lot.jsp"  in case lot with entered ID available for the auction;
      * "/jsp/404.jsp" in other case.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        long lotId = Long.parseLong(request.getParameter(LOT_ID));
+        long lotId = NumberParser.parse(request.getParameter(LOT_ID));
         try {
             Lot lot = lotService.getAvailableLotById(lotId);
             if (lot == null) {

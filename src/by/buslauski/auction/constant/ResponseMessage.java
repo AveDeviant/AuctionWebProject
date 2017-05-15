@@ -1,7 +1,7 @@
 package by.buslauski.auction.constant;
 
 /**
- * Created by Acer on 20.03.2017.
+ * @author Mikita Buslauski
  */
 public class ResponseMessage {
     public static final String NOT_UNIQUE_NAME_EMAIL = "registration.error";

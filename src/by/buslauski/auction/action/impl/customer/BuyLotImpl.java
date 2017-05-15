@@ -1,6 +1,7 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
+import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * Created by Acer on 25.03.2017.
+ * @author Mikita Buslauski
  */
 public class BuyLotImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
@@ -46,8 +47,8 @@ public class BuyLotImpl implements Command {
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
      * ResponseType - response type:
-     * REDIRECT - operation passed successfully;
-     * FORWARD - operation failed.
+     * {@link ResponseType#REDIRECT} - operation passed successfully or
+     * {@link ResponseType#FORWARD} if operation failed.
      * String page - page for response "/jsp/success.jsp" if operation passed successfully
      * ana current page with message if operation failed.
      * @see UserValidator
@@ -57,13 +58,18 @@ public class BuyLotImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         String realName = request.getParameter(NAME_PARAM);
+        if (user.getWinningBets().isEmpty() || realName.isEmpty()) {
+            pageResponse.setResponseType(ResponseType.REDIRECT);
+            pageResponse.setPage(PageNavigation.INDEX_PAGE);
+            return pageResponse;
+        }
         String city = request.getParameter(CITY_PARAM);
         String address = request.getParameter(ADDRESS_PARAM);
         String phone = request.getParameter(PHONE_PARAM);
         Bet winningBet = user.getWinningBets().get(0);
         pageResponse.setPage(returnPageWithQuery(request));
         try {
-            user = userService.findUserById(user.getUserId()); // updating user info.
+            user = userService.findUserById(user.getUserId()); // updating customer info.
             if (!user.getAccess()) {
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 pageResponse.setPage(definePathToAccessDeniedPage(request));
@@ -85,7 +91,7 @@ public class BuyLotImpl implements Command {
                     return pageResponse;
                 }
                 user.getWinningBets().remove(winningBet);
-                request.getSession().setAttribute(SessionAttributes.USER, user);  // update user in the session.
+                request.getSession().setAttribute(SessionAttributes.USER, user);  // update customer in the session.
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
                 browser.addPageToHistory(returnPageWithQuery(request));

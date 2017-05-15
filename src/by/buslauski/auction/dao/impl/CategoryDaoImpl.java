@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 17.03.2017.
+ * @author Mikita Buslauski
  */
 public class CategoryDaoImpl extends AbstractDao implements CategoryDao{
     private static final String SQL_SELECT_ID = "SELECT id_category FROM category WHERE name=?";

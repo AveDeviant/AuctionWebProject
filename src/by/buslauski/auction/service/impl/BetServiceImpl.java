@@ -68,26 +68,26 @@ public class BetServiceImpl extends AbstractService implements BetService {
         return flag;
     }
 
-    @Override
-    public User findUserByBet(Bet bet) throws ServiceException {
-        User user = null;
-        DaoHelper daoHelper = new DaoHelper();
-        try {
-            UserDao userDao = new UserDaoImpl();
-            daoHelper.initDao(userDao);
-            user = userDao.findUserById(bet.getUserId());
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        } finally {
-            daoHelper.release();
-        }
-        return user;
-    }
-
+    /**
+     * Check entered bet value.
+     * <p>
+     * The entered bet should greater than current lot price {@link Lot#currentPrice}
+     * as a minimum of 5 percent {@link BetService#AUCTION_STEP_PERCENT}
+     * of the starting lot price {@link Lot#price}.
+     *
+     * @param lot lot which price should be updated.
+     * @param bet entered bet.
+     * @return true - entered bet is correct;
+     * false  in other case.
+     */
     @Override
     public boolean checkBetValue(Lot lot, BigDecimal bet) {
+        BigDecimal startingPrice = lot.getPrice();
+        BigDecimal step = startingPrice.divide(new BigDecimal(100), BigDecimal.ROUND_CEILING)
+                .multiply(BigDecimal.valueOf(AUCTION_STEP_PERCENT));
         BigDecimal price = lot.getCurrentPrice();
-        return bet.compareTo(price) > 0;
+        BigDecimal minPrice = price.add(step);
+        return bet.compareTo(minPrice) > 0;
     }
 
     @Override

@@ -3,7 +3,7 @@ package by.buslauski.auction.connection;
 import java.util.ResourceBundle;
 
 /**
- * Created by Acer on 31.03.2017.
+ * @author Mikita Buslauski
  */
 class DataBaseManager {
     private static final String PATH = "properties.databaseConfig";

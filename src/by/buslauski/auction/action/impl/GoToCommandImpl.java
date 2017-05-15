@@ -8,7 +8,7 @@ import by.buslauski.auction.response.PageResponse;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 30.03.2017.
+ * @author Mikita Buslauski
  */
 public class GoToCommandImpl implements Command {
     private static final String PAGE = "page";
@@ -30,7 +30,7 @@ public class GoToCommandImpl implements Command {
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * {@link ResponseType} - response type {@link ResponseType#FORWARD}
+     * ResponseType - response type: {@link ResponseType#FORWARD}
      * page - page for response.
      */
     @Override

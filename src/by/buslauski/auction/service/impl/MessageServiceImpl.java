@@ -2,11 +2,8 @@ package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.MessageDao;
-import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.MessageDaoImpl;
-import by.buslauski.auction.dao.impl.UserDaoImpl;
 import by.buslauski.auction.entity.Bet;
-import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
 import by.buslauski.auction.exception.DAOException;
@@ -17,11 +14,10 @@ import by.buslauski.auction.service.MessageService;
 import by.buslauski.auction.service.UserService;
 import org.apache.logging.log4j.Level;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 31.03.2017.
+ * @author Mikita Buslauski
  */
 public class MessageServiceImpl extends AbstractService implements MessageService {
     private static final String AUCTION_NOTIFICATION = "AUCTION RESULT";

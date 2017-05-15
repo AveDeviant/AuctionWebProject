@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 30.03.2017.
+ * @author Mikita Buslauski
  */
 public class GetOrdersCommandImpl implements Command {
     private static final String ORDERS = "orders";

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 15.03.2017.
+ * @author Mikita Buslauski
  */
 public class LotDaoImpl extends AbstractDao implements LotDao {
     private static final String SQL_ADD_LOT = "INSERT INTO lot VALUES(NULL,?,?,?,?,?,?,?,DATE(?),?)";

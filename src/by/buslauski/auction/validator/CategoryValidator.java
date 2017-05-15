@@ -1,7 +1,7 @@
 package by.buslauski.auction.validator;
 
 /**
- * Created by Acer on 10.04.2017.
+ * @author Buslauski Mikita
  */
 public class CategoryValidator {
     private static final String CATEGORY_REGEXP = "[A-Za-z А-Яа-я-;,. ]{2,45}";

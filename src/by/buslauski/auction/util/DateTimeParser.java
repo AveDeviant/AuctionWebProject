@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by Acer on 26.03.2017.
+ * @author Buslauski Mikita
  */
 public class DateTimeParser {
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";

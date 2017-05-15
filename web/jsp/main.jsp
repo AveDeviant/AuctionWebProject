@@ -1,12 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Acer
-  Date: 22.02.2017
-  Time: 10:32
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <fmt:setLocale value="${locale}"/>
@@ -80,7 +74,7 @@
             </c:choose>
         </div>
     </div>
+    <c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </div>
 </body>
-<c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </html>

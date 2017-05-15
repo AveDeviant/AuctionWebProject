@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 28.03.2017.
+ * @author Mikita Buslauski
  */
 public class GetUsersImpl implements Command {
     private static final String CUSTOMERS = "customers";
@@ -25,8 +25,8 @@ public class GetUsersImpl implements Command {
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing two fields:
-     * {@link ResponseType} - response type {@link ResponseType#FORWARD}
-     *  String page - page for response "/jsp/edit_user.jsp"
+     * ResponseType - response type: {@link ResponseType#FORWARD}
+     * String page - page for response "/jsp/edit_user.jsp"
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

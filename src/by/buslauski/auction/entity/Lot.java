@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by Acer on 14.03.2017.
+ * @author Mikita Buslauski
  */
 public class Lot {
     private String title;

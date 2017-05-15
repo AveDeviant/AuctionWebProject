@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 
 /**
- * Created by Acer on 12.04.2017.
+ * @author Mikita Buslauski
  */
 public class DaoHelper {
     private Logger LOGGER = LogManager.getLogger();

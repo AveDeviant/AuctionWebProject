@@ -1,9 +1,11 @@
 package by.buslauski.auction.service;
 
+import by.buslauski.auction.constant.PageNavigation;
+
 import java.util.ArrayDeque;
 
 /**
- * Created by Acer on 27.04.2017.
+ * @author Buslauski Mikita
  */
 public class PageBrowser {
     private ArrayDeque<String> history = new ArrayDeque<>();
@@ -13,7 +15,7 @@ public class PageBrowser {
     }
 
     public String getPreviousPage() {
-        return history.pollLast();
+        return history.isEmpty() ? PageNavigation.INDEX_PAGE : history.pollLast();
 
     }
 }

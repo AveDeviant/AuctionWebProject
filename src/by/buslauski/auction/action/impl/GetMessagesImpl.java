@@ -14,13 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 07.04.2017.
+ * @author Mikita Buslauski
  */
 public class GetMessagesImpl implements Command {
     private static MessageService messageService = new MessageServiceImpl();
 
     /**
-     * Gets user's messages from database.
+     * Gets customer's messages from database.
      *
      * @param request client request to get parameters to work with.
      * @return null.

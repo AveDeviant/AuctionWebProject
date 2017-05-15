@@ -1,4 +1,4 @@
-package by.buslauski.auction.action.impl.user;
+package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
@@ -16,7 +16,7 @@ import by.buslauski.auction.service.impl.LotServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 25.03.2017.
+ * @author Mikita Buslauski
  */
 public class RejectOrderImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
@@ -38,6 +38,11 @@ public class RejectOrderImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        if (user.getWinningBets().isEmpty()) {
+            pageResponse.setPage(PageNavigation.INDEX_PAGE);
+            pageResponse.setResponseType(ResponseType.REDIRECT);
+            return pageResponse;
+        }
         Bet bet = user.getWinningBets().get(0);
         pageResponse.setPage(returnPageWithQuery(request));
         try {
