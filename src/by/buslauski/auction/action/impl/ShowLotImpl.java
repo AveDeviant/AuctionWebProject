@@ -32,7 +32,8 @@ public class ShowLotImpl implements Command {
      * Showing lot and trader info.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType  - response type {@link ResponseType#FORWARD}
      * String page - "/jsp/lot.jsp"  in case lot with entered ID available for the auction;
      * "/jsp/404.jsp" in other case.

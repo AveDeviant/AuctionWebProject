@@ -32,7 +32,8 @@ public class GetLotsByTraderImpl implements Command {
      * Get lot which exposed for the auction by concrete trader.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
      * String page - page for response "/jsp/trader_lots.jsp".
      */

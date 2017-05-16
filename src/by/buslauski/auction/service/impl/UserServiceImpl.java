@@ -177,6 +177,12 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return user;
     }
 
+    /**
+     * Initializing <code>ArrayList</code> containing five numeric values (from 1 to 5) which are used as trader's rating
+     * upon completion of the deal.
+     *
+     * @return {@link ArrayList} object.
+     */
     @Override
     public ArrayList<Integer> defineRating() {
         ArrayList<Integer> rating = new ArrayList<>();
@@ -198,14 +204,17 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Override
     public void updateTraderRating(long traderId, long customerId, int rating) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
-        try {
-            UserDao userDao = new UserDaoImpl();
-            daoHelper.initDao(userDao);
-            userDao.updateTraderRating(traderId, customerId, rating);
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
-            throw new ServiceException(e);
+        if (rating < 1 || rating > 5){
+            return;
         }
+            try {
+                UserDao userDao = new UserDaoImpl();
+                daoHelper.initDao(userDao);
+                userDao.updateTraderRating(traderId, customerId, rating);
+            } catch (DAOException e) {
+                LOGGER.log(Level.ERROR, e);
+                throw new ServiceException(e);
+            }
     }
 
     /**

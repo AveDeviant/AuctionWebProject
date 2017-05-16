@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 05.05.2017.
+ * @author Mikita Buslauski
  */
 public class OrderServiceTest {
 

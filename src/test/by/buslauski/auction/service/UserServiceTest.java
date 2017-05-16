@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Created by Acer on 24.04.2017.
+ * @author Mikita Buslauski
  */
 public class UserServiceTest {
     private static UserService userService;
@@ -22,7 +22,7 @@ public class UserServiceTest {
 
     /**
      * Note that for successfully test passing the database must stores customer
-     * with userName (login) 'AuctionHouse'
+     * with login 'AuctionHouse'
      */
     @Test
     public void registerUserNotUniqueName() throws ServiceException {
@@ -78,8 +78,8 @@ public class UserServiceTest {
     public void changeAccessTestUnban() throws ServiceException {
         User user = userService.findAdmin();
         userService.changeAccess(user.getUserId(), true);
-        User userUpdate1 = userService.findUserById(user.getUserId());
-        Assert.assertTrue(userUpdate1.getAccess());
+        User userUpdate = userService.findUserById(user.getUserId());
+        Assert.assertTrue(userUpdate.getAccess());
     }
 
     /**

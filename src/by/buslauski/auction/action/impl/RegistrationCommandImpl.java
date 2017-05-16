@@ -40,7 +40,7 @@ public class RegistrationCommandImpl implements Command {
         String alias = request.getParameter(USERNAME);
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
-        if (!password.equals(passwordRepeat)) {
+        if (password==null || !password.equals(passwordRepeat)) {
             request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.PASSWORD_NOT_EQUAL);
             return pageResponse;
         }

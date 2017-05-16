@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 12.04.2017.
+ * @author Mikita Buslauski
  */
 public class LotServiceTest {
     private static LotService lotService;
@@ -55,7 +55,7 @@ public class LotServiceTest {
         Lot addedLot = lots.get(lots.size() - 1);
         long addedLotId = addedLot.getId();
         System.out.println("Deleting lot...");
-        lotService.deleteLot(addedLotId,admin);
+        lotService.deleteLot(addedLotId, admin);
         System.out.println("Lot has been deleted.");
         Lot deletedLot = lotService.getLotById(addedLotId);
         Assert.assertEquals(null, deletedLot);
@@ -71,7 +71,7 @@ public class LotServiceTest {
         Lot lot = lotService.getLotById(16);
         User admin = userService.findAdmin();
         System.out.println("Trying to delete lot...");
-        lotService.deleteLot(lot.getId(),admin);
+        lotService.deleteLot(lot.getId(), admin);
     }
 
     /**
@@ -81,11 +81,11 @@ public class LotServiceTest {
     public void changeLotBiddingStatusTest() throws ServiceException {
         User admin = userService.findAdmin();
         System.out.println("Removing lot from auction list...");
-        lotService.changeLotBiddingStatus(16, false,admin);
+        lotService.changeLotBiddingStatus(16, false, admin);
         Lot lotAfterFirstOperation = lotService.getLotById(16);
         Assert.assertEquals(false, lotAfterFirstOperation.getAvailability());
         System.out.println("Returning lot to auction list...");
-        lotService.changeLotBiddingStatus(16, true,admin);
+        lotService.changeLotBiddingStatus(16, true, admin);
         Lot lotAfterSecondOperation = lotService.getLotById(16);
         Assert.assertEquals(true, lotAfterSecondOperation.getAvailability());
     }
@@ -98,7 +98,8 @@ public class LotServiceTest {
 
     /**
      * Note that customer with ID=1 is an administrator of the auction and all lots that
-     * he exposes are available (approved) for bidding.
+     * he exposes are available (approved) for bidding until these lots are purchased.
+     * The last test launch was conducted on 2017.05.15 and at that time lots where available for bidding.
      *
      * @throws ServiceException in case DAOException has been thrown
      *                          (database error occurs)
@@ -131,5 +132,30 @@ public class LotServiceTest {
     public void getAvailableLotByIdLotDoesntExists() throws ServiceException {
         Lot lot = lotService.getAvailableLotById(1);
         Assert.assertNull(lot);
+    }
+
+    /**
+     * Assuming that database doesn't store with ID=1.
+     *
+     * @throws ServiceException in case DAOException has been thrown (database error occurs)
+     */
+    @Test
+    public void extendBiddingPeriodLotDoesntExists() throws ServiceException {
+        Assert.assertFalse(lotService.extendBiddingPeriod(1, 7, 1));
+    }
+
+    @Test
+    public void extendBiddingPeriodTooBigDaysCount() throws ServiceException {
+        Assert.assertFalse(lotService.extendBiddingPeriod(16, 30, 1));
+    }
+
+    /**
+     * Note that a lot is owned by user with ID=1, but ID=14 was passed to the method.
+     *
+     * @throws ServiceException in case DAOException has been thrown (database error occurs)
+     */
+    @Test
+    public void extendBiddingPeriodInvalidOwner() throws ServiceException {
+        Assert.assertFalse(lotService.extendBiddingPeriod(16, 7, 4));
     }
 }

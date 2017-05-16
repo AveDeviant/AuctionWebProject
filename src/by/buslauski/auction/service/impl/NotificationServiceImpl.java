@@ -30,6 +30,7 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
      * @param customerId purchaser ID
      * @param traderId   trader ID
      * @throws ServiceException in case DAOException has been thrown (database error occurs)
+     * @see MessageServiceImpl#addMessage(String, String, long, User)
      */
     @Override
     public void createNotificationForTraderAuctionResult(long lotId, long customerId, long traderId) throws ServiceException {

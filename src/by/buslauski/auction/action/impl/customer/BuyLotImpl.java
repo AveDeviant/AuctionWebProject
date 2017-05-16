@@ -42,16 +42,21 @@ public class BuyLotImpl implements Command {
      * Customer unable to register his order;
      * Customer exceeded auction waiting period (10 days) or lot was blocked;
      * Invalid customer's personal information;
-     * Exception during payment transaction.
+     * Exception during operation.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully or
      * {@link ResponseType#FORWARD} if operation failed.
      * String page - page for response "/jsp/success.jsp" if operation passed successfully
      * ana current page with message if operation failed.
+     * @see Command#returnPageWithQuery(HttpServletRequest)
+     * @see Command#definePathToSuccessPage(HttpServletRequest)
+     * @see Command#definePathToAccessDeniedPage(HttpServletRequest)
      * @see UserValidator
+     * @see PageBrowser
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

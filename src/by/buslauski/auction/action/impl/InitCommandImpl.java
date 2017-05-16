@@ -38,9 +38,11 @@ public class InitCommandImpl implements Command {
      * Init command. Get available lots for bids from database and
      * displays it to main page. Displaying appropriate message in case the list is empty.
      * Displaying appropriate message in case customer have been banned.
+     * Check for new events in case user has been authorized.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
      * String page - page for response "/jsp/main.jsp"
      */

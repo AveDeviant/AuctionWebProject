@@ -24,14 +24,17 @@ public class ExtendBiddingPeriodImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Extending lot bidding period to 7 or 15 days by trader.
+     * Extending lot bidding period to {@link LotService#EXTENDING_PERIOD_MIN} or
+     * {@link LotService#EXTENDING_PERIOD_MAX} (in days) by trader.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully and auction date has been changed or
      * {@link ResponseType#FORWARD} if operation failed (current lot date doesn't passed or bets were made on this lot).
      * String page - page for response (current page).
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

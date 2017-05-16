@@ -26,10 +26,11 @@ public class OrderPageImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Showing order page with first lot in customer's winning list.
+     * Showing order page with first lot in customer's winning list {@link User#winningBets}.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#FORWARD}.
      * String page - "/jsp/order.jsp"
      */

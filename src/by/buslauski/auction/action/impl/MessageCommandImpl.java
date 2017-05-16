@@ -35,12 +35,14 @@ public class MessageCommandImpl implements Command {
      * Conversation implementation between customers and auction administrator.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully and message was sent and
      * {@link ResponseType#FORWARD} - in other case;
      * String page - "/jsp/success.jsp" if operation passed successfully and
      * current page with appropriate message in other case.
+     * @see PageBrowser
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 03.05.2017.
+ * @author Mikita Buslauski
  */
 public class CategoryServiceTest {
 

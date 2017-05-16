@@ -26,10 +26,13 @@ public class AccessEditImpl implements Command {
      * Changing customer's access to bidding.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully and
      * {@link ResponseType#FORWARD} in case operation failed (an exception has been thrown)
      * String page - page for response (current page)
+     * @see Command#returnPageWithQuery(HttpServletRequest)
+     * @see NumberParser
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

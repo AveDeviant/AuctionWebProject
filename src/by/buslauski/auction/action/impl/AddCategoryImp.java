@@ -23,11 +23,13 @@ public class AddCategoryImp implements Command {
      * Creating a new lot category and insert it into database.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} if operation passed successfully.
      * {@link ResponseType#FORWARD} in other case.
      * String page - page for response (current page).
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

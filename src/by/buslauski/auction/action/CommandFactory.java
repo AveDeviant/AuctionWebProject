@@ -43,9 +43,14 @@ public class CommandFactory {
     private static final String USER_LOTS = "userLots";
     private static final String EXTEND_PERIOD = "extendPeriod";
 
+    /**
+     * Defines {@link Command} using {@link CommandFactory#COMMAND_PARAM}.
+     * @param request client request to get parameters to work with.
+     * @return defined {@link Command}
+     */
     public Command getCurrentCommand(HttpServletRequest request) {
         String command = request.getParameter(COMMAND_PARAM);
-        if (command == null || command.isEmpty()) {
+        if (command == null || command.trim().isEmpty()) {
             return new InitCommandImpl();
         }
         switch (command) {

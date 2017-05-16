@@ -41,12 +41,6 @@ public class GetUserOperationsImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
-//        if (currentUser == null) {
-//            PageResponse pageResponse = new PageResponse();
-//            pageResponse.setPage(PageNavigation.INDEX_PAGE);
-//            pageResponse.setResponseType(ResponseType.REDIRECT);
-//            return pageResponse;
-//        }
         try {
             ArrayList<Order> orders = orderService.getUserConfirmedOrders(currentUser.getUserId());
             ArrayList<Integer> rating = userService.defineRating();

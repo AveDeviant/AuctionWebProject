@@ -2,6 +2,7 @@ package by.buslauski.auction.action;
 
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.response.PageResponse;
+import by.buslauski.auction.response.ResponseType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,8 @@ public interface Command {
      * Handling client request.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type (forward or redirect).
      * String page - page for response.
      */

@@ -21,9 +21,11 @@ public class LocaleCommandImpl implements Command {
      * Change application localization.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:  {@link ResponseType#FORWARD}
      * String page - page for response (current page).
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

@@ -24,7 +24,6 @@ import java.util.ArrayList;
  * Created by Acer on 16.03.2017.
  */
 public class LotServiceImpl extends AbstractService implements LotService {
-    private static final int WAITING_PERIOD = 10;       // waiting period for registration of the won lot, in days.
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
@@ -192,8 +191,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                     if (!lot.getBets().isEmpty() && !checkWaitingPeriod(lot)) {
                         resetBids(lot);
                     }
-                    // if lot has confirmed bets and time is over then notify trader that
-                    // he has a purchaser.
+                    // if lot has confirmed bets and time is over then notify trader that he has a purchaser.
                     if (!lot.getBets().isEmpty()) {
                         Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
                         notificationService.createNotificationForTraderAuctionResult(lot.getId(),
@@ -309,7 +307,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Check the auction waiting period.
-     * If period is greater than 10 days from current date, all results for this lot must be reset.
+     * If period is greater than {@link LotService#WAITING_PERIOD} days from current date, all results for this lot must be reset.
      * In other case results for lot are still actual.
      *
      * @param lot lot which time need to be checked.
@@ -340,7 +338,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             LotDao lotDao = new LotDaoImpl();
             daoHelper.initDao(lotDao);
             Lot lot = lotDao.findLotById(lotId);
-            if ((user == null) || (user.getRole() != Role.ADMIN && user.getUserId() != lot.getUserId())) {
+            if ((user == null) || (lot == null) || (user.getRole() != Role.ADMIN && user.getUserId() != lot.getUserId())) {
                 return;
             }
             lotDao.changeLotBiddingStatus(lotId, status);
@@ -391,12 +389,13 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
-     * Extending lot bidding period by customer which expose the lot for the auction
-     * in case lot bidding time is over and lot have empty bet list.
+     * Extending lot bidding period by customer which expose the lot for the auction in case lot bidding time is over
+     * and lot have empty bet list.
      * Check that operation invokes by real lot owner.
      *
-     * @param lotId lot ID.
-     * @param days  days count (7 or 15 days).
+     * @param lotId  lot ID.
+     * @param days   days count ({@link LotService#EXTENDING_PERIOD_MIN} or {@link LotService#EXTENDING_PERIOD_MAX}).
+     * @param userId ID user who invokes this operation.
      * @return true - operation passed successfully;
      * false - lot have confirmed bets or lot auction period is not over
      * (in these cases customer cannot extend the bidding period).
@@ -408,7 +407,9 @@ public class LotServiceImpl extends AbstractService implements LotService {
         boolean flag = false;
         Lot lot = getLotById(lotId);
         LocalDate currentDate = LocalDate.now();
-        if (!lot.getBets().isEmpty() || lot.getDateAvailable().isAfter(currentDate) || lot.getUserId() != userId) {
+        if (lot == null || !lot.getBets().isEmpty() || lot.getDateAvailable().isAfter(currentDate) || lot.getUserId() != userId) {
+            return flag;
+        } else if (days != EXTENDING_PERIOD_MIN && days != EXTENDING_PERIOD_MAX) {
             return flag;
         }
         LocalDate extendedDate = currentDate.plusDays(days);

@@ -42,9 +42,11 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
+                    <div class="lot-stat">
                     <div class="row">
                         <h6 class="text-center" id="remaining"></h6>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

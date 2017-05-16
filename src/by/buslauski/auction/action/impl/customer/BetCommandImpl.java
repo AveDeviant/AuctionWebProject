@@ -47,18 +47,19 @@ public class BetCommandImpl implements Command {
      * Exception during operation;
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully.
      * {@link ResponseType#FORWARD} - detecting errors during operations.
      * String page - current page or "/jsp/denied.jsp" in case lot became unable for the auction.
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      * @see BetValidator
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SessionAttributes.USER);
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         long lotId = NumberParser.parse(request.getParameter(LOT_ID_PARAM));
         pageResponse.setPage(returnPageWithQuery(request));
         pageResponse.setResponseType(ResponseType.FORWARD);
@@ -96,7 +97,7 @@ public class BetCommandImpl implements Command {
             } else {
                 request.setAttribute(BET_ERROR, ResponseMessage.ACCESS_DENIED);
                 pageResponse.setResponseType(ResponseType.FORWARD);
-                session.setAttribute(SessionAttributes.USER, user);
+                request.getSession().setAttribute(SessionAttributes.USER, user);
             }
 
         } catch (ServiceException e) {

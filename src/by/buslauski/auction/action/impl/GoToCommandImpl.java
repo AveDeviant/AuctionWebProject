@@ -29,7 +29,8 @@ public class GoToCommandImpl implements Command {
      * Page navigation.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
      * page - page for response.
      */

@@ -40,6 +40,7 @@ public class BetDaoImpl extends AbstractDao implements BetDao {
         }
     }
 
+
     @Override
     public ArrayList<Bet> getBetsByLotId(long lotId) throws DAOException {
         ArrayList<Bet> bets = new ArrayList<>();

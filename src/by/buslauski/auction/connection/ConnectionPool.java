@@ -51,7 +51,7 @@ public class ConnectionPool {
         for (int i = 0; i < connectionCount; i++) {
             ProxyConnection connection = createConnection();
             if (connection != null) {
-                connections.add(createConnection());
+                connections.add(connection);
             }
         }
         if (connections.isEmpty()) {

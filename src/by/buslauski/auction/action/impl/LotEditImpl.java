@@ -53,10 +53,12 @@ public class LotEditImpl implements Command {
      * Exception during operation;
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully and
      * {@link ResponseType#FORWARD} in other case.
      * String page - page for response (current page).
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

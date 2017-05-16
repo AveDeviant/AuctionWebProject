@@ -26,13 +26,16 @@ public class RejectOrderImpl implements Command {
      * Rejecting deal by customer.
      * Reset auction results for lot (deleting all bets made on this lot).
      * Return lot to bids.
+     * Delete first winning bet ({@link Bet} from customer's winning list ({@link User#winningBets}).
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully and the auction results
      * were cancelled and {@link ResponseType#FORWARD} in other case;
      * String page - page for response - "index.jsp" if operation passed successfully and
      * current page with appropriate message in other case.
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

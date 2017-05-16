@@ -27,7 +27,8 @@ public class DeleteLotImpl implements Command {
      * order have already been made for this lot.
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#REDIRECT} - operation passed successfully or
      * {@link ResponseType#FORWARD} - exception during operation.
      * String page - current page.

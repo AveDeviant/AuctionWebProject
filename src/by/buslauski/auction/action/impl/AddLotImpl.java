@@ -56,7 +56,8 @@ public class AddLotImpl implements Command {
      * Exception during operation;
      *
      * @param request client request to get parameters to work with.
-     * @return {@link PageResponse} object containing two fields:
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#REDIRECT} if operation passed successfully and
      * {@link ResponseType#FORWARD} in other case;
      * String page - page for response:

@@ -41,16 +41,16 @@
                 <c:when test="${lotsByCategory==null}">
                     <c:set var="counter" value="${0}" scope="page"/>
                     <c:forEach var="lot" items="${lots}" varStatus="status">
-                        <c:if test="${(counter%2) eq 0}">
+                        <c:if test="${(counter%3) eq 0}">
                             <div class="row"></c:if>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <a class="lot-title"
                                href="${pageContext.request.contextPath}/Auction?command=showLot&id=${lot.getId()}">
-                                <h4>${lot.getTitle()}</h4></a>
-                            <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
+                                <h4 class="text-center">${lot.getTitle()}</h4></a>
+                            <img class="img-responsive" src="${lot.getImage()}" alt="${lot.getTitle()}">
                         </div>
                         <c:set var="counter" value="${counter+1}" scope="page"/>
-                        <c:if test="${(counter%2) eq 0}"></div>
+                        <c:if test="${(counter%3) eq 0}"></div>
                             <br></c:if>
                     </c:forEach>
                 </c:when>
@@ -58,16 +58,16 @@
                     <h5 class="text center"><fmt:message key="selected.category"/>${categoryValue} </h5>
                     <c:set var="counter" value="${0}" scope="page"/>
                     <c:forEach var="lot" items="${lotsByCategory}" varStatus="status">
-                        <c:if test="${(counter%2) eq 0}">
+                        <c:if test="${(counter%3) eq 0}">
                             <div class="row"></c:if>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <a class="lot-title"
                                href="${pageContext.request.contextPath}/Auction?command=showLot&id=${lot.getId()}">
-                                <h4>${lot.getTitle()}</h4></a>
-                            <img style="height:350px" src="${lot.getImage()}" alt="${lot.getTitle()}">
+                                <h4 class="text-center">${lot.getTitle()}</h4></a>
+                            <img  class="img-responsive" src="${lot.getImage()}" alt="${lot.getTitle()}">
                         </div>
                         <c:set var="counter" value="${counter+1}" scope="page"/>
-                        <c:if test="${(counter%2) eq 0}"></div>
+                        <c:if test="${(counter%3) eq 0}"></div>
                             <br></c:if>
                     </c:forEach>
                 </c:otherwise>

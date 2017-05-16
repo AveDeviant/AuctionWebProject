@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Created by Acer on 12.04.2017.
+ * @author Mikita Buslauski
  */
 public class BetServiceTest {
     private static BetService betService;
