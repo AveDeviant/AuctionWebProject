@@ -6,26 +6,27 @@ import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.DAOException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.exception.ServiceException;
+import by.buslauski.auction.service.AuctionService;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.NotificationService;
+import by.buslauski.auction.service.UserService;
 import org.apache.logging.log4j.Level;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
 /**
- * Created by Acer on 16.03.2017.
+ * @author Mikita Buslauski
  */
 public class LotServiceImpl extends AbstractService implements LotService {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-
 
     /**
      * Insert a new lot into database.
@@ -141,6 +142,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
     @Override
     public Lot getAvailableLotById(long lotId) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
+        DaoHelper commentHelper = new DaoHelper();
         Lot lot = null;
         try {
             ArrayList<Lot> lots = getAvailableLots();
@@ -151,14 +153,18 @@ public class LotServiceImpl extends AbstractService implements LotService {
             }
             if (lot != null) {
                 BetDaoImpl betDao = new BetDaoImpl();
+                CommentDao commentDao = new CommentDaoImpl();
+                commentHelper.initDao(commentDao);
                 daoHelper.initDao(betDao);
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
                 lot.setFollowersCount(betDao.countLotFollowers(lotId));
+                lot.setComments(commentDao.getCommentsByLotId(lotId));
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
+            commentHelper.release();
         }
         return lot;
     }
@@ -194,7 +200,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                     // if lot has confirmed bets and time is over then notify trader that he has a purchaser.
                     if (!lot.getBets().isEmpty()) {
                         Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
-                        notificationService.createNotificationForTraderAuctionResult(lot.getId(),
+                        notificationService.createNotificationAuctionResult(lot.getId(),
                                 lastBet.getUserId(), lot.getUserId());
                     }
                 }
@@ -243,7 +249,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Deleting lot from database using lot ID.
-     * Check that user who invokes this operation has a permission for this operation: {@link Role#ADMIN}.
+     * Check that user who called this operation has a permission for this operation: {@link Role#ADMIN}.
      *
      * @param lotId ID lot which should be deleted.
      * @throws ServiceException thrown in case lot have confirmed bets and/or
@@ -275,6 +281,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * Delete all bets made for this lot.
      *
      * @param lot lot which must be returned to lot list.
+     * @see by.buslauski.auction.action.impl.customer.RejectOrderImpl#execute(HttpServletRequest)
      */
     @Override
     public void resetBids(Lot lot) throws ServiceException {
@@ -295,6 +302,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
             notificationDao.deleteNotification(lot.getId());
             daoHelper.commit();
             lot.getBets().clear(); // clear bet list
+            UserService userService = new UserServiceImpl();
+            userService.blockUser(AuctionService.REJECTED_DEALS_COUNT);
         } catch (DAOException e) {
             daoHelper.rollback();
             LOGGER.log(Level.ERROR, e);
@@ -307,7 +316,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Check the auction waiting period.
-     * If period is greater than {@link LotService#WAITING_PERIOD} days from current date, all results for this lot must be reset.
+     * If period is greater than {@link LotService#WAITING_PERIOD} days from current date,
+     * all results for this lot must be reset.
      * In other case results for lot are still actual.
      *
      * @param lot lot which time need to be checked.
@@ -323,11 +333,11 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Withdraw the lot or put the lot up for bids.
-     * Check that this operation invokes by real lot owner or auction administrator.
+     * Check that this operation called by real lot owner or auction administrator.
      *
      * @param lotId  lot which status should be changed.
      * @param status true - put up lot for auction;
-     *               false - withdraw lot
+     *               false - withdraw lot.
      * @param user   user who invokes this operation.
      * @throws ServiceException if a database access error occurs.
      */
@@ -391,7 +401,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
     /**
      * Extending lot bidding period by customer which expose the lot for the auction in case lot bidding time is over
      * and lot have empty bet list.
-     * Check that operation invokes by real lot owner.
+     * Check that operation called by real lot owner.
      *
      * @param lotId  lot ID.
      * @param days   days count ({@link LotService#EXTENDING_PERIOD_MIN} or {@link LotService#EXTENDING_PERIOD_MAX}).
@@ -421,7 +431,6 @@ public class LotServiceImpl extends AbstractService implements LotService {
             lotDao.extendBiddingPeriod(lotId, formattedDate);
             flag = true;
         } catch (DAOException e) {
-            flag = false;
             LOGGER.log(Level.ERROR, e + "Exception during extending auction period.");
         } finally {
             daoHelper.release();

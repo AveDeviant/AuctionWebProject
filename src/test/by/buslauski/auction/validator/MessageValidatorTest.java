@@ -27,4 +27,18 @@ public class MessageValidatorTest {
         String content = "I beginning to feel like a rap god, rap god";
         Assert.assertTrue(MessageValidator.checkMessage(theme, content));
     }
+
+    @Test
+    public void checkCommentInvalidScenario(){
+        String content="";
+        Assert.assertFalse(MessageValidator.checkComment(content));
+    }
+    @Test
+    public void checkCommentInvalidScenarioTooLongComment(){
+        String content = "Чтобы проснуться известным, я засыспаю у mic'a." +
+                " My man наливает Bacardi," +
+                "а пока небольшая ремарка:" +
+                " бездарности в поисках счастья, всегда натыкались на правду";
+        Assert.assertFalse(MessageValidator.checkComment(content));
+    }
 }

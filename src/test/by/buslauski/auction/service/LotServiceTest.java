@@ -2,13 +2,11 @@ package test.by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.impl.UserServiceImpl;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -155,7 +153,18 @@ public class LotServiceTest {
      * @throws ServiceException in case DAOException has been thrown (database error occurs)
      */
     @Test
-    public void extendBiddingPeriodInvalidOwner() throws ServiceException {
+    public void extendBiddingPeriodNotAnOwner() throws ServiceException {
         Assert.assertFalse(lotService.extendBiddingPeriod(16, 7, 4));
+    }
+
+    /**
+     * Note that user with ID=4 is not an auction administrator so he doesn't have access to this operation.
+     *
+     * @throws ServiceException in case DAOException has been thrown (database error occurs)
+     */
+    @Test
+    public void deleteLotAccessDenied() throws ServiceException {
+        User user = userService.findUserById(4);
+        lotService.deleteLot(31, user);
     }
 }

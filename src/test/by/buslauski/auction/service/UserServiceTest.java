@@ -2,7 +2,7 @@ package test.by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.service.impl.UserServiceImpl;
 import org.junit.Assert;
@@ -82,15 +82,4 @@ public class UserServiceTest {
         Assert.assertTrue(userUpdate.getAccess());
     }
 
-    /**
-     * Note that database stores lot with lot ID=16.
-     *
-     * @throws ServiceException in case DAOException has been thrown
-     *                          (database error occurs).
-     */
-    @Test
-    public void finTraderTest() throws ServiceException {
-        User user = userService.findTrader(16);
-        Assert.assertNotNull(user);
-    }
 }

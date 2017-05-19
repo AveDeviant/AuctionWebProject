@@ -23,6 +23,7 @@ public class Lot {
     private BigDecimal currentPrice;
     private ArrayList<Bet> bets;
     private int followersCount;
+    private ArrayList<Comment> comments;
 
     public Lot(long id, long userId, String title, String description, String image, int categoryId, BigDecimal price,
                boolean availability, LocalDate dateAvailable, BigDecimal currentPrice, String category) {
@@ -38,6 +39,7 @@ public class Lot {
         this.currentPrice = currentPrice;
         this.bets = new ArrayList<>();
         this.category = category;
+        this.comments = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -142,6 +144,14 @@ public class Lot {
 
     public int getFollowersCount() {
         return followersCount;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
     }
 
     @Override

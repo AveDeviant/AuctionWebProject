@@ -1,6 +1,6 @@
 package by.buslauski.auction.validator;
 
-import by.buslauski.auction.exception.InvalidNumberValueException;
+import by.buslauski.auction.validator.exception.InvalidNumberValueException;
 
 import java.math.BigDecimal;
 

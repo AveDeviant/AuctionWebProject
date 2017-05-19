@@ -3,7 +3,7 @@ package by.buslauski.auction.dao.impl;
 import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 import org.apache.logging.log4j.Level;
 
 import java.sql.PreparedStatement;
@@ -37,6 +37,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             "JOIN lot ON user.id_user=lot.id_user WHERE id_lot=?";
     private static final String SQL_UPDATE_TRADER_RATING = "INSERT INTO trader_rating VALUES (NULL,?,?,?)";
     private static final String SQL_SELECT_TRADER_RATING = "SELECT AVG(rating) AS rating FROM trader_rating WHERE id_trader=?";
+    private static final String SQL_BLOCK_USERS = "UPDATE user SET access=FALSE " +
+            "WHERE id_user=(SELECT id_user FROM auction.order WHERE accept=FALSE " +
+            "GROUP BY id_user HAVING COUNT(*)>=?)";
 
     @Override
     public ArrayList<User> getAllCustomers() throws DAOException {
@@ -222,6 +225,16 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             throw new DAOException(e);
         }
         return rating;
+    }
+
+    @Override
+    public void blockUser(int rejectedDeals) throws DAOException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_BLOCK_USERS)) {
+            preparedStatement.setInt(1, rejectedDeals);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
     }
 
     private User initUser(ResultSet resultSet) throws SQLException {

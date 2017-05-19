@@ -25,6 +25,7 @@ public class Controller extends HttpServlet {
 
     public void init() throws ServletException {
         super.init();
+        ConnectionPool.getInstance();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

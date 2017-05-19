@@ -3,15 +3,13 @@ package by.buslauski.auction.service.impl;
 import by.buslauski.auction.dao.BetDao;
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.LotDao;
-import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.BetDaoImpl;
 import by.buslauski.auction.dao.impl.LotDaoImpl;
-import by.buslauski.auction.dao.impl.UserDaoImpl;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.DAOException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.BetService;
 import org.apache.logging.log4j.Level;
 
@@ -20,11 +18,10 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by Acer on 21.03.2017.
+ * @author Mikita Buslauski
  */
 public class BetServiceImpl extends AbstractService implements BetService {
     private static ReentrantLock lock = new ReentrantLock();
-
 
     /**
      * Adding bet and updating lot current price.
@@ -32,10 +29,10 @@ public class BetServiceImpl extends AbstractService implements BetService {
      * <code>ReentrantLock</code> reduces performance
      * but also reduces the rick of incorrect logic behavior.
      *
-     * @param userId customer's.
+     * @param userId customer iD.
      * @param lotId  lot ID.
      * @param price  new lot price.
-     * @return true in case operation passed successfully and the price has been updated.
+     * @return true in case operation passed successfully and lot price has been updated,
      * false in other case.
      * @throws ServiceException if a database access error occurs
      *                          (DAOException has been thrown).
@@ -72,7 +69,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
      * Check entered bet value.
      * <p>
      * The entered bet should greater than current lot price {@link Lot#currentPrice}
-     * as a minimum of 5 percent {@link BetService#AUCTION_STEP_PERCENT}
+     * as a minimum of {@link BetService#AUCTION_STEP_PERCENT} percents.
      * of the starting lot price {@link Lot#price}.
      *
      * @param lot lot which price should be updated.
@@ -87,7 +84,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
                 .multiply(BigDecimal.valueOf(AUCTION_STEP_PERCENT));
         BigDecimal price = lot.getCurrentPrice();
         BigDecimal minPrice = price.add(step);
-        return bet.compareTo(minPrice) > 0;
+        return bet.compareTo(minPrice) >= 0;
     }
 
     @Override

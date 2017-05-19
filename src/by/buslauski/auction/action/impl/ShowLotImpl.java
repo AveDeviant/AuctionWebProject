@@ -2,10 +2,8 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
-import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.entity.Lot;
@@ -35,8 +33,8 @@ public class ShowLotImpl implements Command {
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType  - response type {@link ResponseType#FORWARD}
-     * String page - "/jsp/lot.jsp"  in case lot with entered ID available for the auction;
-     * "/jsp/404.jsp" in other case.
+     * String page - {@link PageNavigation#LOT_PAGE}  in case lot with entered ID available for the auction;
+     * {@link PageNavigation#PAGE_NOT_FOUND} in other case.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -49,7 +47,7 @@ public class ShowLotImpl implements Command {
                 pageResponse.setPage(PageNavigation.PAGE_NOT_FOUND);
                 return pageResponse;
             }
-            User trader = userService.findTrader(lot.getId());
+            User trader = userService.findUserById(lot.getUserId());
             userService.setTraderRating(trader);
             request.setAttribute(SessionAttributes.TRADER, trader);
             request.setAttribute(LOT, lot);

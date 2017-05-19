@@ -8,7 +8,11 @@ import java.util.ArrayDeque;
  * @author Buslauski Mikita
  */
 public class PageBrowser {
-    private ArrayDeque<String> history = new ArrayDeque<>();
+    private ArrayDeque<String> history;
+
+    public PageBrowser() {
+        history = new ArrayDeque<>();
+    }
 
     public void addPageToHistory(String page) {
         history.addLast(page);

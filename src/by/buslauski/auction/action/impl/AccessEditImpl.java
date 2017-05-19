@@ -3,7 +3,7 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.UserService;
@@ -37,7 +37,7 @@ public class AccessEditImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         long customerId = NumberParser.parse(request.getParameter(CUSTOMER_ID));
         String state = request.getParameter(STATE);
         boolean access = UNBANNED.equals(state);

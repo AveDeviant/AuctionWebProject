@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
@@ -44,7 +44,7 @@ public class InitCommandImpl implements Command {
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
-     * String page - page for response "/jsp/main.jsp"
+     * String page - page for response {@link PageNavigation#MAIN_PAGE}
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
@@ -54,6 +54,7 @@ public class InitCommandImpl implements Command {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
             ArrayList<Lot> availableLots = lotService.getAvailableLots();
+            auctionService.setWinner();
             if (user != null) {
                 user = userService.findUserById(user.getUserId());  //update customer info
                 user.setUserMessages(messageService.findUserMessages(user.getUserId()));

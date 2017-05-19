@@ -6,7 +6,7 @@ import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.MessageService;
@@ -40,7 +40,7 @@ public class MessageCommandImpl implements Command {
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully and message was sent and
      * {@link ResponseType#FORWARD} - in other case;
-     * String page - "/jsp/success.jsp" if operation passed successfully and
+     * String page - {@link PageNavigation#SUCCESS_PAGE} if operation passed successfully and
      * current page with appropriate message in other case.
      * @see PageBrowser
      */
@@ -48,8 +48,8 @@ public class MessageCommandImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        pageResponse.setResponseType(ResponseType.FORWARD);
         if (user == null) {
-            pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.AUTHORIZATION_PAGE);
             request.setAttribute(AUTHORIZATION_ERROR, ResponseMessage.MESSAGE_ERROR_AUTHORIZATION);
             return pageResponse;
@@ -57,8 +57,7 @@ public class MessageCommandImpl implements Command {
         String theme = request.getParameter(MESSAGE_THEME);
         String text = request.getParameter(MESSAGE_TEXT);
         if (!MessageValidator.checkMessage(theme,text)) {
-            pageResponse.setResponseType(ResponseType.FORWARD);
-            pageResponse.setPage(returnPageWithQuery(request));
+            pageResponse.setPage(Command.returnPageWithQuery(request));
             request.setAttribute(MESSAGE_ERROR, ResponseMessage.MESSAGE_ERROR_INVALID);
             return pageResponse;
         }
@@ -73,8 +72,8 @@ public class MessageCommandImpl implements Command {
             }
             pageResponse.setResponseType(ResponseType.REDIRECT);
             PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
-            browser.addPageToHistory(returnPageWithQuery(request));
-            pageResponse.setPage(definePathToSuccessPage(request));
+            browser.addPageToHistory(Command.returnPageWithQuery(request));
+            pageResponse.setPage(Command.definePathToSuccessPage(request));
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR, e);
             request.setAttribute(MESSAGE_ERROR, ResponseMessage.OPERATION_ERROR);

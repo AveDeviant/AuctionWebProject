@@ -42,9 +42,11 @@ public class CommandFactory {
     private static final String TRADER_LOTS = "traderLots";
     private static final String USER_LOTS = "userLots";
     private static final String EXTEND_PERIOD = "extendPeriod";
+    private static final String COMMENT = "comment";
 
     /**
      * Defines {@link Command} using {@link CommandFactory#COMMAND_PARAM}.
+     *
      * @param request client request to get parameters to work with.
      * @return defined {@link Command}
      */
@@ -112,6 +114,8 @@ public class CommandFactory {
                 return manageAccessAuthorizedUser(request, new GetUserLotsImpl());
             case EXTEND_PERIOD:
                 return manageAccessAuthorizedUser(request, new ExtendBiddingPeriodImpl());
+            case COMMENT:
+                return new CommentImpl();
             default:
                 return new InitCommandImpl();
         }

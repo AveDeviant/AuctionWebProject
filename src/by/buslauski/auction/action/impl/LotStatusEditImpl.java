@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.LotService;
@@ -39,7 +39,7 @@ public class LotStatusEditImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         long lotId = NumberParser.parse(request.getParameter(LOT_ID));
         boolean status = Boolean.valueOf(request.getParameter(STATUS));
         try {

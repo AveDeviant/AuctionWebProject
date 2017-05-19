@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Acer on 07.04.2017.
+ * @author Mikita Buslauski
  */
 public class DateTag extends TagSupport {
     private static Logger LOGGER = LogManager.getLogger();

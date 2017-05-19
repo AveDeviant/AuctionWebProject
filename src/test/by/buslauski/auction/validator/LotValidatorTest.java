@@ -1,6 +1,6 @@
 package test.by.buslauski.auction.validator;
 
-import by.buslauski.auction.exception.InvalidDateValueException;
+import by.buslauski.auction.validator.exception.InvalidDateValueException;
 import by.buslauski.auction.validator.LotValidator;
 import org.junit.Assert;
 import org.junit.Test;

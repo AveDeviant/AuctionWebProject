@@ -1,7 +1,7 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;

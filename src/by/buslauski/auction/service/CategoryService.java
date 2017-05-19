@@ -1,7 +1,7 @@
 package by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Category;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 
 import java.util.ArrayList;
 

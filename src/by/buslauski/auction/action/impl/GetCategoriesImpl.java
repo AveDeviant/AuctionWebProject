@@ -2,7 +2,7 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.entity.Category;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.CategoryService;
 import by.buslauski.auction.service.impl.CategoryServiceImpl;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class GetCategoriesImpl implements Command {
     private static final String CATEGORIES = "categories";
     private static CategoryService categoryService = new CategoryServiceImpl();
-
 
     /**
      * Return all lot categories from database.

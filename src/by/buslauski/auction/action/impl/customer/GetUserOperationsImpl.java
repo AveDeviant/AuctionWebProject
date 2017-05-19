@@ -1,14 +1,12 @@
 package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
-import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.BetService;
 import by.buslauski.auction.service.OrderService;
 import by.buslauski.auction.service.UserService;
@@ -33,7 +31,7 @@ public class GetUserOperationsImpl implements Command {
 
     /**
      * Get customer bets, accepted deals and lots from database
-     * and displaying it to current customer.
+     * and display it to current customer.
      *
      * @param request client request to get parameters to work with.
      * @return null.

@@ -23,11 +23,6 @@
                 <fmt:message key="${error}"/>
             </div>
         </c:if>
-        <c:if test="${bankErr !=null}">
-            <div class=" alert alert-danger alert-dismissable fade in">
-                <fmt:message key="${bankErr}"/>
-            </div>
-        </c:if>
         <div class="row">
             <div class="col-sm-6">
                 <c:choose>
@@ -126,7 +121,6 @@
                             <button id="logout" type="submit" name="button"><fmt:message
                                     key="private.button.logout"/></button>
                             <input type="hidden" name="command" value="logout">
-                            <input type="hidden" name="jspPath" value="${pageContext.request.servletPath}"/><br>
                         </form>
                     </div>
                 </div>

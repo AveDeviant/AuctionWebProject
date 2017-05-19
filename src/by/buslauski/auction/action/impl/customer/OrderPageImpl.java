@@ -1,7 +1,7 @@
 package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
@@ -32,7 +32,7 @@ public class OrderPageImpl implements Command {
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#FORWARD}.
-     * String page - "/jsp/order.jsp"
+     * String page - {@link PageNavigation#ORDER_PAGE}
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

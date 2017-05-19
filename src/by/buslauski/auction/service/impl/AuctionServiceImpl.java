@@ -2,14 +2,13 @@ package by.buslauski.auction.service.impl;
 
 import by.buslauski.auction.dao.*;
 import by.buslauski.auction.dao.impl.LotDaoImpl;
-import by.buslauski.auction.dao.impl.MessageDaoImpl;
 import by.buslauski.auction.dao.impl.OrderDaoImpl;
 import by.buslauski.auction.dao.impl.UserDaoImpl;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.DAOException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.AuctionService;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.MessageService;
@@ -47,8 +46,13 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
         }
     }
 
+    @Override
+    public void setWinner() throws ServiceException {
+        lotService.getLotsWithOverTiming();
+    }
+
     /**
-     * Create notification for trader containing information about purchaser .
+     * Create notification for trader containing information about purchaser.
      * Withdraw lot from auction (update database setting {@link Lot#availability} to false).
      * Add order into database for deal registration.
      * Create notification for trader and send it to trader's account in the system and
@@ -81,6 +85,7 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
             daoHelper.commit();
             status = true;
         } catch (DAOException e) {
+            e.printStackTrace();
             daoHelper.rollback();
             LOGGER.log(Level.ERROR, e + " Exception during paying.");
             throw new ServiceException(e);

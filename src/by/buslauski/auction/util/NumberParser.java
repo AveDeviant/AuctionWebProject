@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Acer on 15.05.2017.
+ * @author Buslauski Mikita
  */
 public class NumberParser {
     private static final Logger LOGGER = LogManager.getLogger();

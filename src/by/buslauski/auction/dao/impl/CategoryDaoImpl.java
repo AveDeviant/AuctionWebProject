@@ -2,7 +2,7 @@ package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.CategoryDao;
 import by.buslauski.auction.entity.Category;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 import org.apache.logging.log4j.Level;
 
 import java.sql.PreparedStatement;
@@ -17,7 +17,6 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao{
     private static final String SQL_SELECT_ID = "SELECT id_category FROM category WHERE name=?";
     private static final String SQL_SELECT_ALL_CATEGORIES = "SELECT id_category, name FROM category";
     private static final String SQL_INSERT_CATEGORY ="INSERT INTO category VALUES(NULL,?)";
-
 
     @Override
     public int findCategoryIdByName(String name) throws DAOException {

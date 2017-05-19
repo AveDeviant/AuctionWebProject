@@ -1,12 +1,12 @@
 package by.buslauski.auction.service;
 
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 
 /**
  * @author Buslauski Mikita
  */
 public interface NotificationService {
 
-    void createNotificationForTraderAuctionResult(long lotId, long traderId, long customerId) throws ServiceException;
+    void createNotificationAuctionResult(long lotId, long traderId, long customerId) throws ServiceException;
 
 }

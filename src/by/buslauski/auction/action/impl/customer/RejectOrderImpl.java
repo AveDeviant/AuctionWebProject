@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
@@ -33,7 +33,7 @@ public class RejectOrderImpl implements Command {
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - {@link ResponseType#REDIRECT} in case operation passed successfully and the auction results
      * were cancelled and {@link ResponseType#FORWARD} in other case;
-     * String page - page for response - "index.jsp" if operation passed successfully and
+     * String page - page for response - {@link PageNavigation#INDEX_PAGE} if operation passed successfully and
      * current page with appropriate message in other case.
      * @see Command#returnPageWithQuery(HttpServletRequest)
      */
@@ -47,7 +47,7 @@ public class RejectOrderImpl implements Command {
             return pageResponse;
         }
         Bet bet = user.getWinningBets().get(0);
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         try {
             Lot lot = lotService.getLotById(bet.getLotId());
             lotService.resetBids(lot);

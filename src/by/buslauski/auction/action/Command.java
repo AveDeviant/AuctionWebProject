@@ -1,5 +1,6 @@
 package by.buslauski.auction.action;
 
+import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
@@ -31,18 +32,21 @@ public interface Command {
      * @param request client request to get parameters to work with.
      * @return current page.
      */
-    default String returnPageWithQuery(HttpServletRequest request) {
+    static String returnPageWithQuery(HttpServletRequest request) {
         String controller = request.getRequestURI();
         String path = request.getParameter(SessionAttributes.JSP_PATH);
-        if (path.endsWith("?")) {
-            return path;
-        } else {
-            String query = path.substring(path.lastIndexOf("?"));
-            return controller + query;
+        if (path == null || path.trim().isEmpty()){
+            return PageNavigation.INDEX_PAGE;
         }
+            if (path.endsWith("?")) {
+                return path;
+            } else {
+                String query = path.substring(path.lastIndexOf("?"));
+                return controller + query;
+            }
     }
 
-    default String definePathToSuccessPage(HttpServletRequest request) {
+    static String definePathToSuccessPage(HttpServletRequest request) {
         String controller = request.getRequestURI();
         String command = "command=goTo";
         String successPage = "page=success";
@@ -52,7 +56,7 @@ public interface Command {
         return stringBuilder.toString();
     }
 
-    default String definePathToAccessDeniedPage(HttpServletRequest request) {
+    static String definePathToAccessDeniedPage(HttpServletRequest request) {
         String controller = request.getRequestURI();
         String command = "command=goTo";
         String successPage = "page=accessDenied";

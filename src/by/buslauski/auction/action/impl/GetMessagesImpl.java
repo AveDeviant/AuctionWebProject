@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.MessageService;
 import by.buslauski.auction.service.impl.MessageServiceImpl;

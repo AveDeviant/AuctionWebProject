@@ -1,7 +1,7 @@
 package by.buslauski.auction.response;
 
 /**
- * Created by Acer on 19.03.2017.
+ * @author Mikita Buslauski
  */
 public enum ResponseType {
     FORWARD("forward"), REDIRECT("sendRedirect");

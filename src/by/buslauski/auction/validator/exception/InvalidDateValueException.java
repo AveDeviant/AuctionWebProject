@@ -1,4 +1,4 @@
-package by.buslauski.auction.exception;
+package by.buslauski.auction.validator.exception;
 
 /**
  * @author Mikita Buslauski

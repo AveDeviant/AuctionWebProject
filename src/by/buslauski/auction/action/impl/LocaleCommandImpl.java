@@ -39,7 +39,7 @@ public class LocaleCommandImpl implements Command {
         if (main.equals(path)) {
             pageResponse.setPage(PageNavigation.INDEX_PAGE);
         } else {
-            pageResponse.setPage(returnPageWithQuery(request));
+            pageResponse.setPage(Command.returnPageWithQuery(request));
         }
         return pageResponse;
     }

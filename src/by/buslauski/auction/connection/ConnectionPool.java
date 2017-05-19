@@ -120,7 +120,6 @@ public class ConnectionPool {
             LOGGER.info("Drivers has been deregistered");
         } catch (SQLException e) {
             LOGGER.log(Level.ERROR, e + "Problem during deregister drivers");
-            e.printStackTrace();
         }
         LOGGER.info("All connections has been closed.");
     }

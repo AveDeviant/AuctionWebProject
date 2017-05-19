@@ -1,7 +1,7 @@
 package by.buslauski.auction.dao;
 
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 
 import java.util.ArrayList;
 
@@ -34,4 +34,6 @@ public interface UserDao {
     void updateTraderRating(long traderId, long customerId, int rating) throws DAOException;
 
     double findTraderRating(long traderId) throws DAOException;
+
+    void blockUser(int rejectedDeals) throws DAOException;
 }

@@ -5,7 +5,7 @@ import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.LotService;
@@ -29,7 +29,7 @@ public class GetUserLotsImpl implements Command {
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
-     * String page - page for response "/jsp/user_lots.jsp".
+     * String page - page for response {@link PageNavigation#USER_LOTS}.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

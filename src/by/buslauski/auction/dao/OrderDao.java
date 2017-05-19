@@ -1,7 +1,8 @@
 package by.buslauski.auction.dao;
 
+import by.buslauski.auction.entity.AuctionStat;
 import by.buslauski.auction.entity.Order;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +18,6 @@ public interface OrderDao {
 
     ArrayList<Order> getUserConfirmedOrders(long userId) throws DAOException;
 
-
+    AuctionStat calculateStatistic() throws DAOException;
 
 }

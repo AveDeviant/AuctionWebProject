@@ -1,7 +1,7 @@
 package by.buslauski.auction.validator;
 
 
-import by.buslauski.auction.exception.InvalidDateValueException;
+import by.buslauski.auction.validator.exception.InvalidDateValueException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;

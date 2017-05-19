@@ -3,27 +3,24 @@ package by.buslauski.auction.service.impl;
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.UserDaoImpl;
-import by.buslauski.auction.entity.Bet;
-import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.DAOException;
-import by.buslauski.auction.exception.ServiceException;
-import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.UserService;
 import by.buslauski.auction.util.Md5Converter;
 import by.buslauski.auction.validator.UserValidator;
 import org.apache.logging.log4j.Level;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 24.03.2017.
+ * @author Mikita Buslauski
  */
 public class UserServiceImpl extends AbstractService implements UserService {
     private static final String PASSWORD_NOT_FOUND = "";
     private static final int ROLE_ID_CUSTOMER = 2;
-
 
     @Override
     public User authorizationChecking(String login, String password) throws ServiceException {
@@ -67,6 +64,18 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return users;
     }
 
+    /**
+     * Insert user personal information into database.
+     *
+     * @param userId  user ID.
+     * @param name    user's real name.
+     * @param city    user's city.
+     * @param address user's address.
+     * @param phone   user's contact phone.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs).
+     * @see by.buslauski.auction.action.impl.customer.BuyLotImpl#execute(HttpServletRequest)
+     */
     @Override
     public void updateUserInfo(long userId, String name, String city,
                                String address, String phone) throws ServiceException {
@@ -76,6 +85,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             userDao.updateUserInfo(userId, name, city, address, phone);
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -83,11 +93,12 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     /**
-     * Ban or unban costumer using customer ID.
+     * Ban or unban customer using customer ID.
      *
      * @param userId User ID whose access should be updated.
      * @param access true - unban costumer.
      *               false - ban costumer.
+     * @see by.buslauski.auction.action.impl.AccessEditImpl#execute(HttpServletRequest)
      */
     @Override
     public void changeAccess(long userId, boolean access) throws ServiceException {
@@ -103,6 +114,19 @@ public class UserServiceImpl extends AbstractService implements UserService {
         }
     }
 
+    /**
+     * Creating a new account using entered values by new user.
+     *
+     * @param userName user login;
+     * @param password user password;
+     * @param alias    user alias;
+     * @param email    user e-mail;
+     * @return new defined {@link User}
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs)
+     * @see UserServiceImpl#uniqueCheck(String, String, String)
+     * @see by.buslauski.auction.action.impl.RegistrationCommandImpl#execute(HttpServletRequest)
+     */
     @Override
     public User registerUser(String userName, String password, String alias, String email) throws ServiceException {
         User user = null;
@@ -127,6 +151,13 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     }
 
+    /**
+     * This method find {@link User} with {@link by.buslauski.auction.entity.Role#ADMIN}
+     *
+     * @return defined {@link User}.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs).
+     */
     @Override
     public User findAdmin() throws ServiceException {
         User user = null;
@@ -152,24 +183,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             user = userDao.findUserById(userId);
         } catch (DAOException e) {
-            e.printStackTrace();
-            throw new ServiceException(e);
-        } finally {
-            daoHelper.release();
-        }
-        return user;
-    }
-
-    @Override
-    public User findTrader(long lotId) throws ServiceException {
-        User user = null;
-        DaoHelper daoHelper = new DaoHelper();
-        try {
-            UserDao userDao = new UserDaoImpl();
-            daoHelper.initDao(userDao);
-            user = userDao.findTrader(lotId);
-        } catch (DAOException e) {
-            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -200,21 +213,22 @@ public class UserServiceImpl extends AbstractService implements UserService {
      * @param rating     rating value.
      * @throws ServiceException in case DAOException has been thrown
      *                          (database error occurs).
+     * @see by.buslauski.auction.action.impl.customer.TraderRatingImpl#execute(HttpServletRequest)
      */
     @Override
     public void updateTraderRating(long traderId, long customerId, int rating) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
-        if (rating < 1 || rating > 5){
+        if (rating < 1 || rating > 5 || traderId == customerId) {
             return;
         }
-            try {
-                UserDao userDao = new UserDaoImpl();
-                daoHelper.initDao(userDao);
-                userDao.updateTraderRating(traderId, customerId, rating);
-            } catch (DAOException e) {
-                LOGGER.log(Level.ERROR, e);
-                throw new ServiceException(e);
-            }
+        try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
+            userDao.updateTraderRating(traderId, customerId, rating);
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -222,7 +236,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
      * Get average value fom database and round it using <code>BigDecimal</code>
      * Set calculated rating to trader. {@link User#userRating}
      *
-     * @param trader Trader whose rating should be calculated.
+     * @param trader trader whose rating should be calculated.
      * @throws ServiceException in case DAOException has been thrown
      *                          (database error occurs).
      */
@@ -236,6 +250,21 @@ public class UserServiceImpl extends AbstractService implements UserService {
             BigDecimal bigDecimal = new BigDecimal(rating);
             rating = bigDecimal.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();  //rating rounding.
             trader.setUserRating(rating);
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+            throw new ServiceException(e);
+        } finally {
+            daoHelper.release();
+        }
+    }
+
+    @Override
+    public void blockUser(int rejectedDeals) throws ServiceException {
+        DaoHelper daoHelper = new DaoHelper();
+        UserDao userDao = new UserDaoImpl();
+        try {
+            daoHelper.initDao(userDao);
+            userDao.blockUser(rejectedDeals);
         } catch (DAOException e) {
             LOGGER.log(Level.ERROR, e);
             throw new ServiceException(e);

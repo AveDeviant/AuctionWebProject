@@ -1,4 +1,4 @@
-package by.buslauski.auction.exception;
+package by.buslauski.auction.dao.exception;
 
 /**
  * @author Mikita Buslauski

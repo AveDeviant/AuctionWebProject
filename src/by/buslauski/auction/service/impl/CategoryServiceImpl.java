@@ -4,8 +4,8 @@ import by.buslauski.auction.dao.CategoryDao;
 import by.buslauski.auction.dao.DaoHelper;
 import by.buslauski.auction.dao.impl.CategoryDaoImpl;
 import by.buslauski.auction.entity.Category;
-import by.buslauski.auction.exception.DAOException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.CategoryService;
 
 import java.util.ArrayList;

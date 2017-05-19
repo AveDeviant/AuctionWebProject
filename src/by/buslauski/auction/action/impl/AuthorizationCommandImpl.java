@@ -1,7 +1,7 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.PageNavigation;
@@ -21,13 +21,13 @@ import javax.servlet.http.HttpSession;
  * @author Mikita Buslauski
  */
 public class AuthorizationCommandImpl implements Command {
-    private static UserService userService = new UserServiceImpl();
-    private static MessageService messageService = new MessageServiceImpl();
-    private static AuctionService auctionService = new AuctionServiceImpl();
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String AUTHORIZATION_ERROR = "authorizationError";
     private static final String USER_BANNED = "banned";
+    private static UserService userService = new UserServiceImpl();
+    private static MessageService messageService = new MessageServiceImpl();
+    private static AuctionService auctionService = new AuctionServiceImpl();
 
 
     @Override

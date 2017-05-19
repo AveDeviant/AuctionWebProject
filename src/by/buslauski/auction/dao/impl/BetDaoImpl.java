@@ -2,7 +2,7 @@ package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.BetDao;
 import by.buslauski.auction.entity.Bet;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 import by.buslauski.auction.util.DateTimeParser;
 import org.apache.logging.log4j.Level;
 

@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.LotService;
@@ -32,11 +32,12 @@ public class DeleteLotImpl implements Command {
      * ResponseType - response type: {@link ResponseType#REDIRECT} - operation passed successfully or
      * {@link ResponseType#FORWARD} - exception during operation.
      * String page - current page.
+     * @see Command#returnPageWithQuery(HttpServletRequest)
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         User currentUser = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
             long lotId = NumberParser.parse(request.getParameter(LOT_ID));

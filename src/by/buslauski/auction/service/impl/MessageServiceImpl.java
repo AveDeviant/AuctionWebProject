@@ -6,8 +6,8 @@ import by.buslauski.auction.dao.impl.MessageDaoImpl;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.entity.UserMessage;
-import by.buslauski.auction.exception.DAOException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.mail.MailSender;
 import by.buslauski.auction.mail.exception.MailException;
 import by.buslauski.auction.service.MessageService;
@@ -20,7 +20,6 @@ import java.util.ArrayList;
  * @author Mikita Buslauski
  */
 public class MessageServiceImpl extends AbstractService implements MessageService {
-    private static final String AUCTION_NOTIFICATION = "AUCTION RESULT";
     private static UserService userService = new UserServiceImpl();
 
 
@@ -33,6 +32,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             messageDao.addMessage(theme, text, senderId, recipient.getUserId());
             sendMessageOnMailBox(theme, text, recipient);
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -48,6 +48,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             daoHelper.initDao(messageDao);
             messages.addAll(messageDao.findUserMessages(userId));
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -108,6 +109,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             daoHelper.initDao(messageDao);
             count = messageDao.countUserUnreadMessages(userId);
         } catch (DAOException e) {
+            e.printStackTrace();
             throw new ServiceException(e);
         } finally {
             daoHelper.release();

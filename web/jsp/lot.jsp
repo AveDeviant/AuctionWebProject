@@ -21,7 +21,15 @@
         <c:set var="step" scope="page" value="${lot.getPrice()/100*5}"/>
         <c:if test="${betErr ne null}">
             <div class=" alert alert-danger alert-dismissable fade in">
-                <fmt:message key="${betErr}"/><c:out value="${lot.getCurrentPrice()+step}"/></div>
+                <fmt:message key="${betErr}"/></div>
+        </c:if>
+        <c:if test="${betSizeErr ne null}">
+            <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="${betSizeErr}"/><c:out value="${lot.getCurrentPrice()+step}"/></div>
+        </c:if>
+        <c:if test="${error ne null}">
+            <div class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="${error}"/></div>
         </c:if>
         <div class="row">
             <div class="col-sm-12">
@@ -43,10 +51,10 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="lot-stat">
-                    <div class="row">
-                        <h6 class="text-center" id="remaining"></h6>
+                        <div class="row">
+                            <h6 class="text-center" id="remaining"></h6>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -54,6 +62,30 @@
             <div class="col-sm-6">
                 <img class="img-responsive" src="${lot.getImage()}">
                 <h6>${lot.getDescription()}</h6>
+                <br/>
+                <a href="#comments" onclick="showComments()"><fmt:message
+                        key="show.comments"/></a>
+                <div id="comments" style="display: none">
+                    <div class="row">
+                        <c:forEach var="comment" items="${lot.getComments()}">
+                            <span><strong><c:out value="${comment.getUserAlias()}"/></strong></span><br/>
+                            <span><c:out value="${comment.getContent()}"/></span><br/>
+                        </c:forEach>
+                        <form method="post" action="${pageContext.request.contextPath}/Auction">
+                            <label for="content"><fmt:message key="comment.title"/></label><label
+                                class="required">*</label>
+                            <textarea type="text" name="content" id="content" required rows="5"
+                                      class="form-control"></textarea>
+                            <span class="help-block"><fmt:message key="comment.length"/></span>
+                            <br/>
+                            <button class="button-auction" type="submit" name="command" value="comment"><fmt:message
+                                    key="faq.form.send"/></button>
+                            <input type="hidden" name="jspPath"
+                                   value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                            <input type="hidden" name="lotId" value="${lot.getId()}">
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-3">
                 <h5><fmt:message key="lot.page.startingPrice"/></h5>
@@ -105,8 +137,8 @@
                     <h5><fmt:message key="trader.ref.city"/></h5>
                     <p>${trader.getCity()}</p>
                 </c:if>
-                <button class="button-auction" type="button" onclick="showBets()"><fmt:message
-                        key="lot.page.button.showBets"/></button>
+                <a href="#bets" onclick="showBets()"><fmt:message
+                        key="lot.page.button.showBets"/></a>
                 <br/>
                 <div id="bets" class="bets" style="display: none;">
                     <c:forEach var="bet" items="${lot.getBets()}">
@@ -123,7 +155,6 @@
             </div>
         </div>
     </div>
-    <c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </div>
 <script async="async">
     function showBets() {
@@ -133,6 +164,15 @@
         }
         else {
             bets.style.display = "none";
+        }
+    }
+    function showComments() {
+        var comments = document.getElementById("comments");
+        if (comments.style.display === "none") {
+            comments.style.display = "inline";
+        }
+        else {
+            comments.style.display = "none";
         }
     }
     function timeRemaining() {
@@ -163,5 +203,6 @@
         window.setTimeout("timeRemaining()", 1000)
     }
 </script>
+<c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
 </body>
 </html>

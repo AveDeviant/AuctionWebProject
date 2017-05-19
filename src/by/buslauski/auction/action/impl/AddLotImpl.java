@@ -2,9 +2,9 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
-import by.buslauski.auction.exception.InvalidDateValueException;
-import by.buslauski.auction.exception.InvalidNumberValueException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.validator.exception.InvalidDateValueException;
+import by.buslauski.auction.validator.exception.InvalidNumberValueException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.entity.User;
@@ -61,19 +61,19 @@ public class AddLotImpl implements Command {
      * ResponseType - {@link ResponseType#REDIRECT} if operation passed successfully and
      * {@link ResponseType#FORWARD} in other case;
      * String page - page for response:
-     * "/jsp/success.jsp" if operation passed successfully and current page with the appropriate message
-     * in other case.
+     * {@link by.buslauski.auction.constant.PageNavigation#SUCCESS_PAGE} if operation passed successfully
+     * and current page with the appropriate message in other case.
      * @see LotValidator
      * @see BetValidator
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         try {
             User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
             if (!user.getAccess()) {
-                pageResponse.setPage(definePathToAccessDeniedPage(request));
+                pageResponse.setPage(Command.definePathToAccessDeniedPage(request));
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 return pageResponse;
             }
@@ -96,12 +96,12 @@ public class AddLotImpl implements Command {
                 String uploadPath = request.getServletContext().getRealPath(UPLOAD);
                 FileUploadingManager fileUploadingManager = new FileUploadingManager();
                 String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);
-                lotService.addLot(user, lotTitle, lotDescription, image,  BetValidator.initPrice(lotPrice),
+                lotService.addLot(user, lotTitle, lotDescription, image, BetValidator.initPrice(lotPrice),
                         lotCategory, lotTimer);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
                 PageBrowser browser = (PageBrowser) request.getSession().getAttribute(SessionAttributes.PAGE_BROWSER);
-                browser.addPageToHistory(returnPageWithQuery(request));
-                pageResponse.setPage(definePathToSuccessPage(request));
+                browser.addPageToHistory(Command.returnPageWithQuery(request));
+                pageResponse.setPage(Command.definePathToSuccessPage(request));
                 return pageResponse;
             } else {
                 request.setAttribute(ADD_ERROR, ResponseMessage.INVALID_VALUE);

@@ -4,7 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.LotService;
@@ -24,7 +24,7 @@ public class ExtendBiddingPeriodImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Extending lot bidding period to {@link LotService#EXTENDING_PERIOD_MIN} or
+     * Extending lot bidding period for {@link LotService#EXTENDING_PERIOD_MIN} or
      * {@link LotService#EXTENDING_PERIOD_MAX} (in days) by trader.
      *
      * @param request client request to get parameters to work with.
@@ -39,7 +39,7 @@ public class ExtendBiddingPeriodImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         long lotId = NumberParser.parse(request.getParameter(LOT_ID));
         int days = (int) NumberParser.parse(request.getParameter(PERIOD));

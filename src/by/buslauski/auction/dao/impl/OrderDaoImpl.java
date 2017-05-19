@@ -1,8 +1,9 @@
 package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.OrderDao;
+import by.buslauski.auction.entity.AuctionStat;
 import by.buslauski.auction.entity.Order;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 import by.buslauski.auction.util.DateTimeParser;
 import org.apache.logging.log4j.Level;
 
@@ -26,6 +27,8 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
             " JOIN user AS trader ON id_trader=trader.id_user" +
             " JOIN lot ON order.id_lot=lot.id_lot" +
             " WHERE (order.id_user=? OR order.id_trader=?) AND accept=TRUE ORDER BY id_order";
+    private static final String SQL_SELECT_MONEY_DEALS = "SELECT SUM(payment) AS total_sum, COUNT(*) AS total_count " +
+            "FROM auction.order WHERE accept=TRUE";
 
 
     @Override
@@ -63,9 +66,9 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
         ArrayList<Order> orders = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_CONFIRMED_ORDERS)) {
             preparedStatement.setLong(1, userId);
-            preparedStatement.setLong(2,userId);
+            preparedStatement.setLong(2, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Order order = initOrder(resultSet);
                 order.setTraderUsername(resultSet.getString("trader.alias"));
                 order.setLotTitle(resultSet.getString("title"));
@@ -76,6 +79,20 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
             throw new DAOException(e);
         }
         return orders;
+    }
+
+    @Override
+    public AuctionStat calculateStatistic() throws DAOException {
+        AuctionStat auctionStat = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_MONEY_DEALS)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                auctionStat = initStatistic(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return auctionStat;
     }
 
     private Order initOrder(ResultSet resultSet) throws SQLException {
@@ -92,5 +109,12 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
         order.setAccept(resultSet.getBoolean("accept"));
         order.setDateTime(DateTimeParser.parseDate(resultSet.getString("date")));
         return order;
+    }
+
+    private AuctionStat initStatistic(ResultSet resultSet) throws SQLException {
+        AuctionStat auctionStat = new AuctionStat();
+        auctionStat.setDealsSum(resultSet.getBigDecimal("total_sum"));
+        auctionStat.setDealsCount(resultSet.getLong("total_count"));
+        return auctionStat;
     }
 }

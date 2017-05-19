@@ -5,7 +5,7 @@ import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.service.LotService;
@@ -19,14 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 /**
- * Created by Acer on 02.05.2017.
+ * @author Mikita Buslauski
  */
 public class GetLotsByTraderImpl implements Command {
     private static final String TRADER_ID = "traderId";
     private static final String TRADER_LOTS = "traderLots";
     private static LotService lotService = new LotServiceImpl();
     private static UserService userService = new UserServiceImpl();
-
 
     /**
      * Get lot which exposed for the auction by concrete trader.
@@ -35,7 +34,7 @@ public class GetLotsByTraderImpl implements Command {
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
-     * String page - page for response "/jsp/trader_lots.jsp".
+     * String page - page for response {@link PageNavigation#TRADER_LOTS}.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

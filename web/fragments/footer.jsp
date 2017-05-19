@@ -6,6 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<footer class="text-right" style="background-color: #0B0B0B">
-    <p>Mikita Buslauski</p>
+<footer class="text-right">
+    <p style="margin-right: 10px">Mikita Buslauski</p>
 </footer>

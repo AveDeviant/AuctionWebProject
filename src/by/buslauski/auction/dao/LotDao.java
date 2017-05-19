@@ -1,7 +1,7 @@
 package by.buslauski.auction.dao;
 
 import by.buslauski.auction.entity.Lot;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,7 +19,6 @@ public interface LotDao {
     ArrayList<Lot> findAllLots() throws DAOException;
 
     Lot findLotById(long id) throws DAOException;
-
 
     ArrayList<Lot> findAvailableLots() throws DAOException;
 

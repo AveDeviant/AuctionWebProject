@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
+<c:if test="${user ne null}">
+    <c:redirect url="${pageContext.request.contextPath}/Auction"/>
+</c:if>
 <div class="container">
     <div class="custom-opacity">
         <div class="row">

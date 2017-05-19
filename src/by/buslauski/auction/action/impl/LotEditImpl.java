@@ -1,25 +1,21 @@
 package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
-import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
-import by.buslauski.auction.entity.Role;
-import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.InvalidDateValueException;
-import by.buslauski.auction.exception.InvalidNumberValueException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.validator.exception.InvalidDateValueException;
+import by.buslauski.auction.validator.exception.InvalidNumberValueException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 import by.buslauski.auction.service.FileUploadingManager;
+import by.buslauski.auction.util.NumberParser;
 import by.buslauski.auction.validator.BetValidator;
 import by.buslauski.auction.validator.LotValidator;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -63,15 +59,9 @@ public class LotEditImpl implements Command {
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
-        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        if (user == null || !(Role.ADMIN == user.getRole())) {
-            pageResponse.setResponseType(ResponseType.REDIRECT);
-            pageResponse.setPage(PageNavigation.INDEX_PAGE);
-            return pageResponse;
-        }
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         pageResponse.setResponseType(ResponseType.FORWARD);
-        long id = Long.valueOf(request.getParameter(LOT_ID));
+        long id = NumberParser.parse(request.getParameter(LOT_ID));
         try {
             Lot lot = lotService.getLotById(id);
             if (lot == null) {
@@ -103,7 +93,7 @@ public class LotEditImpl implements Command {
                 pageResponse.setResponseType(ResponseType.FORWARD);
                 request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_VALUE);
             }
-            pageResponse.setPage(returnPageWithQuery(request));
+            pageResponse.setPage(Command.returnPageWithQuery(request));
         } catch (ServiceException e) {
             request.setAttribute(EDIT_ERROR, ResponseMessage.OPERATION_ERROR);
             pageResponse.setResponseType(ResponseType.FORWARD);

@@ -1,7 +1,7 @@
 package by.buslauski.auction.response;
 
 /**
- * Created by Acer on 31.03.2017.
+ * @author Mikita Buslauski
  */
 public class PageResponse {
     private ResponseType responseType;

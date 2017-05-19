@@ -4,9 +4,10 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.entity.AuctionStat;
 import by.buslauski.auction.entity.Role;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.response.PageResponse;
@@ -21,11 +22,13 @@ import java.util.ArrayList;
  */
 public class GetOrdersCommandImpl implements Command {
     private static final String ORDERS = "orders";
+    private static final String STATISTIC = "stat";
     private static final String ERROR = "err";
     private static OrderService orderService = new OrderServiceImpl();
 
     /**
      * Get orders (deals) from database.
+     * Showing total auction statistic.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
@@ -44,7 +47,9 @@ public class GetOrdersCommandImpl implements Command {
         }
         try {
             ArrayList<Order> orders = orderService.getAllOrders();
+            AuctionStat stat = orderService.calculateStatistic();
             request.setAttribute(ORDERS, orders);
+            request.setAttribute(STATISTIC,stat);
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.ORDERS_SHOW_PAGE);
         } catch (ServiceException e) {

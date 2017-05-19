@@ -19,7 +19,6 @@
 <fmt:setBundle basename="properties.locale"/>
 <div class="custom-opacity">
     <div class="container">
-        <div class="custom-wrapper">
             <div class="row">
                 <c:if test="${err != null}">
                     <div class=" alert alert-danger alert-dismissable fade in">
@@ -64,7 +63,7 @@
                             <a class="lot-title"
                                href="${pageContext.request.contextPath}/Auction?command=showLot&id=${lot.getId()}">
                                 <h4 class="text-center">${lot.getTitle()}</h4></a>
-                            <img  class="img-responsive" src="${lot.getImage()}" alt="${lot.getTitle()}">
+                            <img class="img-responsive" src="${lot.getImage()}" alt="${lot.getTitle()}">
                         </div>
                         <c:set var="counter" value="${counter+1}" scope="page"/>
                         <c:if test="${(counter%3) eq 0}"></div>
@@ -74,7 +73,5 @@
             </c:choose>
         </div>
     </div>
-    <c:import url="${pageContext.request.contextPath}/fragments/footer.jsp"/>
-</div>
 </body>
 </html>

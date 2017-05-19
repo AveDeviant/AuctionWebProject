@@ -8,7 +8,7 @@ import java.util.concurrent.Executor;
 /**
  * @author Mikita Buslauski
  */
-public class ProxyConnection implements Connection,AutoCloseable {
+public class ProxyConnection implements Connection {
     private Connection connection;
 
     ProxyConnection(Connection connection) {
@@ -604,7 +604,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-    connection.setTypeMap(map);
+        connection.setTypeMap(map);
     }
 
     /**
@@ -628,7 +628,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void setHoldability(int holdability) throws SQLException {
-    connection.setHoldability(holdability);
+        connection.setHoldability(holdability);
     }
 
     /**
@@ -718,7 +718,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void rollback(Savepoint savepoint) throws SQLException {
-    connection.rollback(savepoint);
+        connection.rollback(savepoint);
     }
 
     /**
@@ -737,7 +737,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-    connection.releaseSavepoint(savepoint);
+        connection.releaseSavepoint(savepoint);
     }
 
     /**
@@ -776,7 +776,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return connection.createStatement(resultSetType,resultSetConcurrency,resultSetHoldability);
+        return connection.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     /**
@@ -957,7 +957,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        return connection.prepareStatement(sql,columnIndexes);
+        return connection.prepareStatement(sql, columnIndexes);
     }
 
     /**
@@ -1168,7 +1168,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
-    connection.setClientInfo(name, value);
+        connection.setClientInfo(name, value);
     }
 
     /**
@@ -1202,7 +1202,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
-    connection.setClientInfo(properties);
+        connection.setClientInfo(properties);
     }
 
     /**
@@ -1323,7 +1323,7 @@ public class ProxyConnection implements Connection,AutoCloseable {
      */
     @Override
     public void setSchema(String schema) throws SQLException {
-connection.setSchema(schema);
+        connection.setSchema(schema);
     }
 
     /**
@@ -1379,7 +1379,7 @@ connection.setSchema(schema);
      */
     @Override
     public void abort(Executor executor) throws SQLException {
-    connection.abort(executor);
+        connection.abort(executor);
     }
 
     /**
@@ -1473,7 +1473,7 @@ connection.setSchema(schema);
      */
     @Override
     public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-    connection.setNetworkTimeout(executor, milliseconds);
+        connection.setNetworkTimeout(executor, milliseconds);
     }
 
     /**

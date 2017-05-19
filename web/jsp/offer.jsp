@@ -40,7 +40,7 @@
                             <label for="title"><fmt:message key="admin.lot.title"/> </label>
                             <input class="form-control" type="text" name="title" id="title"
                                    title="<fmt:message key="admin.lot.title.restrict"/>" required>
-
+                            <span class="help-block"><fmt:message key="admin.lot.title.restrict"/> </span>
                             <span class="err" id="errTitle" style="display: none"><fmt:message
                                     key="admin.lot.title.restrict"/> </span>
                             <br/>
@@ -53,8 +53,8 @@
                             <label for="image"><fmt:message key="admin.lot.image"/> </label>
                             <input class="form-control" type="file" name="image" id="image" required><br/>
                             <c:if test="${imageErr!=null}">
-                            <div class=" alert alert-danger alert-dismissable fade in">
-                                <fmt:message key="${imageErr}"/></div>
+                                <div class=" alert alert-danger alert-dismissable fade in">
+                                    <fmt:message key="${imageErr}"/></div>
                             </c:if>
                             <label for="price"><fmt:message key="admin.lot.startingprice"/> </label>
                             <input class="form-control" type="text" name="price" id="price"
@@ -66,6 +66,7 @@
                             <label for="availableTiming"><fmt:message key="lot.timing"/> </label>
                             <input class="form-control" type="date" name="availableTiming" id="availableTiming"
                                    required>
+                            <span class="help-block"><fmt:message key="lot.timing.note"/> </span>
                             <label class="alert-danger" id="errDate"></label><br/>
                             <label for="category"><fmt:message key="admin.lot.value"/> </label>
                             <select name="category" id="category">

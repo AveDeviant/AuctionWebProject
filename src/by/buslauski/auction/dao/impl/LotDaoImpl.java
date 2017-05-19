@@ -3,7 +3,7 @@ package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.LotDao;
 import by.buslauski.auction.entity.Lot;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 import org.apache.logging.log4j.Level;
 
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
 package by.buslauski.auction.dao;
 
 import by.buslauski.auction.entity.AuctionNotification;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 
 /**
  * @author Mikita Buslauski

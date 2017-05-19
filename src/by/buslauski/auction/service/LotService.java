@@ -2,7 +2,7 @@ package by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public interface LotService {
     int WAITING_PERIOD = 10;  // waiting period for registration of the won lot, in days.
-    int EXTENDING_PERIOD_MIN = 7; // extended bidding period,bottom line, in days
-    int EXTENDING_PERIOD_MAX = 15; // extended bidding period, upper bound, in days
+    int EXTENDING_PERIOD_MIN = 7; // extended bidding period,bottom line, in days.
+    int EXTENDING_PERIOD_MAX = 15; // extended bidding period, upper bound, in days.
 
     void addLot(User user, String title, String description,
                 String image, BigDecimal price,

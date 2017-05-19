@@ -1,7 +1,7 @@
 package by.buslauski.auction.service;
 
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 
 import java.util.ArrayList;
 
@@ -26,11 +26,11 @@ public interface UserService {
 
     User findUserById(long userId) throws ServiceException;
 
-    User findTrader(long lotId) throws ServiceException;
-
     ArrayList<Integer> defineRating();
 
     void updateTraderRating(long traderId, long customerId, int rating) throws ServiceException;
 
     void setTraderRating(User trader) throws ServiceException;
+
+    void blockUser(int rejectedDeals) throws ServiceException;
 }

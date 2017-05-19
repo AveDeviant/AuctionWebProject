@@ -3,7 +3,7 @@ package by.buslauski.auction.service;
 import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.service.exception.ServiceException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

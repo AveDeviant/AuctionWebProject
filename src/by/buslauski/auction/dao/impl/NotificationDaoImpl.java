@@ -2,7 +2,7 @@ package by.buslauski.auction.dao.impl;
 
 import by.buslauski.auction.dao.NotificationDao;
 import by.buslauski.auction.entity.AuctionNotification;
-import by.buslauski.auction.exception.DAOException;
+import by.buslauski.auction.dao.exception.DAOException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,9 +18,10 @@ public class NotificationDaoImpl extends AbstractDao implements NotificationDao 
             "WHERE id_customer=? AND id_lot=?";
     private static final String SQL_DELETE_NOTIFICATION = "DELETE FROM result_notification WHERE id_lot=?";
     private static final String SQL_SELECT_NOTIFICATION = "SELECT id_notification, result.id_customer, customer.alias, " +
-            "result.id_lot, lot.title, date, id_trader " +
+            "trader.alias, result.id_lot, lot.title, date, result.id_trader " +
             "FROM result_notification AS result " +
             "JOIN user AS customer ON result.id_customer=customer.id_user " +
+            "JOIN user AS trader ON result.id_trader=trader.id_user " +
             "JOIN lot ON result.id_lot=lot.id_lot " +
             "WHERE result.id_lot=?";
 
@@ -79,7 +80,7 @@ public class NotificationDaoImpl extends AbstractDao implements NotificationDao 
         AuctionNotification notification = new AuctionNotification();
         notification.setNotificationId(resultSet.getLong("id_notification"));
         notification.setCustomerId(resultSet.getLong("result.id_customer"));
-        notification.setTraderId(resultSet.getLong("id_trader"));
+        notification.setTraderId(resultSet.getLong("result.id_trader"));
         notification.setLotId(resultSet.getLong("result.id_lot"));
         notification.setLotTitle(resultSet.getString("lot.title"));
         notification.setCustomerAlias(resultSet.getString("customer.alias"));

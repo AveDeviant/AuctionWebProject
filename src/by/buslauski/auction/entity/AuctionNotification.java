@@ -69,4 +69,6 @@ public class AuctionNotification {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
+
+
 }

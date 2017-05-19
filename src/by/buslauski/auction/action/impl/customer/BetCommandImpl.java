@@ -2,8 +2,9 @@ package by.buslauski.auction.action.impl.customer;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
-import by.buslauski.auction.exception.InvalidNumberValueException;
-import by.buslauski.auction.exception.ServiceException;
+import by.buslauski.auction.entity.Role;
+import by.buslauski.auction.validator.exception.InvalidNumberValueException;
+import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.constant.ResponseMessage;
 import by.buslauski.auction.constant.SessionAttributes;
@@ -18,7 +19,6 @@ import by.buslauski.auction.util.NumberParser;
 import by.buslauski.auction.validator.BetValidator;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 
 
@@ -29,6 +29,7 @@ public class BetCommandImpl implements Command {
     private static final String PRICE_PARAM = "price";
     private static final String LOT_ID_PARAM = "lotId";
     private static final String BET_ERROR = "betErr";
+    private static final String BET_SIZE_ERROR = "betSizeErr";
     private static final String AUTHORIZATION_ERROR = "authorizationError";
     private static LotService lotService = new LotServiceImpl();
     private static BetService betService = new BetServiceImpl();
@@ -52,8 +53,9 @@ public class BetCommandImpl implements Command {
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully.
      * {@link ResponseType#FORWARD} - detecting errors during operations.
-     * String page - current page or "/jsp/denied.jsp" in case lot became unable for the auction.
+     * String page - current page or {@link PageNavigation#ACCESS_DENIED_PAGE} in case lot became unable for the auction.
      * @see Command#returnPageWithQuery(HttpServletRequest)
+     * @see Command#definePathToAccessDeniedPage(HttpServletRequest)
      * @see BetValidator
      */
     @Override
@@ -61,7 +63,7 @@ public class BetCommandImpl implements Command {
         PageResponse pageResponse = new PageResponse();
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         long lotId = NumberParser.parse(request.getParameter(LOT_ID_PARAM));
-        pageResponse.setPage(returnPageWithQuery(request));
+        pageResponse.setPage(Command.returnPageWithQuery(request));
         pageResponse.setResponseType(ResponseType.FORWARD);
         if (user == null) {
             request.setAttribute(AUTHORIZATION_ERROR, ResponseMessage.BET_AUTHORIZATION_ERROR);
@@ -73,7 +75,7 @@ public class BetCommandImpl implements Command {
             user = userService.findUserById(user.getUserId()); // updating user info
             if (user.getAccess()) {
                 Lot lot = lotService.getAvailableLotById(lotId); //updating lot info
-                if (lot != null) {
+                if (lot != null && user.getRole() != Role.ADMIN) {
                     if (lot.getUserId() == user.getUserId()) {
                         request.setAttribute(BET_ERROR, ResponseMessage.BET_ON_OWN_LOT);
                         return pageResponse;
@@ -84,14 +86,14 @@ public class BetCommandImpl implements Command {
                     }
                     BigDecimal newPrice = BetValidator.initPrice(request.getParameter(PRICE_PARAM));
                     if (!betService.checkBetValue(lot, newPrice) || !betService.addBet(userId, lotId, newPrice)) {
-                        request.setAttribute(BET_ERROR, ResponseMessage.BET_SIZE_ERROR);
+                        request.setAttribute(BET_SIZE_ERROR, ResponseMessage.BET_SIZE_ERROR);
                         return pageResponse;
                     }
                     user.setBets(betService.getUserBets(user));
                     pageResponse.setResponseType(ResponseType.REDIRECT);
                     return pageResponse;
                 } else {
-                    pageResponse.setPage(definePathToAccessDeniedPage(request));
+                    pageResponse.setPage(Command.definePathToAccessDeniedPage(request));
                     pageResponse.setResponseType(ResponseType.REDIRECT);
                 }
             } else {
