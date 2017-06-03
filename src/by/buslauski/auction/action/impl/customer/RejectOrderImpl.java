@@ -4,6 +4,7 @@ import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.PageNavigation;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
+import by.buslauski.auction.service.AuctionService;
 import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.response.ResponseType;
 import by.buslauski.auction.entity.Bet;
@@ -11,6 +12,7 @@ import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.service.LotService;
+import by.buslauski.auction.service.impl.AuctionServiceImpl;
 import by.buslauski.auction.service.impl.LotServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RejectOrderImpl implements Command {
     private static final String ORDER_ERROR_ATTR = "orderError";
     private static LotService lotService = new LotServiceImpl();
+    private static AuctionService auctionService = new AuctionServiceImpl();
 
     /**
      * Rejecting deal by customer.
@@ -50,7 +53,7 @@ public class RejectOrderImpl implements Command {
         pageResponse.setPage(Command.returnPageWithQuery(request));
         try {
             Lot lot = lotService.getLotById(bet.getLotId());
-            lotService.resetBids(lot);
+            auctionService.resetBids(lot);
             user.getWinningBets().remove(bet);
             pageResponse.setResponseType(ResponseType.REDIRECT);
             pageResponse.setPage(PageNavigation.INDEX_PAGE);

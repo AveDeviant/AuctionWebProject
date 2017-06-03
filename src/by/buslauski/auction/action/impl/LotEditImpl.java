@@ -3,6 +3,8 @@ package by.buslauski.auction.action.impl;
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
 import by.buslauski.auction.constant.ResponseMessage;
+import by.buslauski.auction.service.CategoryService;
+import by.buslauski.auction.service.impl.CategoryServiceImpl;
 import by.buslauski.auction.validator.exception.InvalidDateValueException;
 import by.buslauski.auction.validator.exception.InvalidNumberValueException;
 import by.buslauski.auction.service.exception.ServiceException;
@@ -38,12 +40,15 @@ public class LotEditImpl implements Command {
     private static final String LOT_IMAGE = "image";
     private static final String CATEGORY = "category";
     private static LotService lotService = new LotServiceImpl();
+    private static CategoryService categoryService = new CategoryServiceImpl();
 
     /**
      * Editing lot title, starting price, image, availability for bids,
      * timing, lot category.
      * <p>
      * Checked situations:
+     * Lot doesn't exists;
+     * Entered category doesn't exists;
      * Invalid lot image extension;
      * Invalid lot title, description, price or date;
      * Exception during operation;
@@ -69,12 +74,16 @@ public class LotEditImpl implements Command {
                 return pageResponse;
             }
             Part lotImage = request.getPart(LOT_IMAGE);
+            if (lotImage == null) {
+                request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
+                return pageResponse;
+            }
             String fileName = lotImage.getSubmittedFileName();
             if (!fileName.isEmpty()) {
                 String type = request.getServletContext().getMimeType(fileName);
                 if (!type.startsWith(IMAGE_MIME_TYPE)) {
                     request.setAttribute(EDIT_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
-                    pageResponse.setPage(request.getParameter(SessionAttributes.JSP_PATH));
+                    pageResponse.setPage(Command.returnPageWithQuery(request));
                     return pageResponse;
                 }
             }
@@ -86,7 +95,8 @@ public class LotEditImpl implements Command {
             boolean availability = Boolean.parseBoolean(request.getParameter(AVAILABILITY));
             String availableDate = request.getParameter(AVAILABLE_TIMING);
             String category = request.getParameter(CATEGORY);
-            if (LotValidator.checkLot(lotTitle, availableDate) && BetValidator.checkPriceForValid(startingPrice)) {
+            if (LotValidator.checkLot(lotTitle, availableDate) && BetValidator.checkPriceForValid(startingPrice) &&
+                    categoryService.categoryExists(category)) {
                 lotService.editLot(id, category, lotTitle, image, BetValidator.initPrice(startingPrice), availability, availableDate);
                 pageResponse.setResponseType(ResponseType.REDIRECT);
             } else {

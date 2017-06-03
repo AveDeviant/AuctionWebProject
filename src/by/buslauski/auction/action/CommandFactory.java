@@ -43,6 +43,7 @@ public class CommandFactory {
     private static final String USER_LOTS = "userLots";
     private static final String EXTEND_PERIOD = "extendPeriod";
     private static final String COMMENT = "comment";
+    private static final String INIT_COMMAND ="init";
 
     /**
      * Defines {@link Command} using {@link CommandFactory#COMMAND_PARAM}.
@@ -56,6 +57,8 @@ public class CommandFactory {
             return new InitCommandImpl();
         }
         switch (command) {
+            case INIT_COMMAND:
+                return new InitCommandImpl();
             case LOCALE:
                 return new LocaleCommandImpl();
             case LOGIN:

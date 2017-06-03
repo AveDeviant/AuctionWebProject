@@ -89,7 +89,7 @@ public class BetCommandImpl implements Command {
                         request.setAttribute(BET_SIZE_ERROR, ResponseMessage.BET_SIZE_ERROR);
                         return pageResponse;
                     }
-                    user.setBets(betService.getUserBets(user));
+//                    user.setBets(betService.getUserBets(userId));
                     pageResponse.setResponseType(ResponseType.REDIRECT);
                     return pageResponse;
                 } else {

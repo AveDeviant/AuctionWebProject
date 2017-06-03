@@ -23,55 +23,60 @@
         <div class="col-sm-12">
             <div class="row">
                 <h4><fmt:message key="user.lot.page.approved"/></h4>
-                <c:if test="${!lots.isEmpty()}">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th><fmt:message key="lot.edit.table.lot.title"/></th>
-                            <th><fmt:message key="lot.edit.table.lot.price"/></th>
-                            <th><fmt:message key="lot.edit.table.lot.current"/></th>
-                            <th><fmt:message key="lot.edit.table.lot.date"/></th>
-                            <th><fmt:message key="lot.edit.table.lot.availability"/></th>
-                            <th><fmt:message key="extend.period.title"/></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="lot" items="${lots}">
+                <c:choose>
+                    <c:when test="${lots.isEmpty()}">
+                        <h1><fmt:message key="lots.empty"/></h1>
+                    </c:when>
+                    <c:otherwise>
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td><c:out value="${lot.getTitle()}"/></td>
-                                <td><c:out value="${lot.getPrice()}"/></td>
-                                <td><c:out value="${lot.getCurrentPrice()}"/></td>
-                                <td><c:out value="${lot.getDateAvailable()}"/></td>
-                                <td>
-                                    <form method="post" action="${pageContext.request.contextPath}/Auction">
-                                        <button class="button-auction" type="submit"><fmt:message
-                                                key="admin.edit.lot.withdraw"/></button>
-                                        <input type="hidden" name="command" value="lotStatus">
-                                        <input type="hidden" name="id" value="${lot.getId()}">
-                                        <input type="hidden" name="status" value="false">
-                                        <input type="hidden" name="jspPath"
-                                               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-                                    </form>
-                                </td>
-                                <td>
-                                    <form method="post" action="${pageContext.request.contextPath}/Auction">
-                                        <select name="period">
-                                            <option value="7">7</option>
-                                            <option value="15">15</option>
-                                        </select>
-                                        <button class="button-auction" type="submit"><fmt:message
-                                                key="extend.button"/></button>
-                                        <input type="hidden" name="command" value="extendPeriod">
-                                        <input type="hidden" name="lotId" value="${lot.getId()}">
-                                        <input type="hidden" name="jspPath"
-                                               value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-                                    </form>
-                                </td>
+                                <th><fmt:message key="lot.edit.table.lot.title"/></th>
+                                <th><fmt:message key="lot.edit.table.lot.price"/></th>
+                                <th><fmt:message key="lot.edit.table.lot.current"/></th>
+                                <th><fmt:message key="lot.edit.table.lot.date"/></th>
+                                <th><fmt:message key="lot.edit.table.lot.availability"/></th>
+                                <th><fmt:message key="extend.period.title"/></th>
                             </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </c:if>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="lot" items="${lots}">
+                                <tr>
+                                    <td><c:out value="${lot.getTitle()}"/></td>
+                                    <td><c:out value="${lot.getPrice()}"/></td>
+                                    <td><c:out value="${lot.getCurrentPrice()}"/></td>
+                                    <td><c:out value="${lot.getDateAvailable()}"/></td>
+                                    <td>
+                                        <form method="post" action="${pageContext.request.contextPath}/Auction">
+                                            <button class="button-auction" type="submit"><fmt:message
+                                                    key="admin.edit.lot.withdraw"/></button>
+                                            <input type="hidden" name="command" value="lotStatus">
+                                            <input type="hidden" name="id" value="${lot.getId()}">
+                                            <input type="hidden" name="status" value="false">
+                                            <input type="hidden" name="jspPath"
+                                                   value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="${pageContext.request.contextPath}/Auction">
+                                            <select name="period">
+                                                <option value="7">7</option>
+                                                <option value="15">15</option>
+                                            </select>
+                                            <button class="button-auction" type="submit"><fmt:message
+                                                    key="extend.button"/></button>
+                                            <input type="hidden" name="command" value="extendPeriod">
+                                            <input type="hidden" name="lotId" value="${lot.getId()}">
+                                            <input type="hidden" name="jspPath"
+                                                   value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>

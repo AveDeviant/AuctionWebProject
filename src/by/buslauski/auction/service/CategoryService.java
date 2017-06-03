@@ -12,4 +12,6 @@ public interface CategoryService {
     ArrayList<Category> getAllCategories() throws ServiceException;
 
     void addCategory(String name) throws ServiceException;
+
+    boolean categoryExists(String category) throws ServiceException;
 }

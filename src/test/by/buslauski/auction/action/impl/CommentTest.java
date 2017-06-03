@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 18.05.2017.
+ * @author Mikita Buslauski
  */
 public class CommentTest {
     private static HttpServletRequest request;

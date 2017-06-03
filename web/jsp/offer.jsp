@@ -8,6 +8,7 @@
 <c:import url="/fragments/header.jsp"/>
 <head>
     <title><fmt:message key="offer.lot.title"/></title>
+    <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
 </head>
 <body>
 <div class="custom-opacity">
@@ -47,9 +48,12 @@
                             <label for="description"><fmt:message key="admin.lot.description"/> </label>
                             <textarea class="form-control" rows="4" name="description" id="description"
                                       oninput=" return checkLength()"></textarea>
-                            <label class="help-block" id="symbolCount"></label><br/><label id="descriptErr"
-                                                                                           class="alert-danger">
-                        </label><br/>
+                            <label class="help-block" id="symbolCount"></label><br/>
+                            <div style="display:none;" id="descriptErr"
+                                 class=" alert alert-danger alert-dismissable fade in">
+                                <fmt:message key="description.length.error"/>
+                            </div>
+
                             <label for="image"><fmt:message key="admin.lot.image"/> </label>
                             <input class="form-control" type="file" name="image" id="image" required><br/>
                             <c:if test="${imageErr!=null}">
@@ -67,7 +71,11 @@
                             <input class="form-control" type="date" name="availableTiming" id="availableTiming"
                                    required>
                             <span class="help-block"><fmt:message key="lot.timing.note"/> </span>
-                            <label class="alert-danger" id="errDate"></label><br/>
+                            <div style="display:none;" id="errDate"
+                                 class=" alert alert-danger alert-dismissable fade in">
+                                <fmt:message key="admin.lot.timing.err"/>
+                            </div>
+                            <br/>
                             <label for="category"><fmt:message key="admin.lot.value"/> </label>
                             <select name="category" id="category">
                                 <c:forEach var="option" items="${categories}">
@@ -88,38 +96,6 @@
     </div>
 </div>
 <script>
-    function checkInput() {
-        var valid = true;
-        var checkedDate = document.addingLot.availableTiming.value;
-        var textArea = document.getElementById("description").value;
-        var errDate = document.getElementById("errDate");
-        var MAX_PRICE = 9999999.99;
-        var arr = checkedDate.toString().split("-");
-        var year = arr[0];
-        var month = arr[1];
-        var day = arr[2];
-        var date = new Date(year, month, day);
-        var currentTime = new Date();
-        if (date.getTime() < currentTime) {
-            valid = false;
-            errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';
-        }
-        if (textArea.length > 1000) {
-            valid = false;
-            var error = document.getElementById("descriptErr");
-            error.innerHTML = '<fmt:message key="description.length.error"/>';
-        }
-        return valid;
-    }
-
-    function checkLength() {
-        var textArea = document.getElementById("description").value;
-        var count = document.getElementById("symbolCount");
-        count.innerHTML = String(1000 - textArea.length);
-        if (textArea.length > 1000) {
-            count.style.color = "red";
-        }
-    }
 </script>
 </body>
 </html>

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
+ * This class represents info about entity "order".
+ *
  * @author Mikita Buslauski
  */
 public class Order {

@@ -42,6 +42,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
         return orders;
     }
 
+
     @Override
     public ArrayList<Order> getUserConfirmedOrders(long userId) throws ServiceException {
         ArrayList<Order> orders = new ArrayList<>();
@@ -59,6 +60,14 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
         return orders;
     }
 
+    /**
+     * Get from database total sum of {@link Order#payment} and total count of {@link Order} objects where
+     * {@link Order#accept} is <code>true</code>.
+     *
+     * @return defined {@link AuctionStat} object.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs)
+     */
     @Override
     public AuctionStat calculateStatistic() throws ServiceException {
         AuctionStat auctionStat = null;

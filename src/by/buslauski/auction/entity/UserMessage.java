@@ -3,6 +3,8 @@ package by.buslauski.auction.entity;
 import java.time.LocalDateTime;
 
 /**
+ * This class represents info about entity "message".
+ *
  * @author Mikita Buslauski
  */
 public class UserMessage {
@@ -16,12 +18,14 @@ public class UserMessage {
     private LocalDateTime dateTime;
 
 
-    public long getMessageId(){
+    public long getMessageId() {
         return messageId;
     }
-    public void setMessageId(long messageId){
-        this.messageId=messageId;
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
     }
+
     public long getSenderId() {
         return senderId;
     }

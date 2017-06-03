@@ -1,6 +1,7 @@
 package by.buslauski.auction.validator;
 
 
+import by.buslauski.auction.service.AuctionService;
 import by.buslauski.auction.validator.exception.InvalidDateValueException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,13 +58,16 @@ public class LotValidator {
 
     /**
      * Checking for compliance with the ISO format and check that entered date later than
-     * current date.
+     * current date and that entered date doesn't exceeded maximum bidding period which is
+     * calculated as <blockquote>
+     * current date + {@link AuctionService#AUCTION_BIDDING_PERIOD_MAX}.
+     * </blockquote>
      *
      * @param checkedDate entered lot date.
      * @return true - entered date appropriate to ISO format and later than current date;
      * false - entered date doesn't appropriate to ISO format or date passed.
      * @throws InvalidDateValueException in case entered date can not be converted  to
-     *                                   <code>LocalDate</code>
+     *                                   <code>LocalDate</code> object
      */
     private static boolean checkDate(String checkedDate) throws InvalidDateValueException {
         if (checkedDate != null && !checkedDate.isEmpty()) {
@@ -74,7 +78,7 @@ public class LotValidator {
                 throw new InvalidDateValueException(e);
             }
             LocalDate now = LocalDate.now();
-            return now.isBefore(date);
+            return now.isBefore(date) && now.plusDays(AuctionService.AUCTION_BIDDING_PERIOD_MAX).isAfter(date);
         }
         return false;
     }

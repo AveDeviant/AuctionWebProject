@@ -6,7 +6,7 @@ body {
     background-color: rgba(0,0,0,0.7);
     filter: alpha(opacity=70);
     /*height:100vh;*/
-    width: 100vw;
+    /*width: 100vw;*/
 }
 .login-form {
     margin: 20px;

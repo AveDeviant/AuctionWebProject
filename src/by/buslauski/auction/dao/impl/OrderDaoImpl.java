@@ -4,6 +4,7 @@ import by.buslauski.auction.dao.OrderDao;
 import by.buslauski.auction.entity.AuctionStat;
 import by.buslauski.auction.entity.Order;
 import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.response.PageResponse;
 import by.buslauski.auction.util.DateTimeParser;
 import org.apache.logging.log4j.Level;
 
@@ -27,8 +28,9 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
             " JOIN user AS trader ON id_trader=trader.id_user" +
             " JOIN lot ON order.id_lot=lot.id_lot" +
             " WHERE (order.id_user=? OR order.id_trader=?) AND accept=TRUE ORDER BY id_order";
-    private static final String SQL_SELECT_MONEY_DEALS = "SELECT SUM(payment) AS total_sum, COUNT(*) AS total_count " +
+    private static final String SQL_SELECT_MONEY_ORDERS = "SELECT SUM(payment) AS total_sum, COUNT(*) AS total_count " +
             "FROM auction.order WHERE accept=TRUE";
+    private static final String SQL_DELETE_REJECTED_ORDERS = "DELETE FROM auction.order WHERE accept=FALSE AND id_user=?";
 
 
     @Override
@@ -84,7 +86,7 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
     @Override
     public AuctionStat calculateStatistic() throws DAOException {
         AuctionStat auctionStat = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_MONEY_DEALS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_MONEY_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 auctionStat = initStatistic(resultSet);
@@ -93,6 +95,16 @@ public class OrderDaoImpl extends AbstractDao implements OrderDao {
             throw new DAOException(e);
         }
         return auctionStat;
+    }
+
+    @Override
+    public void deleteRejectedOrders(long userId) throws DAOException {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_REJECTED_ORDERS)) {
+            preparedStatement.setLong(1,userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
     }
 
     private Order initOrder(ResultSet resultSet) throws SQLException {

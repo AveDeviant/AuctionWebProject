@@ -3,7 +3,9 @@ package by.buslauski.auction.entity;
 import java.time.LocalDateTime;
 
 /**
- * Created by Acer on 18.05.2017.
+ * This class represents info about entity "comment".
+ *
+ * @author Mikita Buslauski
  */
 public class Comment {
     private long commentId;

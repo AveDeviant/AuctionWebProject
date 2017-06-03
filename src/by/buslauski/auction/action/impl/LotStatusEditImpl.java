@@ -24,7 +24,7 @@ public class LotStatusEditImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Changing lot bidding status. Withdraw or accept lot for bids.
+     * Changing lot bidding status - withdraw or accept lot for bids.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}

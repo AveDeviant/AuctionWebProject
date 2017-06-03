@@ -3,6 +3,8 @@ package by.buslauski.auction.entity;
 import java.math.BigDecimal;
 
 /**
+ * This class represents info about total auction statistic.
+ *
  * @author Mikita Buslauski
  */
 public class AuctionStat {

@@ -7,6 +7,7 @@
 <fmt:setBundle basename="properties.locale"/>
 <head>
     <title><fmt:message key="admin.title"/></title>
+    <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
 </head>
 <body>
 <c:import url="/fragments/header.jsp"/>
@@ -111,37 +112,38 @@
     </div>
 </div>
 <script>
-    function checkInput() {
-        var valid = true;
-        var checkedDate = document.addingLot.availableTiming.value;
-        var textArea = document.getElementById("description").value;
-        var errDate = document.getElementById("errDate");
-        var arr = checkedDate.toString().split("-");
-        var year = arr[0];
-        var month = arr[1];
-        var day = arr[2];
-        var date = new Date(year, month, day);
-        var currentTime = new Date();
-        if (date.getTime() < currentTime) {
-            valid = false;
-            errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';
-        }
-        if (textArea.length > 1000) {
-            valid = false;
-            var error = document.getElementById("descriptErr");
-            error.innerHTML = '<fmt:message key="description.length.error"/>';
-        }
-        return valid;
-    }
+    <%--function checkInput() {--%>
+        <%--var valid = true;--%>
+        <%--var checkedDate = document.addingLot.availableTiming.value;--%>
+        <%--var textArea = document.getElementById("description").value;--%>
+        <%--var errDate = document.getElementById("errDate");--%>
+        <%--var arr = checkedDate.toString().split("-");--%>
+        <%--var MAX_BIDDING_DATE=30;--%>
+        <%--var year = arr[0];--%>
+        <%--var month = arr[1]-1;--%>
+        <%--var day = arr[2];--%>
+        <%--var date = new Date(year, month, day);--%>
+        <%--var currentTime = new Date();--%>
+        <%--if ((date.getTime() < currentTime) || ((date.getTime() - currentTime.getTime()) / 86400000) > MAX_BIDDING_DATE) {--%>
+            <%--valid = false;--%>
+            <%--errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';--%>
+        <%--}--%>
+        <%--if (textArea.length > 1000) {--%>
+            <%--valid = false;--%>
+            <%--var error = document.getElementById("descriptErr");--%>
+            <%--error.innerHTML = '<fmt:message key="description.length.error"/>';--%>
+        <%--}--%>
+        <%--return valid;--%>
+    <%--}--%>
 
-    function checkLength() {
-        var textArea = document.getElementById("description").value;
-        var count = document.getElementById("symbolCount");
-        count.innerHTML = String(1000 - textArea.length);
-        if (textArea.length > 1000) {
-            count.style.color = "red";
-        }
-    }
+    <%--function checkLength() {--%>
+        <%--var textArea = document.getElementById("description").value;--%>
+        <%--var count = document.getElementById("symbolCount");--%>
+        <%--count.innerHTML = String(1000 - textArea.length);--%>
+        <%--if (textArea.length > 1000) {--%>
+            <%--count.style.color = "red";--%>
+        <%--}--%>
+    <%--}--%>
 </script>
 </body>
 </html>

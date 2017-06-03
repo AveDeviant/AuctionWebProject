@@ -21,7 +21,7 @@ public class GetLotsImpl implements Command {
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Get all lots from database.
+     * Get <code>ArrayList</code> of {@link Lot} objects from database.
      *
      * @param request client request to get parameters to work with.
      * @return null.

@@ -38,8 +38,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String SQL_UPDATE_TRADER_RATING = "INSERT INTO trader_rating VALUES (NULL,?,?,?)";
     private static final String SQL_SELECT_TRADER_RATING = "SELECT AVG(rating) AS rating FROM trader_rating WHERE id_trader=?";
     private static final String SQL_BLOCK_USERS = "UPDATE user SET access=FALSE " +
-            "WHERE id_user=(SELECT id_user FROM auction.order WHERE accept=FALSE " +
-            "GROUP BY id_user HAVING COUNT(*)>=?)";
+            "WHERE id_user IN (SELECT id_user FROM auction.order WHERE accept=FALSE " +
+            "GROUP BY id_user HAVING COUNT(*)>?)";
+    private static final String SQL_SELECT_CUSTOMER_ROLE_ID = "SELECT id_role FROM role WHERE name='customer'";
 
     @Override
     public ArrayList<User> getAllCustomers() throws DAOException {
@@ -227,6 +228,12 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         return rating;
     }
 
+    /**
+     * Set {@link User#access} to false in case he reject to much deals.
+     *
+     * @param rejectedDeals {@link by.buslauski.auction.service.AuctionService#REJECTED_DEALS_COUNT}
+     * @throws DAOException in case SQLException has been thrown (database error occurs)
+     */
     @Override
     public void blockUser(int rejectedDeals) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_BLOCK_USERS)) {
@@ -235,6 +242,20 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         } catch (SQLException e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public int findCustomerRoleId() throws DAOException {
+        int id = 0;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_CUSTOMER_ROLE_ID)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt("id_role");
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return id;
     }
 
     private User initUser(ResultSet resultSet) throws SQLException {

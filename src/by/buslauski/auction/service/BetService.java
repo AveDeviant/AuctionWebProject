@@ -12,11 +12,10 @@ import java.util.ArrayList;
  * @author Buslauski Mikita
  */
 public interface BetService {
-    int AUCTION_STEP_PERCENT = 5;
 
     boolean addBet(long userId, long lotId, BigDecimal price) throws ServiceException;
 
     boolean checkBetValue(Lot lot, BigDecimal bet);
 
-    ArrayList<Bet> getUserBets(User user) throws ServiceException;
+    ArrayList<Bet> getUserBets(long userId) throws ServiceException;
 }

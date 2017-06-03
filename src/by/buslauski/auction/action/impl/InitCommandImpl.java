@@ -35,10 +35,11 @@ public class InitCommandImpl implements Command {
     private static AuctionService auctionService = new AuctionServiceImpl();
 
     /**
-     * Init command. Get available lots for bids from database and
-     * displays it to main page. Displaying appropriate message in case the list is empty.
-     * Displaying appropriate message in case customer have been banned.
-     * Check for new events in case user has been authorized.
+     * Init command. Get <code>ArrayList</code> of {@link Lot} objects
+     * with {@link Lot#availability}==true from database and displays it to main page.
+     * Displaying appropriate message in case the list is empty.
+     * Displaying appropriate message in case {@link User} have been banned.
+     * Check for new events in case <code>User</code> has been authorized.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
@@ -54,7 +55,6 @@ public class InitCommandImpl implements Command {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         try {
             ArrayList<Lot> availableLots = lotService.getAvailableLots();
-            auctionService.setWinner();
             if (user != null) {
                 user = userService.findUserById(user.getUserId());  //update customer info
                 user.setUserMessages(messageService.findUserMessages(user.getUserId()));

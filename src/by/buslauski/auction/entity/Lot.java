@@ -7,6 +7,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
+ * This class represents info about entity "lot".
+ *
  * @author Mikita Buslauski
  */
 public class Lot {

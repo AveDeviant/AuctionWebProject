@@ -50,7 +50,7 @@ public class LotServiceTest {
                 "other", "2017-05-01");
         System.out.println("Test lot added.");
         ArrayList<Lot> lots = lotService.getAllLots();
-        Lot addedLot = lots.get(lots.size() - 1);
+        Lot addedLot = lots.get(0);
         long addedLotId = addedLot.getId();
         System.out.println("Deleting lot...");
         lotService.deleteLot(addedLotId, admin);

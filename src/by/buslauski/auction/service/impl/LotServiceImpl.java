@@ -27,6 +27,7 @@ import java.util.ArrayList;
  */
 public class LotServiceImpl extends AbstractService implements LotService {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static AuctionService auctionService = new AuctionServiceImpl();
 
     /**
      * Insert a new lot into database.
@@ -172,9 +173,20 @@ public class LotServiceImpl extends AbstractService implements LotService {
     /**
      * Get lots from database which bidding time is over.
      * Lot bidding time ends at 00:00 of day that specified in the field {@link Lot#dateAvailable}.
-     * If lot have access to the auction find bets by lot for determine the winner of the auction.
+     * If lot have access to the auction find bets to determine the result of the auction.
+     * <p>
+     * In case auction result is actual ({@link AuctionService#WAITING_PERIOD} doesn't exceeded):
+     * Saving the result of the auction in the database and then notifying winner of the auction and trader.
+     * </p>
+     * <p>
+     * In case {@link AuctionService#WAITING_PERIOD} exceeded:
+     * Reset bids for this lot.
+     * </p>
      *
      * @return lots for which the auction is ended.
+     * @see AuctionServiceImpl#resetBids(Lot)
+     * @see NotificationServiceImpl#createNotificationAuctionResult(long, long, long)
+     * @see LotServiceImpl#checkWaitingPeriod(Lot)
      */
     @Override
     public ArrayList<Lot> getLotsWithOverTiming() throws ServiceException {
@@ -195,7 +207,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                     }
                     // if auction waiting period is overdue then reset bids results.
                     if (!lot.getBets().isEmpty() && !checkWaitingPeriod(lot)) {
-                        resetBids(lot);
+                        auctionService.resetBids(lot);
                     }
                     // if lot has confirmed bets and time is over then notify trader that he has a purchaser.
                     if (!lot.getBets().isEmpty()) {
@@ -275,48 +287,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
     }
 
     /**
-     * Method is called in case rejecting payment by costumer.
-     * Lot returns in list of lots which available for bidding.
-     * Cancelled order added into database for further admin investigation.
-     * Delete all bets made for this lot.
-     *
-     * @param lot lot which must be returned to lot list.
-     * @see by.buslauski.auction.action.impl.customer.RejectOrderImpl#execute(HttpServletRequest)
-     */
-    @Override
-    public void resetBids(Lot lot) throws ServiceException {
-        DaoHelper daoHelper = new DaoHelper();
-        Bet lastBet = lot.getBets().get(lot.getBets().size() - 1);
-        BigDecimal currentPrice = lot.getCurrentPrice();
-        long customerId = lastBet.getUserId();
-        LocalDate date = addDaysToDate();
-        try {
-            BetDao betDao = new BetDaoImpl();
-            LotDao lotDao = new LotDaoImpl();
-            NotificationDao notificationDao = new NotificationDaoImpl();
-            OrderDao orderDao = new OrderDaoImpl();
-            daoHelper.beginTransaction(betDao, lotDao, orderDao, notificationDao);
-            betDao.resetBets(lot.getId());
-            lotDao.returnLotToBids(lot.getId(), lot.getPrice(), date);
-            orderDao.addOrder(customerId, lot.getUserId(), lot.getId(), currentPrice, false);
-            notificationDao.deleteNotification(lot.getId());
-            daoHelper.commit();
-            lot.getBets().clear(); // clear bet list
-            UserService userService = new UserServiceImpl();
-            userService.blockUser(AuctionService.REJECTED_DEALS_COUNT);
-        } catch (DAOException e) {
-            daoHelper.rollback();
-            LOGGER.log(Level.ERROR, e);
-            throw new ServiceException(e);
-        } finally {
-            daoHelper.endTransaction();
-        }
-
-    }
-
-    /**
      * Check the auction waiting period.
-     * If period is greater than {@link LotService#WAITING_PERIOD} days from current date,
+     * If period is greater than {@link AuctionService#WAITING_PERIOD} days from current date,
      * all results for this lot must be reset.
      * In other case results for lot are still actual.
      *
@@ -328,7 +300,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
     public boolean checkWaitingPeriod(Lot lot) {
         LocalDate lotDateAvailable = lot.getDateAvailable();
         LocalDate currentDate = LocalDate.now();
-        return currentDate.minusDays(WAITING_PERIOD).isBefore(lotDateAvailable);
+        return currentDate.minusDays(AuctionService.WAITING_PERIOD).isBefore(lotDateAvailable);
     }
 
     /**
@@ -404,7 +376,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * Check that operation called by real lot owner.
      *
      * @param lotId  lot ID.
-     * @param days   days count ({@link LotService#EXTENDING_PERIOD_MIN} or {@link LotService#EXTENDING_PERIOD_MAX}).
+     * @param days   days count ({@link AuctionService#EXTENDING_PERIOD_MIN} or {@link AuctionService#EXTENDING_PERIOD_MAX}).
      * @param userId ID user who invokes this operation.
      * @return true - operation passed successfully;
      * false - lot have confirmed bets or lot auction period is not over
@@ -419,7 +391,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
         LocalDate currentDate = LocalDate.now();
         if (lot == null || !lot.getBets().isEmpty() || lot.getDateAvailable().isAfter(currentDate) || lot.getUserId() != userId) {
             return flag;
-        } else if (days != EXTENDING_PERIOD_MIN && days != EXTENDING_PERIOD_MAX) {
+        } else if (days != AuctionService.EXTENDING_PERIOD_MIN && days != AuctionService.EXTENDING_PERIOD_MAX) {
             return flag;
         }
         LocalDate extendedDate = currentDate.plusDays(days);
@@ -438,16 +410,5 @@ public class LotServiceImpl extends AbstractService implements LotService {
         return flag;
     }
 
-    /**
-     * Editing lot date before returning lot to bids.
-     * Adding 10 days to current date to get a new date to make the lot available for auction bids.
-     *
-     * @return new date.
-     */
-    private LocalDate addDaysToDate() {
-        LocalDate now = LocalDate.now();
-        LocalDate date = now.plusDays(WAITING_PERIOD);
-        return date;
-    }
 
 }

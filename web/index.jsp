@@ -6,8 +6,7 @@
   </head>
   <body>
   <jsp:include page="${pageContext.request.contextPath}/Auction">
-    <jsp:param name="command" value=""/>
+    <jsp:param name="command" value="init"/>
   </jsp:include>
-  <%--<c:redirect url="/Controller"/>--%>
   </body>
 </html>

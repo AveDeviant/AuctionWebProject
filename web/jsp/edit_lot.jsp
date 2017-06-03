@@ -37,7 +37,11 @@
                    title="<fmt:message key="bet.restrict"/>" placeholder="<fmt:message key="bet.restrict"/>">
             <label for="date"><fmt:message key="lot.timing"/></label>
             <input class="form-control" type="date" id="date" name="availableTiming" required/>
-            <label class="alert-danger" id="errDate"></label><br/>
+            <div style="display:none;" id="errDate"
+                 class=" alert alert-danger alert-dismissable fade in">
+                <fmt:message key="admin.lot.timing.err"/>
+            </div>
+            <br/>
             <label for="availability"><fmt:message key="admin.lot.edit.availability"/></label><br/>
             <input type="checkbox" id="availability" name="availability" value="true" checked/><br/>
             <label for="category"><fmt:message key="lot.edit.page.category"/></label>
@@ -75,7 +79,7 @@
                 <td><c:out value="${lot.getId()}"/></td>
                 <td><c:out value="${lot.getTitle()}"/></td>
                 <td><c:out value="${lot.getCategory()}"/></td>
-                <td><img src="${lot.getImage()}" style="width: 20%"/></td>
+                <td><img  class="img-responsive" src="${lot.getImage()}"/></td>
                 <td><c:out value="${lot.getPrice()}"/></td>
                 <td><c:out value="${lot.getCurrentPrice()}"/></td>
                 <td><c:out value="${lot.getDateAvailable()}"/></td>
@@ -132,14 +136,15 @@
         var checkedDate = document.editLot.availableTiming.value;
         var errDate = document.getElementById("errDate");
         var arr = checkedDate.toString().split("-");
+        var MAX_BIDDING_DATE=30;
         var year = arr[0];
-        var month = arr[1];
+        var month = arr[1]-1;
         var day = arr[2];
         var date = new Date(year, month, day);
         var currentTime = new Date();
-        if (date.getTime() < currentTime) {
+        if ((date.getTime() < currentTime) || ((date.getTime() - currentTime.getTime()) / 86400000) > MAX_BIDDING_DATE) {
             valid = false;
-            errDate.innerHTML = '<fmt:message key="admin.lot.timing.err"/> ';
+            errDate.style.display="block";
         }
         return valid;
     }

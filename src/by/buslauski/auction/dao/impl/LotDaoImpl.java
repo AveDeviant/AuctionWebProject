@@ -29,7 +29,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao {
             "JOIN category ON lot.id_category=category.id_category WHERE NOW()>date_available";
     private static final String SQL_GET_ALL_LOTS = "SELECT id_lot, id_user, lot.id_category, name, title, photo, description, starting_price,available, date_available," +
             "current_price FROM lot " +
-            "JOIN category ON lot.id_category=category.id_category ORDER BY id_lot";
+            "JOIN category ON lot.id_category=category.id_category ORDER BY id_lot DESC ";
     private static final String SQL_EDIT_LOT = "UPDATE lot SET title=?, starting_price=?, available=?, photo=?, date_available=DATE(?), id_category=? WHERE id_lot=?";
     private static final String SQL_UPDATE_CURRENT_PRICE = "UPDATE lot SET current_price=? WHERE id_lot=?";
     private static final String SQL_RETURN_LOT_TO_BIDS = "UPDATE lot SET available=true, date_available=DATE(?)," +

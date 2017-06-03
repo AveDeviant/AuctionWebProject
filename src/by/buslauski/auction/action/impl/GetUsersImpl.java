@@ -21,7 +21,8 @@ public class GetUsersImpl implements Command {
     private static UserService userService = new UserServiceImpl();
 
     /**
-     * Get customer list from database.
+     * Get <code>ArrayList</code> of {@link User} objects with {@link by.buslauski.auction.entity.Role#CUSTOMER}
+     * from database.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}

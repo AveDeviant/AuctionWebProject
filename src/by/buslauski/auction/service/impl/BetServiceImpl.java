@@ -9,6 +9,7 @@ import by.buslauski.auction.entity.Bet;
 import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.dao.exception.DAOException;
+import by.buslauski.auction.service.AuctionService;
 import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.BetService;
 import org.apache.logging.log4j.Level;
@@ -47,7 +48,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
             LotDao lotDao = new LotDaoImpl();
             daoHelper.beginTransaction(betDao, lotDao);
             Lot lot = lotDao.findLotById(lotId);
-            if (price.compareTo(lot.getCurrentPrice()) <= 0) {
+            if (!checkBetValue(lot, price)) {
                 return flag;
             }
             betDao.addBet(userId, lotId, price);
@@ -55,7 +56,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
             daoHelper.commit();
             flag = true;
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e + " Exception during adding bet in database");
+            LOGGER.log(Level.ERROR, e + " Exception during adding bet to database");
             daoHelper.rollback();
             throw new ServiceException(e);
         } finally {
@@ -69,7 +70,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
      * Check entered bet value.
      * <p>
      * The entered bet should greater than current lot price {@link Lot#currentPrice}
-     * as a minimum of {@link BetService#AUCTION_STEP_PERCENT} percents.
+     * as a minimum of {@link by.buslauski.auction.service.AuctionService#AUCTION_STEP_PERCENT} percents
      * of the starting lot price {@link Lot#price}.
      *
      * @param lot lot which price should be updated.
@@ -81,20 +82,28 @@ public class BetServiceImpl extends AbstractService implements BetService {
     public boolean checkBetValue(Lot lot, BigDecimal bet) {
         BigDecimal startingPrice = lot.getPrice();
         BigDecimal step = startingPrice.divide(new BigDecimal(100), BigDecimal.ROUND_CEILING)
-                .multiply(BigDecimal.valueOf(AUCTION_STEP_PERCENT));
+                .multiply(BigDecimal.valueOf(AuctionService.AUCTION_STEP_PERCENT));
         BigDecimal price = lot.getCurrentPrice();
         BigDecimal minPrice = price.add(step);
         return bet.compareTo(minPrice) >= 0;
     }
 
+    /**
+     * /**
+     * Get <code>ArrayList</code> of {@link Bet} objects which were made by specified {@link User}.
+     *
+     * @param userId ID of specified user,
+     * @return defined {@link ArrayList} object containing {@link Bet} objects.
+     * @throws ServiceException in case DAOException has e]been thrown (database error occurs)
+     */
     @Override
-    public ArrayList<Bet> getUserBets(User user) throws ServiceException {
+    public ArrayList<Bet> getUserBets(long userId) throws ServiceException {
         ArrayList<Bet> bets = new ArrayList<>();
         DaoHelper daoHelper = new DaoHelper();
         try {
             BetDao betDao = new BetDaoImpl();
             daoHelper.initDao(betDao);
-            bets.addAll(betDao.getUserBets(user.getUserId()));
+            bets.addAll(betDao.getUserBets(userId));
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {

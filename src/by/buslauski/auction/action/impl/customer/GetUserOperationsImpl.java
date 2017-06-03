@@ -42,7 +42,7 @@ public class GetUserOperationsImpl implements Command {
         try {
             ArrayList<Order> orders = orderService.getUserConfirmedOrders(currentUser.getUserId());
             ArrayList<Integer> rating = userService.defineRating();
-            ArrayList<Bet> bets = betService.getUserBets(currentUser);
+            ArrayList<Bet> bets = betService.getUserBets(currentUser.getUserId());
             request.setAttribute(USER_ORDERS, orders);
             request.setAttribute(TRADER_RATING, rating);
             request.setAttribute(USER_BETS, bets);

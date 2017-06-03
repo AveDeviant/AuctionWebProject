@@ -40,9 +40,10 @@ public class FileUploadingManager {
 
 
     /**
-     * Creating unique filename from part using <code>LocalDate</code>.
+     * Creating unique filename from part using <code>LocalDateTime</code>.
      *
-     * @param part
+     * @param part a {@link Part} from form item that was received within
+     *             client {@link javax.servlet.http.HttpServletRequest}
      * @return filename of uploading file.
      */
     private String getFileNameFromPath(Part part) {

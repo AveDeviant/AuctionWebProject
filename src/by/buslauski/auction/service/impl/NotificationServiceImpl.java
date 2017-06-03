@@ -6,6 +6,7 @@ import by.buslauski.auction.dao.UserDao;
 import by.buslauski.auction.dao.impl.NotificationDaoImpl;
 import by.buslauski.auction.dao.impl.UserDaoImpl;
 import by.buslauski.auction.entity.AuctionNotification;
+import by.buslauski.auction.entity.Lot;
 import by.buslauski.auction.entity.User;
 import by.buslauski.auction.dao.exception.DAOException;
 import by.buslauski.auction.service.exception.ServiceException;
@@ -20,11 +21,12 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
     private static final String NOTIFICATION = "AUCTION RESULT/РЕЗУЛЬТАТЫ ТОРГОВ";
 
     /**
+     * Creating {@link AuctionNotification} to register auction results.
      * Creating notification for trader that auction time for his lot is over
      * and trader has a purchaser.
      * Creating notification for customer that he is a winner of the auction.
-     * Insert created notifications into database.
-     * Send message with this notification to trader e-mail box.
+     * Insert created notifications as {@link by.buslauski.auction.entity.UserMessage} objects into database.
+     * Send message with this notification to trader and customer e-mail boxes.
      *
      * @param lotId      ID lot;
      * @param customerId purchaser ID;
@@ -63,6 +65,31 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
         }
     }
 
+    /**
+     * Sending to trader ({@link User} who expose {@link Lot} for the auction) notification
+     * that purchase has been rejected.
+     *
+     * @param lot rejected {@link Lot} object.
+     * @throws ServiceException in case DAOException has been thrown
+     *                          (database error occurs).
+     * @see AuctionServiceImpl#resetBids(Lot)
+     */
+    @Override
+    public void createNotificationDealRejected(Lot lot) throws ServiceException {
+        DaoHelper daoHelper = new DaoHelper();
+        try {
+            UserDao userDao = new UserDaoImpl();
+            daoHelper.initDao(userDao);
+            User trader = userDao.findUserById(lot.getUserId());
+            String content = initNotificationDealRejected(lot);
+            MessageServiceImpl.sendMessageOnMailBox(NOTIFICATION, content, trader);
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e);
+        } finally {
+            daoHelper.release();
+        }
+    }
+
     private String initNotificationToTrader(AuctionNotification notification) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Auction time for lot ");
@@ -77,6 +104,15 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
         stringBuilder.append(notification.getCustomerAlias());
         stringBuilder.append(". Данный пользователь должен подтвердить сделку в течении 10 дней," +
                 " иначе все результаты будут аннулированы.");
+        return stringBuilder.toString();
+    }
+
+    private String initNotificationDealRejected(Lot lot) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Auction results for lot ").append(lot.getTitle()).append(" is cancelled.\n");
+        stringBuilder.append("This lot put up for the auction until").append(lot.getDateAvailable().toString()).append("/\n");
+        stringBuilder.append("Торги по лоту ").append(lot.getTitle()).append(" аннулированы.\n");
+        stringBuilder.append("Лот выставлен на торги до ").append(lot.getDateAvailable().toString());
         return stringBuilder.toString();
     }
 

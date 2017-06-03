@@ -7,6 +7,7 @@ import by.buslauski.auction.entity.Category;
 import by.buslauski.auction.dao.exception.DAOException;
 import by.buslauski.auction.service.exception.ServiceException;
 import by.buslauski.auction.service.CategoryService;
+import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
             daoHelper.initDao(categoryDao);
             categories.addAll(categoryDao.getAllCategories());
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e + " Exception during getting lot categories from database.");
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -40,10 +42,31 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
             daoHelper.initDao(categoryDao);
             categoryDao.addCategory(name);
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e + " Exception during adding a new lot category.");
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
         }
+    }
+
+    /**
+     * Check that entered category exists.
+     *
+     * @param category entered category.
+     * @return true if entered category stores in database;
+     * false in other case.
+     * @throws ServiceException in case DAOException has been thrown (database error occurs)
+     */
+    @Override
+    public boolean categoryExists(String category) throws ServiceException {
+        boolean status = false;
+        ArrayList<Category> categories = getAllCategories();
+        for (Category entity : categories) {
+            if (entity.getValue().equalsIgnoreCase(category)) {
+                status = true;
+            }
+        }
+        return status;
     }
 
 

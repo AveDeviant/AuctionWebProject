@@ -55,14 +55,27 @@ public class LotValidatorTest {
     /**
      * Note that test was written 06.05.2017
      *
-     * @throws InvalidDateValueException if entered date doesn't appropriate to ISO format.
+     * @throws InvalidDateValueException if entered date cannot be converted to ISO format.
      */
     @Test
-    public void CheckLotNullValues3() throws InvalidDateValueException {
+    public void CheckLotCorrectValues() throws InvalidDateValueException {
         String lotTitle = "test lot";
         String lotDescription = "description";
         String date = "2017-06-06";
         Assert.assertTrue(LotValidator.checkLot(lotTitle, lotDescription, date));
+    }
+
+    /**
+     * This test was written on 2017.05.25
+     *
+     * @throws InvalidDateValueException if entered date cannot be converted to ISO format.
+     */
+    @Test
+    public void tooLongPeriod() throws InvalidDateValueException {
+        String lotTitle = "test lot";
+        String lotDescription = "description";
+        String date = "2017-08-06";  // max period exceeded.
+        Assert.assertFalse(LotValidator.checkLot(lotTitle, lotDescription, date));
     }
 
 }

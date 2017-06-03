@@ -20,4 +20,6 @@ public interface OrderDao {
 
     AuctionStat calculateStatistic() throws DAOException;
 
+    void deleteRejectedOrders(long userId) throws DAOException;
+
 }

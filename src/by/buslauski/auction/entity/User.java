@@ -4,6 +4,8 @@ package by.buslauski.auction.entity;
 import java.util.ArrayList;
 
 /**
+ * This class represents info about entity "user".
+ *
  * @author Mikita Buslauski
  */
 public class User {

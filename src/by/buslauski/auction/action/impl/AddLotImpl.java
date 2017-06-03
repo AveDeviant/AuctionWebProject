@@ -2,6 +2,8 @@ package by.buslauski.auction.action.impl;
 
 import by.buslauski.auction.action.Command;
 import by.buslauski.auction.constant.SessionAttributes;
+import by.buslauski.auction.service.CategoryService;
+import by.buslauski.auction.service.impl.CategoryServiceImpl;
 import by.buslauski.auction.validator.exception.InvalidDateValueException;
 import by.buslauski.auction.validator.exception.InvalidNumberValueException;
 import by.buslauski.auction.service.exception.ServiceException;
@@ -41,16 +43,15 @@ public class AddLotImpl implements Command {
     private static final String IMAGE_ERROR = "imageErr";
     private static final String ADD_ERROR = "addErr";
     private static LotService lotService = new LotServiceImpl();
+    private static CategoryService categoryService = new CategoryServiceImpl();
 
-    /**
-     * TODO ЗАЩИТА ОТ ХИДДЕН ПОЛЕЙ
-     */
     /**
      * Add a new lot and insert it into database.
      * Upload lot image on the server.
      * <p>
      * Checked situations:
      * User is unable to add a lot (customer have been banned);
+     * User tries to enter an incorrect lot category;
      * Invalid lot image extension;
      * Invalid lot title, description, price or date;
      * Exception during operation;
@@ -70,6 +71,7 @@ public class AddLotImpl implements Command {
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
         pageResponse.setPage(Command.returnPageWithQuery(request));
+        pageResponse.setResponseType(ResponseType.FORWARD);
         try {
             User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
             if (!user.getAccess()) {
@@ -83,16 +85,20 @@ public class AddLotImpl implements Command {
             String lotCategory = request.getParameter(LOT_CATEGORY);
             String lotTimer = request.getParameter(AVAILABLE_TIMER);
             Part lotImage = request.getPart(LOT_IMAGE);
+            if (lotImage == null) {
+                request.setAttribute(IMAGE_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
+                return pageResponse;
+            }
             String fileName = lotImage.getSubmittedFileName();
             if (!fileName.trim().isEmpty()) {
                 String type = request.getServletContext().getMimeType(fileName);
                 if (!type.startsWith(IMAGE_MIME_TYPE)) {
                     request.setAttribute(IMAGE_ERROR, ResponseMessage.INVALID_IMAGE_TYPE);
-                    pageResponse.setResponseType(ResponseType.FORWARD);
                     return pageResponse;
                 }
             }
-            if (LotValidator.checkLot(lotTitle, lotDescription, lotTimer) && BetValidator.checkPriceForValid(lotPrice)) {
+            if (LotValidator.checkLot(lotTitle, lotDescription, lotTimer) && BetValidator.checkPriceForValid(lotPrice) &&
+                    categoryService.categoryExists(lotCategory)) {
                 String uploadPath = request.getServletContext().getRealPath(UPLOAD);
                 FileUploadingManager fileUploadingManager = new FileUploadingManager();
                 String image = UPLOAD + File.separator + fileUploadingManager.uploadFile(uploadPath, lotImage);

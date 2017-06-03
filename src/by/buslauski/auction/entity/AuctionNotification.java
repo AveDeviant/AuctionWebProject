@@ -3,6 +3,8 @@ package by.buslauski.auction.entity;
 import java.time.LocalDateTime;
 
 /**
+ * This class represents info about entity "result_notification".
+ *
  * @author Mikita Buslauski
  */
 public class AuctionNotification {

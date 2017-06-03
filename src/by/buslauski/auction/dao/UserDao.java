@@ -36,4 +36,6 @@ public interface UserDao {
     double findTraderRating(long traderId) throws DAOException;
 
     void blockUser(int rejectedDeals) throws DAOException;
+
+    int findCustomerRoleId() throws DAOException;
 }

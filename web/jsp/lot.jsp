@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>${lot.getTitle()}</title>
+    <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
 </head>
 <body onload="timeRemaining()">
 <input type="hidden" id="remainingTime" value="${lot.getDateAvailable().toString()}">
@@ -63,7 +64,7 @@
                 <img class="img-responsive" src="${lot.getImage()}">
                 <h6>${lot.getDescription()}</h6>
                 <br/>
-                <a href="#comments" onclick="showComments()"><fmt:message
+                <a class="text-center" href="#comments" onclick="showComments()"><fmt:message
                         key="show.comments"/></a>
                 <div id="comments" style="display: none">
                     <div class="row">
@@ -92,8 +93,7 @@
                 <h2 id="start-price">${lot.getPrice()}</h2>
                 <h5><fmt:message key="lot.page.currentPrice"/></h5>
                 <h2 id="current-price">${lot.getCurrentPrice()}</h2>
-                <h5><fmt:message key="lot.timing"/></h5>
-                <h4><avail-date:avail-date/></h4>
+                <h6><fmt:message key="auction.step"/>${step}</h6>
                 <c:choose>
                     <c:when test="${user!=null && user.getAccess() eq false || user.getRole().getValue() eq 'admin'}">
                         <button type="button" class="button-auction-disabled" disabled>
@@ -113,10 +113,11 @@
                             <input type="hidden" name="lotId" value="${lot.getId()}">
                             <input type="hidden" name="jspPath"
                                    value="${pageContext.request.requestURI.concat("?").concat(pageContext.request.queryString)}">
-
                         </form>
                     </c:otherwise>
                 </c:choose>
+                <h5><fmt:message key="lot.timing"/></h5>
+                <h4><avail-date:avail-date/></h4>
             </div>
             <div class="col-sm-3">
                 <h5><fmt:message key="trader.ref"/></h5>
@@ -127,7 +128,7 @@
                 <h5><fmt:message key="trader.rating"/></h5>
                 <c:choose>
                     <c:when test="${trader.getUserRating() eq 0.0}">
-                        <h3><fmt:message key="trader.rating.unable"/></h3>
+                        <h5><fmt:message key="trader.rating.unable"/></h5>
                     </c:when>
                     <c:otherwise>
                         <h3>${trader.getUserRating()}</h3>
@@ -157,24 +158,6 @@
     </div>
 </div>
 <script async="async">
-    function showBets() {
-        var bets = document.getElementById("bets");
-        if (bets.style.display === "none") {
-            bets.style.display = "inline";
-        }
-        else {
-            bets.style.display = "none";
-        }
-    }
-    function showComments() {
-        var comments = document.getElementById("comments");
-        if (comments.style.display === "none") {
-            comments.style.display = "inline";
-        }
-        else {
-            comments.style.display = "none";
-        }
-    }
     function timeRemaining() {
         var remaining = document.getElementById("remaining");
         var date = document.getElementById("remainingTime").value;

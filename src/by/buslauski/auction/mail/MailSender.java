@@ -9,7 +9,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
- * Created by Acer on 08.05.2017.
+ * @author  Mikita Buslauski
  */
 public class MailSender {
     private static final String AUCTION_MAIL = "auctionhouse.webproject@gmail.com";

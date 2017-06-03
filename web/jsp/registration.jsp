@@ -14,8 +14,8 @@
 <c:if test="${user ne null}">
     <c:redirect url="${pageContext.request.contextPath}/Auction"/>
 </c:if>
+<div class="custom-opacity">
 <div class="container">
-    <div class="custom-opacity">
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="text-center strong text-info"><fmt:message key="register.page.title"/></h1>

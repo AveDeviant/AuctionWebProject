@@ -93,7 +93,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
         addMessage(AUCTION_NOTIFICATION, messageContent.toString(), customer.getUserId(), trader);
     }
 
-    private void sendMessageOnMailBox(String theme, String content, User recipient) {
+     static void sendMessageOnMailBox(String theme, String content, User recipient) {
         try {
             MailSender.sendMessage(theme, content, recipient.getEmail());
         } catch (MailException e) {

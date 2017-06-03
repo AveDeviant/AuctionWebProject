@@ -1,6 +1,8 @@
 package by.buslauski.auction.entity;
 
 /**
+ * This enum represents info about entity "role".
+ *
  * @author Mikita Buslauski
  */
 public enum Role {
@@ -8,7 +10,7 @@ public enum Role {
 
     private String value;
 
-   Role(String value) {
+    Role(String value) {
         this.value = value;
     }
 

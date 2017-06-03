@@ -2,7 +2,7 @@ package by.buslauski.auction.mail.exception;
 
 
 /**
- * Created by Acer on 08.05.2017.
+ * @author Mikita Buslauski
  */
 public class MailException extends Exception {
     public MailException() {

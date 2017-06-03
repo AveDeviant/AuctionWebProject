@@ -40,7 +40,7 @@ public class BuyLotImpl implements Command {
      * <p>
      * Checked situations:
      * Customer unable to register his order;
-     * Customer exceeded auction waiting period ({@link LotService#WAITING_PERIOD}) or lot was blocked;
+     * Customer exceeded auction waiting period ({@link AuctionService#WAITING_PERIOD}) or lot was blocked;
      * Invalid customer's personal information;
      * Exception during operation.
      *

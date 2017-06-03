@@ -11,9 +11,6 @@ import java.util.ArrayList;
  * @author Buslauski Mikita
  */
 public interface LotService {
-    int WAITING_PERIOD = 10;  // waiting period for registration of the won lot, in days.
-    int EXTENDING_PERIOD_MIN = 7; // extended bidding period,bottom line, in days.
-    int EXTENDING_PERIOD_MAX = 15; // extended bidding period, upper bound, in days.
 
     void addLot(User user, String title, String description,
                 String image, BigDecimal price,
@@ -35,8 +32,6 @@ public interface LotService {
                  boolean availability, String availableDate) throws ServiceException;
 
     void deleteLot(long lotId, User user) throws ServiceException;
-
-    void resetBids(Lot lot) throws ServiceException;
 
     boolean checkWaitingPeriod(Lot lot);
 

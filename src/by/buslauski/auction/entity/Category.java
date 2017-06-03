@@ -1,6 +1,8 @@
 package by.buslauski.auction.entity;
 
 /**
+ * This class represents info about entity "category".
+ *
  * @author Mikita Buslauski
  */
 public class Category {

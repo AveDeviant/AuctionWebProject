@@ -27,8 +27,8 @@ public class GetOrdersCommandImpl implements Command {
     private static OrderService orderService = new OrderServiceImpl();
 
     /**
-     * Get orders (deals) from database.
-     * Showing total auction statistic.
+     * Get <code>ArrayList</code> of {@link Order} objects from database.
+     * Showing total auction statistic using {@link AuctionStat}.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
@@ -49,7 +49,7 @@ public class GetOrdersCommandImpl implements Command {
             ArrayList<Order> orders = orderService.getAllOrders();
             AuctionStat stat = orderService.calculateStatistic();
             request.setAttribute(ORDERS, orders);
-            request.setAttribute(STATISTIC,stat);
+            request.setAttribute(STATISTIC, stat);
             pageResponse.setResponseType(ResponseType.FORWARD);
             pageResponse.setPage(PageNavigation.ORDERS_SHOW_PAGE);
         } catch (ServiceException e) {
