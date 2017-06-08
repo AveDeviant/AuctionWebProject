@@ -30,6 +30,17 @@ public class AuthorizationCommandImpl implements Command {
     private static AuctionService auctionService = new AuctionServiceImpl();
 
 
+    /**
+     * Performing authorization of the user on the site.
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
+     * ResponseType - response type:
+     * {@link ResponseType#REDIRECT} - operation passed successfully.
+     * {@link ResponseType#FORWARD} - detecting errors during operation.
+     * String page - {@link PageNavigation#INDEX_PAGE} in case operation passed successfully and
+     * {@link PageNavigation#AUTHORIZATION_PAGE} with appropriate message otherwise.
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();

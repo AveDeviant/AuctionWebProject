@@ -32,13 +32,22 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             messageDao.addMessage(theme, text, senderId, recipient.getUserId());
             sendMessageOnMailBox(theme, text, recipient);
         } catch (DAOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
         }
     }
 
+    /**
+     * Get <code>ArrayList</code> of {@link UserMessage} objects where specified user is a sender or a recipient of
+     * message.
+     *
+     * @param userId ID of the specified user.
+     * @return defined {@link ArrayList} object.
+     * @throws ServiceException in case {@link DAOException} has been thrown
+     *                          (database error occurs).
+     */
     @Override
     public ArrayList<UserMessage> findUserMessages(long userId) throws ServiceException {
         ArrayList<UserMessage> messages = new ArrayList<>();
@@ -48,7 +57,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             daoHelper.initDao(messageDao);
             messages.addAll(messageDao.findUserMessages(userId));
         } catch (DAOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -61,6 +70,13 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
         return countUserUnreadMessages(userId) > 0;
     }
 
+    /**
+     * Changing message "isRead" status from <tt>false</tt> to <tt>true</tt>
+     * by updating specified field in "message" table.
+     *
+     * @param userId ID of user who has read all incoming messages.
+     * @throws ServiceException in case DAOException has been thrown (database error occurs).
+     */
     @Override
     public void changeMessageStatus(long userId) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
@@ -69,6 +85,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             daoHelper.initDao(messageDao);
             messageDao.changeMessageStatus(userId);
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -76,7 +93,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
     }
 
     @Override
-    public void createMessageForTraderAboutPurchaser(User trader, Bet bet) throws ServiceException {
+    public void createMessageForTraderPurchaser(User trader, Bet bet) throws ServiceException {
         StringBuilder messageContent = new StringBuilder();
         User customer = userService.findUserById(bet.getUserId());
         messageContent.append("Title: ").append(bet.getLotTitle());
@@ -93,14 +110,29 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
         addMessage(AUCTION_NOTIFICATION, messageContent.toString(), customer.getUserId(), trader);
     }
 
-     static void sendMessageOnMailBox(String theme, String content, User recipient) {
+    /**
+     * Send message to user's e-mail box.
+     *
+     * @param theme     message theme;
+     * @param content   message content;
+     * @param recipient recipient of the message.
+     */
+    static void sendMessageOnMailBox(String theme, String content, User recipient) {
         try {
             MailSender.sendMessage(theme, content, recipient.getEmail());
         } catch (MailException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
         }
     }
 
+    /**
+     * Count amount of a new messages to user.
+     *
+     * @param userId ID of specified user.
+     * @return messages count.
+     * @throws ServiceException in case {@link DAOException} has been thrown
+     *                          (database error occurs).
+     */
     private long countUserUnreadMessages(long userId) throws ServiceException {
         long count = 0;
         DaoHelper daoHelper = new DaoHelper();
@@ -109,7 +141,7 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
             daoHelper.initDao(messageDao);
             count = messageDao.countUserUnreadMessages(userId);
         } catch (DAOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();

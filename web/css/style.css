@@ -161,3 +161,9 @@ footer {
 #comments {
     margin-bottom: 10px;
 }
+
+.exit {
+    border: none;
+    background-color: rgba(0,0,0,0.7);
+    color: goldenrod;
+}

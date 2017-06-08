@@ -1,12 +1,22 @@
 package by.buslauski.auction.entity;
 
+import java.util.Objects;
+
 /**
  * This class represents info about entity "category".
  *
  * @author Mikita Buslauski
  */
 public class Category {
+
+    /**
+     * Unique identifier of the lot category.
+     */
     private int categoryId;
+
+    /**
+     * Category title.
+     */
     private String value;
 
     public Category(int categoryId, String value) {
@@ -43,8 +53,6 @@ public class Category {
 
     @Override
     public int hashCode() {
-        int result = categoryId;
-        result = 31 * result + value.hashCode();
-        return result;
+        return Objects.hash(categoryId, value);
     }
 }

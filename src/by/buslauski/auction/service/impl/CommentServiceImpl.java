@@ -22,7 +22,7 @@ public class CommentServiceImpl extends AbstractService implements CommentServic
         try {
             commentDao.addComment(userId,lotId,content);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,e);
+            LOGGER.log(Level.ERROR,e + " Exception during adding comment to database.");
             throw new ServiceException(e);
         }
         finally {

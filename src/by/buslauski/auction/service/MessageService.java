@@ -21,5 +21,5 @@ public interface MessageService {
 
     void changeMessageStatus(long userId) throws ServiceException;
 
-    void createMessageForTraderAboutPurchaser(User dealer, Bet bet) throws ServiceException;
+    void createMessageForTraderPurchaser(User dealer, Bet bet) throws ServiceException;
 }

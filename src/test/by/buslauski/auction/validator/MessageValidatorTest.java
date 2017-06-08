@@ -4,7 +4,9 @@ import by.buslauski.auction.validator.MessageValidator;
 import org.junit.Assert;
 import org.junit.Test;
 
-
+/**
+ * @author Mikita Buslauski
+ */
 public class MessageValidatorTest {
 
     @Test

@@ -8,7 +8,15 @@ import java.math.BigDecimal;
  * @author Mikita Buslauski
  */
 public class AuctionStat {
+
+    /**
+     * Total sum of all accepted orders.
+     */
     private BigDecimal dealsSum;
+
+    /**
+     * Total count of all accepted order.
+     */
     private long dealsCount;
 
     public BigDecimal getDealsSum() {
@@ -27,5 +35,21 @@ public class AuctionStat {
         this.dealsCount = dealsCount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        AuctionStat that = (AuctionStat) o;
+
+        if (dealsCount != that.dealsCount) return false;
+        return dealsSum.equals(that.dealsSum);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dealsSum.hashCode();
+        result = 31 * result + (int) (dealsCount ^ (dealsCount >>> 32));
+        return result;
+    }
 }

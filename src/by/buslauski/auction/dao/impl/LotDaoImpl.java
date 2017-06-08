@@ -26,7 +26,7 @@ public class LotDaoImpl extends AbstractDao implements LotDao {
             "JOIN category ON lot.id_category=category.id_category WHERE id_lot=?";
     private static final String SQL_GET_LOTS_OVER_TIMING = "SELECT id_lot, id_user, lot.id_category, name, title, photo, description, starting_price,available, date_available," +
             "current_price FROM lot " +
-            "JOIN category ON lot.id_category=category.id_category WHERE NOW()>date_available";
+            "JOIN category ON lot.id_category=category.id_category WHERE NOW()>date_available AND available=TRUE";
     private static final String SQL_GET_ALL_LOTS = "SELECT id_lot, id_user, lot.id_category, name, title, photo, description, starting_price,available, date_available," +
             "current_price FROM lot " +
             "JOIN category ON lot.id_category=category.id_category ORDER BY id_lot DESC ";

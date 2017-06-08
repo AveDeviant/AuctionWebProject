@@ -6,7 +6,14 @@ package by.buslauski.auction.entity;
  * @author Mikita Buslauski
  */
 public enum Role {
-    CUSTOMER("customer"), ADMIN("admin");
+    /**
+     * System user.
+     */
+    CUSTOMER("customer"),
+    /**
+     * System administrator.
+     */
+    ADMIN("admin");
 
     private String value;
 

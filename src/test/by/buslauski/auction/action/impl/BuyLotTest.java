@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 02.06.2017.
+ * @author Mikita Buslauski
  */
 public class BuyLotTest {
     private static HttpServletRequest request;

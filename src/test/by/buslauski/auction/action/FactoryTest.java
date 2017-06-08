@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Deque;
 
 /**
- * Created by Acer on 19.05.2017.
+ * @author Mikita Buslauski
  */
 public class FactoryTest {
     private static HttpServletRequest request;
@@ -75,4 +75,10 @@ public class FactoryTest {
         Assert.assertTrue(TraderRatingImpl.class == command.getClass());
     }
 
+    @Test
+    public void unknownCommand(){
+        Mockito.when(request.getParameter("command")).thenReturn("test");
+        Command command = factory.getCurrentCommand(request);
+        Assert.assertTrue(InitCommandImpl.class == command.getClass());
+    }
 }

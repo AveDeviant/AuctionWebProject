@@ -2,6 +2,7 @@ package by.buslauski.auction.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class represents info about entity "order".
@@ -9,18 +10,69 @@ import java.time.LocalDateTime;
  * @author Mikita Buslauski
  */
 public class Order {
+    /**
+     * Unique identifier of order.
+     */
     private long orderId;
+
+    /**
+     * Identifier of user who is a winner of the auction.
+     */
     private long userId;
+
+    /**
+     * Identifier of user on whose lot the buyer was found.
+     */
     private long traderId;
+
+    /**
+     * Identifier of the winning lot.
+     */
     private long lotId;
+
+    /**
+     * Order cost, or lot final price.
+     */
     private BigDecimal payment;
+
+    /**
+     * Time of order registration.
+     */
     private LocalDateTime dateTime;
+
+    /**
+     * Order status: accepted or rejected.
+     */
     private boolean accept;
+
+    /**
+     * Real purchaser's name.
+     */
     private String costumerName;
+
+    /**
+     * Purchaser city.
+     */
     private String costumerCity;
+
+    /**
+     * Purchaser address.
+     */
     private String costumerAddress;
+
+    /**
+     * Purchaser contact phone.
+     */
     private String costumerPhone;
+
+    /**
+     * Title of winning lot.
+     */
     private String lotTitle;
+
+    /**
+     * Trader alias.
+     */
     private String traderUsername;
 
     public long getOrderId() {
@@ -144,22 +196,14 @@ public class Order {
         if (!costumerName.equals(order.costumerName)) return false;
         if (!costumerCity.equals(order.costumerCity)) return false;
         if (!costumerAddress.equals(order.costumerAddress)) return false;
-        return costumerPhone.equals(order.costumerPhone);
+        if (!costumerPhone.equals(order.costumerPhone)) return false;
+        if (!lotTitle.equals(order.lotTitle)) return false;
+        return traderUsername.equals(order.traderUsername);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (orderId ^ (orderId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + (int) (traderId ^ (traderId >>> 32));
-        result = 31 * result + (int) (lotId ^ (lotId >>> 32));
-        result = 31 * result + payment.hashCode();
-        result = 31 * result + dateTime.hashCode();
-        result = 31 * result + (accept ? 1 : 0);
-        result = 31 * result + costumerName.hashCode();
-        result = 31 * result + costumerCity.hashCode();
-        result = 31 * result + costumerAddress.hashCode();
-        result = 31 * result + costumerPhone.hashCode();
-        return result;
+        return Objects.hash(orderId, userId, traderId, lotId, accept, payment, dateTime, costumerName, costumerCity,
+                costumerAddress, costumerPhone, traderUsername, lotTitle);
     }
 }

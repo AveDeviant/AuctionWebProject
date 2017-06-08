@@ -34,7 +34,7 @@ public class GetUserOperationsImpl implements Command {
      * and display it to current customer.
      *
      * @param request client request to get parameters to work with.
-     * @return null.
+     * @return <tt>null</tt>.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

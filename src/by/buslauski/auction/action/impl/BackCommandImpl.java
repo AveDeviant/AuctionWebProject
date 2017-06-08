@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class BackCommandImpl implements Command {
 
     /**
-     * Return to previous page.
+     * Return to the previous page.
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}

@@ -56,8 +56,7 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
                 messageService.addMessage(NOTIFICATION, contentToCustomer, admin.getUserId(), customer);
             }
         } catch (DAOException e) {
-            e.printStackTrace();
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelperNotification.release();
@@ -84,7 +83,7 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
             String content = initNotificationDealRejected(lot);
             MessageServiceImpl.sendMessageOnMailBox(NOTIFICATION, content, trader);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
         } finally {
             daoHelper.release();
         }

@@ -68,12 +68,13 @@ public class BetServiceTest {
     /**
      * Note that after each test run primary key of "lot" table will increase by one.
      *
-     * @throws ServiceException in case DAOException has been thrown
+     * @throws ServiceException in case DAOException has been thrown.
      * @throws DAOException     in case SQLException has been thrown.
      */
     @Test
     public void checkBetOperationCorrectBehavior() throws ServiceException, DAOException {
         User admin = userService.findAdmin();
+        System.out.println("Adding test lot...");
         lotService.addLot(admin, "test", "test", "test", new BigDecimal(100.00), "other", "2017-08-08");
         Lot test = lotService.getAllLots().get(0);
         BigDecimal bet = new BigDecimal(110.00);
@@ -89,5 +90,24 @@ public class BetServiceTest {
         } finally {
             daoHelper.release();
         }
+    }
+
+    /**
+     * Note that after each test run primary key of "lot" table will increase by one.
+     *
+     * @throws ServiceException in case DAOException has been thrown.
+     */
+    @Test
+    public void checkBetOperationIncorrectBet() throws ServiceException {
+        User admin = userService.findAdmin();
+        System.out.println("Adding test lot...");
+        lotService.addLot(admin, "test", "test", "test", new BigDecimal(100.00), "other", "2017-08-08");
+        Lot test = lotService.getAllLots().get(0);
+        BigDecimal bet = new BigDecimal(102.00);
+        betService.addBet(admin.getUserId(), test.getId(), bet);
+        Lot testAfterUpdate = lotService.getLotById(test.getId());
+        Assert.assertFalse(bet.compareTo(testAfterUpdate.getCurrentPrice()) == 0);
+        System.out.println("Deleting test lot....");
+        lotService.deleteLot(testAfterUpdate.getId(), admin);
     }
 }

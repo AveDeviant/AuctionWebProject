@@ -1,6 +1,7 @@
 package by.buslauski.auction.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class represents info about entity "comment".
@@ -8,11 +9,35 @@ import java.time.LocalDateTime;
  * @author Mikita Buslauski
  */
 public class Comment {
+
+    /**
+     * Unique identifier of the comment.
+     */
     private long commentId;
+
+    /**
+     * Identifier of the lot to which comment was written.
+     */
     private long lotId;
+
+    /**
+     * Identifier of the user who wrote this comment.
+     */
     private long userId;
+
+    /**
+     * Alias of the user who wrote this comment.
+     */
     private String userAlias;
+
+    /**
+     * Content of the comment.
+     */
     private String content;
+
+    /**
+     * Comment creation time.
+     */
     private LocalDateTime time;
 
     public long getCommentId() {
@@ -80,12 +105,7 @@ public class Comment {
 
     @Override
     public int hashCode() {
-        int result = (int) (commentId ^ (commentId >>> 32));
-        result = 31 * result + (int) (lotId ^ (lotId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + userAlias.hashCode();
-        result = 31 * result + content.hashCode();
-        result = 31 * result + time.hashCode();
-        return result;
+
+        return Objects.hash(commentId, lotId, userId, userAlias, content, time);
     }
 }

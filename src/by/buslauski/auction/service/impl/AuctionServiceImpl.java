@@ -23,11 +23,13 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
     private static LotService lotService = new LotServiceImpl();
 
     /**
-     * Check lots which bidding time is over but already have confirmed bets.
+     * Check lots which bidding time is over but they already have confirmed bets.
      * Last bet is a winning bet - the last customer who made this bet is a winner of auction.
      * Set winning bets to customer for further ordering {@link User#winningBets}.
      *
-     * @param user auction customer.
+     * @param user current user.
+     * @throws ServiceException if DAOException ha been thrown
+     *                          (database error occurs).
      */
     @Override
     public void setWinner(User user) throws ServiceException {
@@ -57,8 +59,8 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
      * to trader e-mail box.
      *
      * @param bet the last bet to get fields to work with.
-     * @return true - operation passed successfully (order was added, lot has been withdrawn and message was sent)
-     * and false in other case.
+     * @return <tt>true</tt> - operation passed successfully (order was added, lot has been withdrawn and message was sent)
+     * and <tt>false</tt> in other case.
      * @throws ServiceException if DAOException ha been thrown
      *                          (database error occurs).
      */
@@ -79,11 +81,10 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
             orderDao.addOrder(customerId, trader.getUserId(), lotId, moneyAmount, true);
             lotDao.changeLotBiddingStatus(lotId, false);
             // create notification for customer, who offered lot
-            messageService.createMessageForTraderAboutPurchaser(trader, bet);
+            messageService.createMessageForTraderPurchaser(trader, bet);
             daoHelper.commit();
             status = true;
         } catch (DAOException e) {
-            e.printStackTrace();
             daoHelper.rollback();
             LOGGER.log(Level.ERROR, e + " Exception during ordering.");
             throw new ServiceException(e);
@@ -94,7 +95,7 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
     }
 
     /**
-     * Method is called in case rejecting payment by costumer.
+     * Method is called in case rejecting payment by customer.
      * Lot returns in list of lots which available for bidding (modify {@link Lot#dateAvailable} and
      * set {@link Lot#availability} as <code>true</code>.
      * Cancelled {@link by.buslauski.auction.entity.Order} object added into database for further admin investigation.
@@ -103,6 +104,8 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
      * Block user in case hi is unreliable (count of rejected deals > {@link AuctionService#REJECTED_DEALS_COUNT})
      *
      * @param lot lot which must be returned to lot list.
+     * @throws ServiceException if DAOException ha been thrown
+     *                          (database error occurs).
      * @see by.buslauski.auction.action.impl.customer.RejectOrderImpl#execute(HttpServletRequest)
      * @see LotServiceImpl#getLotsWithOverTiming()
      */
@@ -140,7 +143,8 @@ public class AuctionServiceImpl extends AbstractService implements AuctionServic
 
     /**
      * Editing lot date before returning lot to bids.
-     * Adding 10 days to current date to get a new {@link Lot#dateAvailable} to make the lot available for auction bids.
+     * Adding {@link AuctionService#WAITING_PERIOD} days to current date to get
+     * a new {@link Lot#dateAvailable} to make the lot available for auction bids.
      *
      * @return {@link LocalDate} object.
      */

@@ -1,6 +1,7 @@
 package by.buslauski.auction.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class represents info about entity "message".
@@ -101,14 +102,7 @@ public class UserMessage {
 
     @Override
     public int hashCode() {
-        int result = (int) (messageId ^ (messageId >>> 32));
-        result = 31 * result + (int) (senderId ^ (senderId >>> 32));
-        result = 31 * result + (int) (recipientId ^ (recipientId >>> 32));
-        result = 31 * result + senderUsername.hashCode();
-        result = 31 * result + RecipientUsername.hashCode();
-        result = 31 * result + (theme != null ? theme.hashCode() : 0);
-        result = 31 * result + content.hashCode();
-        result = 31 * result + dateTime.hashCode();
-        return result;
+        return Objects.hash(messageId, senderId, recipientId, senderUsername,
+                RecipientUsername, theme, content, dateTime);
     }
 }

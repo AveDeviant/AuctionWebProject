@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by Acer on 14.04.2017.
+ * @author Mikita Buslauski
  */
 public class LotValidatorTest {
 

@@ -70,7 +70,7 @@
                             <input class="form-control" type="email" name="mail" id="mail" required>
                         </div>
                         <br/>
-                        <button class="button-auction" type="submit" onclick="validateForm()"><fmt:message
+                        <button class="button-auction" type="submit" onclick="checkPasswords()"><fmt:message
                                 key="register.button.register"/></button>
                         <input type="hidden" name="command" value="registration">
                     </form>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <script>
-            function validateForm() {
+            function checkPasswords() {
                 var result = true;
                 var errPwd2 = document.getElementById("errPwd2");
                 var pwd = document.registrationForm.password.value;

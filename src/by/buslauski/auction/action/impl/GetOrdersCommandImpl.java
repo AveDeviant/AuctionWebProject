@@ -34,7 +34,7 @@ public class GetOrdersCommandImpl implements Command {
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type: {@link ResponseType#FORWARD}
-     * String page - page for response "/jsp/orders.jsp"
+     * String page - page for response {@link PageNavigation#ORDERS_SHOW_PAGE}
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

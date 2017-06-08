@@ -76,6 +76,7 @@ public class ConnectionPool {
                 lock.lock();
                 if (instance == null) {
                     instance = new ConnectionPool();
+                    LOGGER.log(Level.INFO, "Connection pool was initialized.");
                     isCreated.getAndSet(true);
                 }
             } finally {

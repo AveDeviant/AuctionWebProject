@@ -24,7 +24,7 @@ public class GetLotsImpl implements Command {
      * Get <code>ArrayList</code> of {@link Lot} objects from database.
      *
      * @param request client request to get parameters to work with.
-     * @return null.
+     * @return <tt>null</tt>.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

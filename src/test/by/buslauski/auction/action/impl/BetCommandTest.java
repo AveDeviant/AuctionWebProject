@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by Acer on 16.05.2017.
+ * @author Mikita Buslauski
  */
 public class BetCommandTest {
     private static HttpServletRequest request;

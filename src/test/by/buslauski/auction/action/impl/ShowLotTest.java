@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 18.05.2017.
+ * @author Mikita Buslauski
  */
 public class ShowLotTest {
     private static HttpServletRequest request;

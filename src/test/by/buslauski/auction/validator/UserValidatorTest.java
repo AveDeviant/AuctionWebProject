@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by Acer on 12.04.2017.
+ * @author Mikita Buslauski
  */
 public class UserValidatorTest {
 

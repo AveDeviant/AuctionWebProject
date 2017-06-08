@@ -111,14 +111,10 @@
                             key="messages.page.reference"/> </a>
                     </h4>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="text-center">
+                <div class="row">
                     <div class="text-center">
                         <form name="logout" action="${pageContext.request.contextPath}/Auction" method="post">
-                            <button id="logout" type="submit" name="button"><fmt:message
+                            <button class="exit" id="logout" type="submit" name="button"><fmt:message
                                     key="private.button.logout"/></button>
                             <input type="hidden" name="command" value="logout">
                         </form>

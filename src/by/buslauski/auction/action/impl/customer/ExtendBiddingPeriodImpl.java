@@ -25,7 +25,7 @@ public class ExtendBiddingPeriodImpl implements Command {
 
     /**
      * Extending lot bidding period for {@link by.buslauski.auction.service.AuctionService#EXTENDING_PERIOD_MIN} or
-     * {@link by.buslauski.auction.service.AuctionService#EXTENDING_PERIOD_MAX} (in days) by trader.
+     * {@link by.buslauski.auction.service.AuctionService#EXTENDING_PERIOD_MAX} (in days).
      *
      * @param request client request to get parameters to work with.
      * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}

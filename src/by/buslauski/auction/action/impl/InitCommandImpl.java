@@ -36,7 +36,7 @@ public class InitCommandImpl implements Command {
 
     /**
      * Init command. Get <code>ArrayList</code> of {@link Lot} objects
-     * with {@link Lot#availability}==true from database and displays it to main page.
+     * with <tt>{@link Lot#availability}==true</tt> from database and displays it on the main page.
      * Displaying appropriate message in case the list is empty.
      * Displaying appropriate message in case {@link User} have been banned.
      * Check for new events in case <code>User</code> has been authorized.

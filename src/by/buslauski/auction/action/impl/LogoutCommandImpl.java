@@ -13,6 +13,15 @@ import javax.servlet.http.HttpSession;
  */
 public class LogoutCommandImpl implements Command {
 
+    /**
+     * Invalidates current session and redirects client to the index page.
+     *
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
+     * ResponseType - {@link ResponseType#REDIRECT};
+     * String page - page for response {@link PageNavigation#INDEX_PAGE}.
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();

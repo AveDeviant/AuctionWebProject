@@ -50,7 +50,6 @@
                         </c:forEach>
                     </ul>
                 </li>
-                <li><a href="/jsp/info.jsp"><fmt:message key="header.menu.info"/> </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${user!=null && (user.isUnreadMessages())}">

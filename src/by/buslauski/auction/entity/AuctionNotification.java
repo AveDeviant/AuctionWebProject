@@ -1,6 +1,7 @@
 package by.buslauski.auction.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class represents info about entity "result_notification".
@@ -8,12 +9,40 @@ import java.time.LocalDateTime;
  * @author Mikita Buslauski
  */
 public class AuctionNotification {
+
+    /**
+     * Unique identifier of auction result/notification.
+     */
     private long notificationId;
+
+    /**
+     * Identifier of the user on whose lot the buyer was found.
+     */
     private long traderId;
+
+    /**
+     * Identifier of the user who win the auction.
+     */
     private long customerId;
+
+    /**
+     * Identifier of the winning lot.
+     */
     private long lotId;
+
+    /**
+     * Alias of the auction winner.
+     */
     private String customerAlias;
+
+    /**
+     * Title of the winning lot.
+     */
     private String lotTitle;
+
+    /**
+     * Time of auction result/notification registration.
+     */
     private LocalDateTime dateTime;
 
     public long getNotificationId() {
@@ -72,5 +101,24 @@ public class AuctionNotification {
         this.dateTime = dateTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        AuctionNotification that = (AuctionNotification) o;
+
+        if (notificationId != that.notificationId) return false;
+        if (traderId != that.traderId) return false;
+        if (customerId != that.customerId) return false;
+        if (lotId != that.lotId) return false;
+        if (!customerAlias.equals(that.customerAlias)) return false;
+        if (!lotTitle.equals(that.lotTitle)) return false;
+        return dateTime.equals(that.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notificationId, traderId, customerId, customerAlias, lotId, lotTitle, dateTime);
+    }
 }

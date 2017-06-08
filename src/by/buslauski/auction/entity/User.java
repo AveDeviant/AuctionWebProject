@@ -2,6 +2,8 @@ package by.buslauski.auction.entity;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This class represents info about entity "user".
@@ -9,21 +11,92 @@ import java.util.ArrayList;
  * @author Mikita Buslauski
  */
 public class User {
+    /**
+     * Unique identifier of user.
+     */
     private long userId;
+
+    /**
+     * Identifier of user role.
+     */
     private int roleId;
+
+    /**
+     * User login.
+     */
     private String userName;
+
+    /**
+     * User alias in the system.
+     */
     private String alias;
+
+    /**
+     * User e-mail.
+     */
     private String email;
+
+    /**
+     * User's city.
+     */
     private String city;
+
+    /**
+     * User's address.
+     */
     private String address;
+
+    /**
+     * User's contact number;
+     */
     private String phoneNumber;
+
+    /**
+     * User's access to the auction.
+     */
     private boolean access;
+
+    /**
+     * User's real name, surname etc.
+     */
     private String name;
+
+    /**
+     * User role in the system.
+     *
+     * @see Role
+     */
     private Role role;
+
+    /**
+     * All bets which made by user.
+     *
+     * @see Bet
+     */
     private ArrayList<Bet> bets;
+
+    /**
+     * Bets which made by user and  were the highest among the rest.
+     *
+     * @see Bet
+     */
     private ArrayList<Bet> winningBets;
+
+    /**
+     * All messages that user were sent or received.
+     *
+     * @see UserMessage
+     */
     private ArrayList<UserMessage> userMessages;
+
+    /**
+     * Indicator of new messages to user.
+     */
     private boolean unreadMessages;
+
+    /**
+     * User rating.
+     */
     private double userRating;
 
     public User(long userId, int roleId, String userName, String email, boolean access,
@@ -182,27 +255,20 @@ public class User {
         if (!phoneNumber.equals(user.phoneNumber)) return false;
         if (!name.equals(user.name)) return false;
         if (role != user.role) return false;
-        if (!bets.equals(user.bets)) return false;
-        if (!winningBets.equals(user.winningBets)) return false;
-        return userMessages.equals(user.userMessages);
+        Bet[] bets1 = (Bet[]) bets.toArray();
+        Bet[] bets2 = (Bet[]) user.bets.toArray();
+        if (!Arrays.equals(bets1, bets2)) return false;
+        Bet[] winning1 = (Bet[]) winningBets.toArray();
+        Bet[] winning2 = (Bet[]) user.winningBets.toArray();
+        if (!Arrays.equals(winning1, winning2)) return false;
+        UserMessage[] messages1 = (UserMessage[]) userMessages.toArray();
+        UserMessage[] messages2 = (UserMessage[]) user.userMessages.toArray();
+        return Arrays.equals(messages1, messages2);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (userId ^ (userId >>> 32));
-        result = 31 * result + roleId;
-        result = 31 * result + userName.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + city.hashCode();
-        result = 31 * result + address.hashCode();
-        result = 31 * result + phoneNumber.hashCode();
-        result = 31 * result + (access ? 1 : 0);
-        result = 31 * result + name.hashCode();
-        result = 31 * result + role.hashCode();
-        result = 31 * result + bets.hashCode();
-        result = 31 * result + winningBets.hashCode();
-        result = 31 * result + userMessages.hashCode();
-        result = 31 * result + (unreadMessages ? 1 : 0);
-        return result;
+        return Objects.hash(userId, roleId, access, unreadMessages, userName, email, city, address, phoneNumber,
+                name, alias, role, bets, winningBets, userMessages, userRating);
     }
 }

@@ -63,6 +63,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             int categoryId = categoryDao.findCategoryIdByName(category);
             lotDao.addLot(userId, categoryId, title, description, image, price, availableDate, availability, price);
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelperCategory.release();
@@ -80,6 +81,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.initDao(lotDao);
             lots = lotDao.findAllLots();
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -90,7 +92,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
     /**
      * Get available lots from database.
      *
-     * @return ArrayList of lots that have access to the auction.
+     * @return defined {@link ArrayList} object containing  {@link Lot} objects that have access to the auction
+     * ({@link Lot#availability} is <tt>true</tt>).
      */
     @Override
     public ArrayList<Lot> getAvailableLots() throws ServiceException {
@@ -124,6 +127,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                 lot.setBets(betDao.getBetsByLotId(lotId)); // setting bets to lot
             }
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelperLot.release();
@@ -162,6 +166,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                 lot.setComments(commentDao.getCommentsByLotId(lotId));
             }
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -218,6 +223,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
                 }
             }
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelperBet.release();
@@ -238,6 +244,18 @@ public class LotServiceImpl extends AbstractService implements LotService {
         return lotsByCategory;
     }
 
+    /**
+     * Change lot data.
+     *
+     * @param lotId         ID of lot which data needs to be changed;
+     * @param category      new lot category;
+     * @param title         new lot title;
+     * @param image         new path to lot image;
+     * @param price         new lot starting price;
+     * @param availability  admission of the lot for trading;
+     * @param availableDate date to which the lot is put up for the auction.
+     * @throws ServiceException in case DAOException has been thrown (database error occurs).
+     */
     @Override
     public void editLot(long lotId, String category, String title, String image, BigDecimal price,
                         boolean availability, String availableDate) throws ServiceException {
@@ -251,6 +269,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelperLot.initDao(lotDao);
             lotDao.editLot(lotId, categoryId, title, price, image, availability, availableDate);
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelperCategory.release();
@@ -261,7 +280,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
 
     /**
      * Deleting lot from database using lot ID.
-     * Check that user who called this operation has a permission for this operation: {@link Role#ADMIN}.
+     * Check that user who called this operation has a permission for this operation ({@link Role#ADMIN}).
      *
      * @param lotId ID lot which should be deleted.
      * @throws ServiceException thrown in case lot have confirmed bets and/or
@@ -279,7 +298,7 @@ public class LotServiceImpl extends AbstractService implements LotService {
             daoHelper.initDao(lotDao);
             lotDao.deleteLot(lotId);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException();
         } finally {
             daoHelper.release();
@@ -293,8 +312,9 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * In other case results for lot are still actual.
      *
      * @param lot lot which time need to be checked.
-     * @return true - period less than 10 days and result of the auction is actual.
-     * false - waiting period is over.
+     * @return <tt>true</tt> - period less than {@link AuctionService#WAITING_PERIOD} days and
+     * result of the auction is an actual.
+     * <tt>false</tt> - waiting period is over.
      */
     @Override
     public boolean checkWaitingPeriod(Lot lot) {
@@ -308,8 +328,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * Check that this operation called by real lot owner or auction administrator.
      *
      * @param lotId  lot which status should be changed.
-     * @param status true - put up lot for auction;
-     *               false - withdraw lot.
+     * @param status <tt>true</tt> - put up lot for auction;
+     *               <tt>false</tt> - withdraw lot.
      * @param user   user who invokes this operation.
      * @throws ServiceException if a database access error occurs.
      */
@@ -378,9 +398,8 @@ public class LotServiceImpl extends AbstractService implements LotService {
      * @param lotId  lot ID.
      * @param days   days count ({@link AuctionService#EXTENDING_PERIOD_MIN} or {@link AuctionService#EXTENDING_PERIOD_MAX}).
      * @param userId ID user who invokes this operation.
-     * @return true - operation passed successfully;
-     * false - lot have confirmed bets or lot auction period is not over
-     * (in these cases customer cannot extend the bidding period).
+     * @return <tt>true</tt> - operation passed successfully;
+     * <tt>false</tt> otherwise.
      * @throws ServiceException in case DAOException has been thrown
      *                          (database error occurs)
      */

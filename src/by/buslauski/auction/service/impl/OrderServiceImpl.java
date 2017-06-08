@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class OrderServiceImpl extends AbstractService implements OrderService {
 
     /**
-     * Method gets all deals (confirmed or rejected) from database.
+     * Method gets all {@link Order} objects (confirmed or rejected) from database.
      *
      * @return defined {@link ArrayList} object containing {@link Order} objects.
      * @throws ServiceException in case DAOException has been thrown (database error occurs).
@@ -34,7 +34,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
             daoHelper.initDao(orderDao);
             orders.addAll(orderDao.getAllOrders());
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -43,6 +43,17 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
     }
 
 
+    /**
+     * Get <code>ArrayList</code> object containing {@link Order} objects
+     * where {@link Order#accept} is <tt>true</tt> and
+     * current user is one of the parties of the transaction ({@link by.buslauski.auction.entity.User#userId equals to
+     * {@link Order#userId} or {@link Order#traderId}}. In other words, current user was the lot seller
+     * or the lot buyer.
+     *
+     * @param userId ID of current user.
+     * @return defined {@link ArrayList} object.
+     * @throws ServiceException in case DAOException has been thrown (database error occurs).
+     */
     @Override
     public ArrayList<Order> getUserConfirmedOrders(long userId) throws ServiceException {
         ArrayList<Order> orders = new ArrayList<>();
@@ -52,7 +63,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
             daoHelper.initDao(orderDao);
             orders.addAll(orderDao.getUserConfirmedOrders(userId));
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -62,7 +73,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
 
     /**
      * Get from database total sum of {@link Order#payment} and total count of {@link Order} objects where
-     * {@link Order#accept} is <code>true</code>.
+     * {@link Order#accept} is <tt>true</tt>.
      *
      * @return defined {@link AuctionStat} object.
      * @throws ServiceException in case DAOException has been thrown
@@ -77,7 +88,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
             daoHelper.initDao(orderDao);
             auctionStat = orderDao.calculateStatistic();
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();

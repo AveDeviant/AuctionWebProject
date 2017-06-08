@@ -33,7 +33,7 @@ public class FileUploadingManager {
             File data = new File(path, getFileNameFromPath(filePart));
             Files.copy(stream, data.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
         }
         return getFileNameFromPath(filePart);
     }

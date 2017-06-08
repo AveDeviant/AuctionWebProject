@@ -47,7 +47,7 @@ public class Controller extends HttpServlet {
         PageResponse pageResponse = command.execute(request);
         if (pageResponse != null) {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(pageResponse.getPage());
-            if (pageResponse.getResponseType().getValue().equals(ResponseType.REDIRECT.getValue())) {
+            if (pageResponse.getResponseType() == ResponseType.REDIRECT) {
                 response.sendRedirect(pageResponse.getPage());
             } else {
                 dispatcher.forward(request, response);

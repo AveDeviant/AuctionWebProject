@@ -3,6 +3,8 @@ package by.buslauski.auction.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -12,19 +14,75 @@ import java.util.concurrent.BlockingQueue;
  * @author Mikita Buslauski
  */
 public class Lot {
+
+    /**
+     * Lot title.
+     */
     private String title;
+
+    /**
+     * Unique lot identifier.
+     */
     private long id;
+
+    /**
+     * Identifier of user who expose lot for the auction.
+     */
     private long userId;
+
+    /**
+     * Lot staring price.
+     */
     private BigDecimal price;
+
+    /**
+     * Path to lot image.
+     */
     private String image;
+
+    /**
+     * Lot description.
+     */
     private String description;
+
+    /**
+     * Availability of the lot to the action trading.
+     */
     private boolean availability;
+
+    /**
+     * identifier of the lot category.
+     */
     private int categoryId;
+
+    /**
+     * Lot category.
+     */
     private String category;
+
+    /**
+     * Date until lot is put up for te auction.
+     */
     private LocalDate dateAvailable;
+
+    /**
+     * Current lot price.
+     */
     private BigDecimal currentPrice;
+
+    /**
+     * All bets made on this lot.
+     */
     private ArrayList<Bet> bets;
+
+    /**
+     * Count of users who bet on this lot.
+     */
     private int followersCount;
+
+    /**
+     * Comments written to this lot.
+     */
     private ArrayList<Comment> comments;
 
     public Lot(long id, long userId, String title, String description, String image, int categoryId, BigDecimal price,
@@ -167,6 +225,7 @@ public class Lot {
         if (userId != lot.userId) return false;
         if (availability != lot.availability) return false;
         if (categoryId != lot.categoryId) return false;
+        if (followersCount != lot.followersCount) return false;
         if (!title.equals(lot.title)) return false;
         if (!price.equals(lot.price)) return false;
         if (!image.equals(lot.image)) return false;
@@ -174,23 +233,17 @@ public class Lot {
         if (!category.equals(lot.category)) return false;
         if (!dateAvailable.equals(lot.dateAvailable)) return false;
         if (!currentPrice.equals(lot.currentPrice)) return false;
-        return bets.equals(lot.bets);
+        Bet[] bets1 = (Bet[]) bets.toArray();
+        Bet[] bets2 = (Bet[]) lot.bets.toArray();
+        if (!Arrays.equals(bets1, bets2)) return false;
+        Comment[] comments1 = (Comment[]) comments.toArray();
+        Comment[] comments2 = (Comment[]) lot.comments.toArray();
+        return Arrays.equals(comments1, comments2);
     }
 
     @Override
     public int hashCode() {
-        int result = title.hashCode();
-        result = 31 * result + (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + price.hashCode();
-        result = 31 * result + image.hashCode();
-        result = 31 * result + description.hashCode();
-        result = 31 * result + (availability ? 1 : 0);
-        result = 31 * result + categoryId;
-        result = 31 * result + category.hashCode();
-        result = 31 * result + dateAvailable.hashCode();
-        result = 31 * result + currentPrice.hashCode();
-        result = 31 * result + bets.hashCode();
-        return result;
+        return Objects.hash(title, id, userId, price, image, description, availability, categoryId,
+                category, dateAvailable, currentPrice, bets, followersCount, comments);
     }
 }

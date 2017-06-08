@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Acer on 16.05.2017.
+ * @author Mikita Buslauski
  */
 public class RegistrationCommandTest {
     private static HttpServletRequest request;

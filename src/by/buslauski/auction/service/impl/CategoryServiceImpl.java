@@ -50,11 +50,11 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
     }
 
     /**
-     * Check that entered category exists.
+     * Check that entered lot category exists.
      *
      * @param category entered category.
-     * @return true if entered category stores in database;
-     * false in other case.
+     * @return <tt>true</tt> if entered category stores in database;
+     * <tt>false</tt> in other case.
      * @throws ServiceException in case DAOException has been thrown (database error occurs)
      */
     @Override

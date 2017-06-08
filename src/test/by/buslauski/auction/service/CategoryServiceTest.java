@@ -43,7 +43,7 @@ public class CategoryServiceTest {
 
     @Test
     public void categoryExistsTest() throws ServiceException {
-        boolean automobiles = categoryService.categoryExists("automobiles");
-        Assert.assertTrue(automobiles);
+        boolean exists = categoryService.categoryExists("automobiles");
+        Assert.assertTrue(exists);
     }
 }

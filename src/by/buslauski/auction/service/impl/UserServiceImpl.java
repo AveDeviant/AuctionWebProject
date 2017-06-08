@@ -25,6 +25,15 @@ import java.util.ArrayList;
 public class UserServiceImpl extends AbstractService implements UserService {
     private static final String PASSWORD_NOT_FOUND = "";
 
+    /**
+     * Authorization of the user in the system.
+     * Checking for correct user login\password combination.
+     * @param login entered login;
+     * @param password entered password.
+     * @return specified {@link User} object if authorization passed successfully and
+     * <tt>null</tt> otherwise.
+     * @throws ServiceException in case DAOException has been thrown (database error occurs).
+     */
     @Override
     public User authorizationChecking(String login, String password) throws ServiceException {
         User user = null;
@@ -41,7 +50,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 user = userDao.findUserByLogin(login);
             }
         } catch (DAOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -50,6 +59,12 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
 
+    /**
+     * Get <code>ArrayList</code> object containing {@link User} objects where {@link User#role} is a {@link Role#CUSTOMER}.
+     *
+     * @return defined {@link ArrayList} object
+     * @throws ServiceException in case DAOException has been thrown (database error occurs).
+     */
     @Override
     public ArrayList<User> getAllCustomers() throws ServiceException {
         ArrayList<User> users = new ArrayList<>();
@@ -59,7 +74,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             users.addAll(userDao.getAllCustomers());
         } catch (DAOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -88,7 +103,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             userDao.updateUserInfo(userId, name, city, address, phone);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,e + " Exception during updating user info.");
+            LOGGER.log(Level.ERROR, e + " Exception during updating user info.");
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -101,7 +116,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
      *
      * @param userId User ID whose access should be updated.
      * @param access true - unban user.
-     *               false - ban yser.
+     *               false - ban user.
      * @see by.buslauski.auction.action.impl.AccessEditImpl#execute(HttpServletRequest)
      */
     @Override
@@ -121,7 +136,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             }
         } catch (DAOException e) {
             daoHelper.rollback();
-            LOGGER.log(Level.ERROR,e + "Exception during user access editing.");
+            LOGGER.log(Level.ERROR, e + "Exception during user access editing.");
             throw new ServiceException(e);
         } finally {
             daoHelper.endTransaction();
@@ -158,7 +173,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 user = userDao.findUserByLogin(userName);
             }
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,e+ " Exception during user registration.");
+            LOGGER.log(Level.ERROR, e + " Exception during user registration.");
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -183,6 +198,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             user = userDao.findAdmin();
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR,e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -191,7 +207,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     /**
-     * Get {@link User} object from database using {@link User#userId}.
+     * Get {@link User} object from database with specified ID.
      *
      * @param userId user ID.
      * @return defined {@link User} object.
@@ -206,6 +222,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             user = userDao.findUserById(userId);
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -249,7 +266,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             userDao.updateTraderRating(traderId, customerId, rating);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         }
     }
@@ -274,7 +291,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             rating = bigDecimal.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();  //rating rounding.
             trader.setUserRating(rating);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -282,7 +299,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     /**
-     * Block user in the system by setting {@link User#access} to <code>false</code>
+     * Block user in the system by setting {@link User#access} to <tt>false</tt>
      *
      * @param rejectedDeals number of rejected orders ({@link by.buslauski.auction.entity.Order#accept})
      *                      after exceeding which block the user.
@@ -296,7 +313,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             daoHelper.initDao(userDao);
             userDao.blockUser(rejectedDeals);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
@@ -309,18 +326,19 @@ public class UserServiceImpl extends AbstractService implements UserService {
      * @param login entered login
      * @param email entered email
      * @param alias entered alias (username)
-     * @return false - entered values have been already used by other users.
-     * true - database doesn't contains entered values.
+     * @return <tt>false</tt> - entered values have been already used by other users.
+     * <tt>true</tt> - database doesn't contains entered values.
      */
     private boolean uniqueCheck(String login, String email, String alias) throws ServiceException {
         DaoHelper daoHelper = new DaoHelper();
         try {
             UserDao userDao = new UserDaoImpl();
             daoHelper.initDao(userDao);
-            if (!userDao.findPasswordByLogin(login).equals("") || userDao.findUserByEmailAlias(email, alias)) {
+            if (!PASSWORD_NOT_FOUND.equals(userDao.findPasswordByLogin(login)) || userDao.findUserByEmailAlias(email, alias)) {
                 return false;
             }
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
             throw new ServiceException();
         } finally {
             daoHelper.release();

@@ -29,6 +29,18 @@ public class RegistrationCommandImpl implements Command {
     private static final String MAIL = "mail";
     private static UserService userService = new UserServiceImpl();
 
+    /**
+     * Create a new user account in the system.
+     *
+     * @param request client request to get parameters to work with.
+     * @return {@link PageResponse} object containing fields {@link ResponseType} and {@link String}
+     * for {@link by.buslauski.auction.servlet.Controller}.
+     * ResponseType - response type:
+     * {@link ResponseType#REDIRECT} - operation passed successfully.
+     * {@link ResponseType#FORWARD} - detecting errors during operation.
+     * String page - {@link PageNavigation#INDEX_PAGE} in case operation passed successfully and
+     * {@link PageNavigation#REGISTRATION_PAGE} with appropriate message otherwise.
+     */
     @Override
     public PageResponse execute(HttpServletRequest request) {
         PageResponse pageResponse = new PageResponse();
@@ -40,7 +52,7 @@ public class RegistrationCommandImpl implements Command {
         String alias = request.getParameter(USERNAME);
         pageResponse.setResponseType(ResponseType.FORWARD);
         pageResponse.setPage(PageNavigation.REGISTRATION_PAGE);
-        if (password==null || !password.equals(passwordRepeat)) {
+        if (password == null || !password.equals(passwordRepeat)) {
             request.setAttribute(REGISTRATION_ERROR_ATTR, ResponseMessage.PASSWORD_NOT_EQUAL);
             return pageResponse;
         }

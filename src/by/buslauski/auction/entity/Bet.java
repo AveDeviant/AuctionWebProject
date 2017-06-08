@@ -2,6 +2,7 @@ package by.buslauski.auction.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class represents info about entity "bet".
@@ -9,11 +10,35 @@ import java.time.LocalDateTime;
  * @author Mikita Buslauski
  */
 public class Bet {
+
+    /**
+     * Unique identifier of the bet.
+     */
     private long betId;
+
+    /**
+     * Identifier of the lot on which bet was made.
+     */
     private long lotId;
+
+    /**
+     * Identifier of the user who made the bet.
+     */
     private long userId;
+
+    /**
+     * Bet value.
+     */
     private BigDecimal bet;
+
+    /**
+     * Time of bet registration.
+     */
     private LocalDateTime date;
+
+    /**
+     * Title of the lot on which bet was made.
+     */
     private String lotTitle;
 
     public Bet(long betId, long lotId, long userId, BigDecimal bet) {
@@ -88,12 +113,6 @@ public class Bet {
 
     @Override
     public int hashCode() {
-        int result = (int) (betId ^ (betId >>> 32));
-        result = 31 * result + (int) (lotId ^ (lotId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + bet.hashCode();
-        result = 31 * result + date.hashCode();
-        result = 31 * result + lotTitle.hashCode();
-        return result;
+        return Objects.hash(betId, lotId, userId, lotTitle, betId, date);
     }
 }

@@ -38,7 +38,7 @@ public class BetCommandImpl implements Command {
     /**
      * Bet operation. Updating lot current price and insert the bet into database.
      * <p>
-     * Checked situations:
+     * Checked situations:<br/>
      * The customer isn't authorized on the site;
      * The customer have been banned during his session on the site;
      * The lot was withdrawn from the auction during customer's session;
@@ -52,7 +52,7 @@ public class BetCommandImpl implements Command {
      * for {@link by.buslauski.auction.servlet.Controller}.
      * ResponseType - response type:
      * {@link ResponseType#REDIRECT} - operation passed successfully.
-     * {@link ResponseType#FORWARD} - detecting errors during operations.
+     * {@link ResponseType#FORWARD} - detecting errors during operation.
      * String page - current page or {@link PageNavigation#ACCESS_DENIED_PAGE} in case lot became unable for the auction.
      * @see Command#returnPageWithQuery(HttpServletRequest)
      * @see Command#definePathToAccessDeniedPage(HttpServletRequest)
@@ -89,7 +89,6 @@ public class BetCommandImpl implements Command {
                         request.setAttribute(BET_SIZE_ERROR, ResponseMessage.BET_SIZE_ERROR);
                         return pageResponse;
                     }
-//                    user.setBets(betService.getUserBets(userId));
                     pageResponse.setResponseType(ResponseType.REDIRECT);
                     return pageResponse;
                 } else {

@@ -20,10 +20,10 @@ public class GetMessagesImpl implements Command {
     private static MessageService messageService = new MessageServiceImpl();
 
     /**
-     * Gets customer's messages from database.
+     * Gets user messages from database.
      *
      * @param request client request to get parameters to work with.
-     * @return null.
+     * @return <tt>null</tt>.
      */
     @Override
     public PageResponse execute(HttpServletRequest request) {

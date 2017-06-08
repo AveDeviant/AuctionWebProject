@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by Acer on 02.05.2017.
+ * @author Mikita Buslauski
  */
 public class BetValidatorTest {
 

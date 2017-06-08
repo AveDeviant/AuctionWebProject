@@ -25,7 +25,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
     private static ReentrantLock lock = new ReentrantLock();
 
     /**
-     * Adding bet and updating lot current price.
+     * Add entered bet to database and update lot current price.
      * <p>
      * <code>ReentrantLock</code> reduces performance
      * but also reduces the rick of incorrect logic behavior.
@@ -33,8 +33,8 @@ public class BetServiceImpl extends AbstractService implements BetService {
      * @param userId customer iD.
      * @param lotId  lot ID.
      * @param price  new lot price.
-     * @return true in case operation passed successfully and lot price has been updated,
-     * false in other case.
+     * @return <tt>true</tt> in case operation passed successfully and lot price has been updated,
+     * <tt>false</tt> in other case.
      * @throws ServiceException if a database access error occurs
      *                          (DAOException has been thrown).
      */
@@ -75,8 +75,8 @@ public class BetServiceImpl extends AbstractService implements BetService {
      *
      * @param lot lot which price should be updated.
      * @param bet entered bet.
-     * @return true - entered bet is correct;
-     * false  in other case.
+     * @return <tt>true</tt> - entered bet is correct;
+     * <tt>false</tt>  in other case.
      */
     @Override
     public boolean checkBetValue(Lot lot, BigDecimal bet) {
@@ -105,6 +105,7 @@ public class BetServiceImpl extends AbstractService implements BetService {
             daoHelper.initDao(betDao);
             bets.addAll(betDao.getUserBets(userId));
         } catch (DAOException e) {
+            LOGGER.log(Level.ERROR,e + " Exception during getting user bets from database.");
             throw new ServiceException(e);
         } finally {
             daoHelper.release();
