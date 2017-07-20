@@ -17,7 +17,7 @@
 <c:if test="${user!=null}">
     <c:redirect url="/jsp/private.jsp"/>
 </c:if>
-<div class="custom-opacity">
+<div class="custom-opacity-2">
 <div class="container">
     <div class="row">
         <div class="col-sm-12">

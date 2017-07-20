@@ -22,6 +22,7 @@ import java.io.IOException;
 @WebServlet("/Controller")
 @MultipartConfig
 public class Controller extends HttpServlet {
+    private static CommandFactory clientCommand = new CommandFactory();
 
     public void init() throws ServletException {
         super.init();
@@ -42,7 +43,6 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CommandFactory clientCommand = new CommandFactory();
         Command command = clientCommand.getCurrentCommand(request);
         PageResponse pageResponse = command.execute(request);
         if (pageResponse != null) {

@@ -118,15 +118,20 @@ public class MessageServiceImpl extends AbstractService implements MessageServic
      * @param recipient recipient of the message.
      */
     static void sendMessageOnMailBox(String theme, String content, User recipient) {
-        try {
-            MailSender.sendMessage(theme, content, recipient.getEmail());
-        } catch (MailException e) {
-            LOGGER.log(Level.ERROR, e.getMessage());
-        }
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    MailSender.sendMessage(theme, content, recipient.getEmail());
+                } catch (MailException e) {
+                    LOGGER.log(Level.ERROR, e.getMessage());
+                }
+            }
+        }.start();
     }
 
     /**
-     * Count amount of a new messages to user.
+     * Count amount of a new messages sent to user.
      *
      * @param userId ID of specified user.
      * @return messages count.

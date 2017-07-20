@@ -10,8 +10,8 @@
 </head>
 <body>
 <c:import url="${pageContext.request.contextPath}/fragments/header.jsp"/>
+<div class="custom-opacity-2">
 <div class="container">
-    <div class="custom-opacity">
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="text-center"><fmt:message key="access.denied"/></h1>

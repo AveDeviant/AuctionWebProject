@@ -10,8 +10,8 @@
     <title><fmt:message key="operation.success"/></title>
 </head>
 <body>
+<div class="custom-opacity-2">
 <div class="container">
-    <div class="custom-opacity">
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="text-center"><fmt:message key="operation.success"/></h1>

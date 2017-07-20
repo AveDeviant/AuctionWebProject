@@ -52,6 +52,7 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
                 AuctionNotification notification = notificationDao.findNotificationByLot(lotId);
                 String contentToTrader = initNotificationToTrader(notification);
                 String contentToCustomer = initNotificationToCustomer(notification);
+                //
                 messageService.addMessage(NOTIFICATION, contentToTrader, customerId, trader);
                 messageService.addMessage(NOTIFICATION, contentToCustomer, admin.getUserId(), customer);
             }
